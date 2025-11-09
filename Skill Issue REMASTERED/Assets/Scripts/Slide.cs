@@ -1,76 +1,101 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider))]
 public class Slide : MonoBehaviour
 {
     [Header("Movimiento")]
     public float moveSpeed = 8f;
-    public float gravity = -9.81f;
+    public float slideBoostMultiplier = 1.5f;
+    public float slideDuration = 1.0f;
+    public float slideCooldown = 0.5f;
+    public float sensitivityHor = 9.0f;
 
-    [Header("Slide")]
-    public float slideBoostMultiplier = 1.3f; // Multiplica la velocidad al iniciar el slide
-    public float slideDuration = 0.9f;
-    public float slideHeight = 0.8f;
+    [Header("Altura del jugador")]
     public float normalHeight = 2f;
-    public float slideCooldown = 0.5f;       // ⏳ Cooldown entre slides
-    public AnimationCurve slideCurve;
+    public float slideHeight = 1f;
+    public Transform playerModel; // Modelo o cámara del jugador
+    public float modelSmoothSpeed = 10f; // Velocidad de Lerp para suavizar
 
-    private CharacterController controller;
-    private Vector3 moveDir;
-    private Vector3 slideVelocity;
-    private float verticalVelocity;
+    [Header("Física")]
+    public float slideFriction = 0.3f;
+    public float gravityForce = 10f;
+    public LayerMask groundMask;
+    public float groundCheckDistance = 0.2f;
+
+    private Rigidbody rb;
+    private CapsuleCollider capsule;
+    private Vector3 inputDir;
     private bool isSliding = false;
     private bool isOnCooldown = false;
     private float slideTimer;
     private float cooldownTimer;
-    private float originalCenterY;
+    private float originalHeight;
+    private Vector3 modelOriginalLocalPos;
 
     void Start()
     {
-        controller = GetComponent<CharacterController>();
-        originalCenterY = controller.center.y;
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        capsule = GetComponent<CapsuleCollider>();
+        originalHeight = capsule.height;
 
-        if (slideCurve == null || slideCurve.length == 0)
-            slideCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
+        if (playerModel) modelOriginalLocalPos = playerModel.localPosition;
     }
 
     void Update()
     {
-        // Actualizar cooldown
-        if (isOnCooldown)
-        {
-            cooldownTimer -= Time.deltaTime;
-            if (cooldownTimer <= 0f)
-                isOnCooldown = false;
-        }
-
-        if (!isSliding)
-            HandleMovement();
-        else
-            HandleSlide();
+        PlayerRotation();
+        HandleInput();
+        HandleCooldown();
+        SmoothModelHeight();
     }
 
-    void HandleMovement()
+    void FixedUpdate()
     {
-        float inputX = Input.GetAxisRaw("Horizontal");
-        float inputZ = Input.GetAxisRaw("Vertical");
+        ApplyGravity();
 
-        Vector3 inputDir = (transform.right * inputX + transform.forward * inputZ).normalized;
-        moveDir = inputDir * moveSpeed;
-
-       // controller.Move(moveDir * Time.deltaTime);
-
-        // Gravedad
-        if (controller.isGrounded)
-            verticalVelocity = -1f;
+        if (isSliding)
+            ApplySlide();
         else
-            verticalVelocity += gravity * Time.deltaTime;
+            ApplyMovement();
+    }
 
-        //controller.Move(Vector3.up * verticalVelocity * Time.deltaTime);
+    void PlayerRotation()
+    {
+        float mouseX = Input.GetAxis("Mouse X") * sensitivityHor;
+        Quaternion deltaRotation = Quaternion.Euler(0f, mouseX, 0f);
+        rb.MoveRotation(rb.rotation * deltaRotation);
+    }
 
+    void HandleInput()
+    {
+        float x = Input.GetAxisRaw("Horizontal");
+        float z = Input.GetAxisRaw("Vertical");
+        inputDir = (transform.forward * z + transform.right * x).normalized;
+
+        Debug.Log("KeyCode.LeftControl: " + Input.GetKeyDown(KeyCode.LeftControl));
         // Iniciar slide
-        if (Input.GetKeyDown(KeyCode.LeftControl) && inputDir.magnitude > 0.1f && controller.isGrounded && !isOnCooldown)
+        if (Input.GetKeyDown(KeyCode.LeftControl) && !isSliding && !isOnCooldown && IsGrounded() && inputDir.magnitude > 0.1f)
             StartSlide();
+            Debug.Log("Slide started");
+        // Terminar slide al soltar Ctrl
+        if (Input.GetKeyUp(KeyCode.LeftControl) && isSliding)
+            StopSlide();
+    }
+
+    void ApplyMovement()
+    {
+        if (inputDir.magnitude > 0)
+        {
+            Vector3 move = inputDir * moveSpeed;
+            rb.linearVelocity = new Vector3(move.x, rb.linearVelocity.y, move.z);
+        }
+        else
+        {
+            // Mantener un poco de momentum
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x * 0.9f, rb.linearVelocity.y, rb.linearVelocity.z * 0.9f);
+        }
     }
 
     void StartSlide()
@@ -80,44 +105,71 @@ public class Slide : MonoBehaviour
         cooldownTimer = slideCooldown;
         slideTimer = slideDuration;
 
-        // Mantener la dirección y aplicar boost
-        Vector3 horizontalVelocity = new Vector3(moveDir.x, 0, moveDir.z);
-        slideVelocity = horizontalVelocity * slideBoostMultiplier;
+        // Ajustar collider
+        capsule.height = slideHeight;
+        capsule.center = new Vector3(0, (slideHeight - normalHeight) / 2f, 0);
 
-        // Cambiar tamaño del collider
-        controller.height = slideHeight;
-        controller.center = new Vector3(controller.center.x, slideHeight / 2, controller.center.z);
+        // Momentum inicial
+        Vector3 horizontalVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+        if (horizontalVel.magnitude < moveSpeed)
+            horizontalVel = inputDir * moveSpeed;
+
+        rb.linearVelocity = horizontalVel * slideBoostMultiplier;
     }
 
-    void HandleSlide()
+    void ApplySlide()
     {
-        slideTimer -= Time.deltaTime;
+        slideTimer -= Time.fixedDeltaTime;
 
-        // Curva de desaceleración
-        float curveValue = slideCurve.Evaluate(1 - (slideTimer / slideDuration));
-        float currentSpeedMultiplier = Mathf.Lerp(1f, 0.3f, curveValue);
-        Vector3 currentSlideMove = slideVelocity * currentSpeedMultiplier * Time.deltaTime;
+        // Fricción progresiva
+        Vector3 horizontalVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+        horizontalVel *= (1f - slideFriction * Time.fixedDeltaTime);
+        rb.linearVelocity = new Vector3(horizontalVel.x, rb.linearVelocity.y, horizontalVel.z);
 
-        controller.Move(currentSlideMove);
-
-        // Gravedad
-        if (!controller.isGrounded)
-            verticalVelocity += gravity * Time.deltaTime;
-
-        controller.Move(Vector3.up * verticalVelocity * Time.deltaTime);
-
-        // Terminar slide
-        if (slideTimer <= 0 || Input.GetKeyUp(KeyCode.LeftControl))
+        // Termina slide
+        if (slideTimer <= 0f || !IsGrounded())
             StopSlide();
     }
 
     void StopSlide()
     {
         isSliding = false;
-        controller.height = normalHeight;
-        controller.center = new Vector3(controller.center.x, originalCenterY, controller.center.z);
+        capsule.height = normalHeight;
+        capsule.center = Vector3.zero;
+    }
 
-        // Mantener un poco del momentum
-        moveDir = new Vector3(slideVelocity.x, 0, slideVelocity.z) * 0.5f;
+    void HandleCooldown()
+    {
+        if (isOnCooldown)
+        {
+            cooldownTimer -= Time.deltaTime;
+            if (cooldownTimer <= 0f)
+                isOnCooldown = false;
+        }
+    }
+
+    void ApplyGravity()
+    {
+        if (!IsGrounded())
+            rb.AddForce(Vector3.down * gravityForce, ForceMode.Acceleration);
+    }
+
+    bool IsGrounded()
+    {
+        Vector3 origin = transform.position + Vector3.up * 0.1f;
+        return Physics.Raycast(origin, Vector3.down, groundCheckDistance + 0.1f, groundMask);
+    }
+
+    void SmoothModelHeight()
+    {
+        if (!playerModel) return;
+
+        Vector3 targetLocalPos = modelOriginalLocalPos;
+
+        if (isSliding)
+            targetLocalPos.y = modelOriginalLocalPos.y - (normalHeight - slideHeight) / 2f;
+
+        // Suavizado con Lerp
+        playerModel.localPosition = Vector3.Lerp(playerModel.localPosition, targetLocalPos, Time.deltaTime * modelSmoothSpeed);
     }
 }
