@@ -5,7 +5,7 @@ public class PlayerCharacter : MonoBehaviour
 
     void Start()
     {
-        _health = 5;
+        _health = 100;
     }
 
     public void Hurt(int damage)

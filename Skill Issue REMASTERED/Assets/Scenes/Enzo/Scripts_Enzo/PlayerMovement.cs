@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Movement")]
     public float moveSpeed;
-
+	
     public float groundDrag;
 
     public float jumpForce;
@@ -31,11 +31,12 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+	// Start is called once before the first execution of Update after the MonoBehaviour is created
+	void Start()
     {
         Debug.Log("a");
-        rb = GetComponent<Rigidbody>();
+		rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
 
@@ -67,16 +68,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void MyInput()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal");
-        verticalInput = Input.GetAxisRaw("Vertical");
+        horizontalInput = Input.GetAxisRaw("Horizontal"); // Las teclas asociadas están en:
+		verticalInput = Input.GetAxisRaw("Vertical");   // Edit\Project Settings\Input (según el codigo ejemplo del PDF)
 
-        if (Input.GetKey(jumpKey) && readyToJump && grounded)
+		if (Input.GetKey(jumpKey) && readyToJump && grounded)
         {
             readyToJump = false;
 
             Jump();
 
-            Invoke(nameof(ResetJump), jumpCooldown);
+            Invoke(nameof(ResetJump), jumpCooldown); //habria que hacerlo con corutina?
         }
     }
 
@@ -115,4 +116,5 @@ public class PlayerMovement : MonoBehaviour
     {
         readyToJump = true;
     }
+
 }
