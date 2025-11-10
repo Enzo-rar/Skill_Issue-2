@@ -37,6 +37,7 @@ Juego FPS 1v1 de acción frenética
 • Subir código a menudo
 
 • Prueba el juego tras la actualización y verifica que funciona
+
 • Cuidado al subir sólo parte de los cambios, o no subir ficheros nuevos
 
 •En el mensaje de commit, explicar brevemente el objetivo de los cambios realizados

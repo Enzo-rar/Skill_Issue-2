@@ -17,7 +17,8 @@ public class RayShooter : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetMouseButton(1))
+		
+		if (Input.GetMouseButton(1))
         {
             _camera.fieldOfView = originalFOV / 2;
         } else
