@@ -8,6 +8,7 @@ public class FPSInput : MonoBehaviour
 	[Header("Salto y gravedad")]
 	public float jumpHeight = 1.5f;
 	public float gravity = -9.8f;
+
 	public float fallMultiplier = 2.2f;   // multiplica gravedad al CAER
 	public float jumpCutMultiplier = 0.5f; // recorta salto al soltar Jump
 	//public float maxFallSpeed = -50f;     // límite de caída 
@@ -15,6 +16,7 @@ public class FPSInput : MonoBehaviour
 	private CharacterController _charController;
 	private Vector3 velocity;
 	//private float verticalVelocity;
+
 	private bool isGrounded;
 
 	void Start()
@@ -47,6 +49,7 @@ public class FPSInput : MonoBehaviour
 		}
 
 		// --- Gravedad ---
+
 		//velocity.y += gravity * Time.deltaTime;
 		// más gravedad al caer
 		if (velocity.y < 0f)
@@ -57,6 +60,9 @@ public class FPSInput : MonoBehaviour
 		// cortar salto si sueltas el botón mientras subes
 		if (!isGrounded && !Input.GetButton("Jump") && velocity.y > 0f)
 			velocity.y *= jumpCutMultiplier;
+
+		velocity.y += gravity * Time.deltaTime;
+
 
 		// --- Movimiento total ---
 		Vector3 finalMove = move + Vector3.up * velocity.y; 
