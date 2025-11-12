@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Fireball : MonoBehaviour
 {
-    public float speed = 10.0f;
+    public float speed = 1.0f;
     public int damage = 1;
 
     void Update()
@@ -12,7 +12,8 @@ public class Fireball : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerCharacter player = other.GetComponent<PlayerCharacter>();
+        PlayerCharacter player = other.GetComponentInParent<PlayerCharacter>();
+        Debug.Log(player);
         if (player != null)
         {
             player.Hurt(damage);
