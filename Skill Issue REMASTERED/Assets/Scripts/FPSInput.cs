@@ -11,9 +11,10 @@ public class FPSInput : MonoBehaviour
 
 	public float fallMultiplier = 1.5f;   // multiplica gravedad al CAER
 	public float jumpCutMultiplier = 0.5f; // recorta salto al soltar Jump
-	//public float maxFallSpeed = -50f;     // límite de caída 
+										   //public float maxFallSpeed = -50f;     // lï¿½mite de caï¿½da 
 
 	private CharacterController _charController;
+	private Slide _slide;
 	private Vector3 velocity;
 	//private float verticalVelocity;
 
@@ -21,7 +22,8 @@ public class FPSInput : MonoBehaviour
 
 	void Start()
     {
-        _charController = GetComponent<CharacterController>();
+		_charController = GetComponent<CharacterController>();
+		_slide = GetComponent<Slide>();
     }
 
 	void Jump()
@@ -33,7 +35,7 @@ public class FPSInput : MonoBehaviour
     {
 		// --- Movimiento del plano horizontal ---
 
-		float deltaX = Input.GetAxis("Horizontal"); // Las teclas asociadas están en:
+		float deltaX = Input.GetAxis("Horizontal"); // Las teclas asociadas estï¿½n en:
         float deltaZ = Input.GetAxis("Vertical");   // Edit\Project Settings\Input
        // Vector3 movement = new Vector3(deltaX, 0, deltaZ);
 		Vector3 move = transform.right * deltaX + transform.forward * deltaZ;
@@ -51,30 +53,51 @@ public class FPSInput : MonoBehaviour
 		if (Input.GetButtonDown("Jump") && isGrounded)
 		{
 			Jump();
-            //velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-        }
+			//velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+		}
+		
+		
 
 		// --- Gravedad ---
 
 		//velocity.y += gravity * Time.deltaTime;
-		// más gravedad al caer
+		// mï¿½s gravedad al caer
 		if (velocity.y < 0f)
 			velocity.y += gravity * fallMultiplier * Time.deltaTime;
 		else
 			velocity.y += gravity * Time.deltaTime;
 
-		// cortar salto si sueltas el botón mientras subes
+		// cortar salto si sueltas el botï¿½n mientras subes
 		if (!isGrounded && !Input.GetButton("Jump") && velocity.y > 0f)
 			velocity.y *= jumpCutMultiplier;
 
 		velocity.y += gravity * Time.deltaTime;
 
 
-		// --- Movimiento total ---
-		Vector3 finalMove = move + Vector3.up * velocity.y; 
+		// --- Slide ---
 
-		_charController.Move(finalMove * Time.deltaTime);
+		// Intentar iniciar slide
+        if (Input.GetKeyDown(KeyCode.LeftShift) && isGrounded)
+        {
+            Debug.Log("Trying to Slide");
+            _slide.TryStartSlide(move);
+        }
+			
 
+        // Actualizar el mÃ³dulo de slide
+        _slide.UpdateSlide();
+
+		if (_slide.IsSliding){
+			Debug.Log("Sliding");
+			Debug.Log(_slide.SlideVelocity * Time.deltaTime);
+			_charController.Move(_slide.SlideVelocity * Time.deltaTime);
+		}
+		else
+		{
+			// --- Movimiento total ---
+			Vector3 finalMove = move + Vector3.up * velocity.y;
+			_charController.Move(finalMove * Time.deltaTime);
+		}
 		//movement = transform.TransformDirection(movement); // convierte desde el sistema local al global
        // _charController.Move(movement * Time.deltaTime); // no movemos el transform para que se calculen
     }						// las colisiones

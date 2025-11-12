@@ -5,7 +5,7 @@ using UnityEngine;
 public class MouseLook : MonoBehaviour
 {
     public enum RotationAxes
-    { // Movimiento ratón
+    { // Movimiento ratï¿½n
         MouseXandY = 0,
         MouseX = 1,
         MouseY = 2
@@ -13,7 +13,7 @@ public class MouseLook : MonoBehaviour
     public RotationAxes axes = RotationAxes.MouseXandY;
     public float sensitivityHor = 9.0f;    // velocidad
     public float sensitivityVert = 9.0f;
-    public float minPitchAngle = -45.0f;   // rango de rotación vertical
+    public float minPitchAngle = -45.0f;   // rango de rotaciï¿½n vertical
     public float maxPitchAngle = 45.0f;
 
     private float pitchAngle = 0;  // cabeceo (pitch) actual 
@@ -28,7 +28,7 @@ public class MouseLook : MonoBehaviour
         {
             pitchAngle -= Input.GetAxis("Mouse Y") * sensitivityVert;
             pitchAngle = Mathf.Clamp(pitchAngle, minPitchAngle, maxPitchAngle);
-            float yawAngle = transform.localEulerAngles.y; // mantener el mismo ángulo de guiñada (yaw)
+            float yawAngle = transform.localEulerAngles.y; // mantener el mismo ï¿½ngulo de guiï¿½ada (yaw)
             if (axes == RotationAxes.MouseXandY)
             {
                 yawAngle += Input.GetAxis("Mouse X") * sensitivityHor;
