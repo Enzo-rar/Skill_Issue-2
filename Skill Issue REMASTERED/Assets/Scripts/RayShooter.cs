@@ -33,10 +33,15 @@ public class RayShooter : MonoBehaviour
                 Debug.Log("");
                 if (item != null)
                 {
+                    
                     componenteReactivo = item.GetComponent<ObjetoReactivo>();
                     Debug.Log(item + " seleccionado");
-                    componenteReactivo.ReactToCollect(item, _camera);
-                }
+                    if (componenteReactivo != null)
+                    {
+                        componenteReactivo.ReactToCollect(item, _camera);
+                    }
+
+                    }
                 else
                 {
                     Debug.Log("Seleccionado: " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido");
@@ -61,19 +66,26 @@ public class RayShooter : MonoBehaviour
                     Debug.Log("Dropear en superficie: ", superficie);
                     PlayerCharacter playerStats = _camera.GetComponentInParent<PlayerCharacter>();
                     //componenteReactivo = playerStats._armaEquipada.GetComponent<ObjetoReactivo>();
+                    
                     var itemEquipado = playerStats._armaEquipada;
-                    ObjetoReactivo componenteReactivo = itemEquipado.GetComponent<ObjetoReactivo>();
-                    if (itemEquipado != null)
-                    {
-                        componenteReactivo.ReactToDrop(itemEquipado, hit.point);
-                        playerStats.SetItemEquipped(null);
-                    }
+                    if (itemEquipado != null) {
+                        ObjetoReactivo componenteReactivo = itemEquipado.GetComponent<ObjetoReactivo>();
+                        if (itemEquipado != null)
+                        {
+                            Debug.Log("A");
+                            componenteReactivo.ReactToDrop(itemEquipado, hit.point);
+                            Debug.Log("B");
+                            playerStats.SetItemEquipped(null);
+                            Debug.Log("C");
+                        }
 
-                    else
-                    {
-                        Debug.Log("Seleccionado: " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido");
-                        //StartCoroutine(SphereIndicator(hit.point));
+                        else
+                        {
+                            Debug.Log("Seleccionado: " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido");
+                            //StartCoroutine(SphereIndicator(hit.point));
+                        }
                     }
+                 
                 }
             }
         }
