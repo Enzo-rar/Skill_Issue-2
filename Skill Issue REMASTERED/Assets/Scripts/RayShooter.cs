@@ -1,20 +1,25 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class RayShooter : MonoBehaviour
 {
     private Camera _camera;
     private float originalFOV;
+    private bool equipado;
     private GameObject _armaEquipada;
     private ObjetoReactivo componenteReactivo;
+
+    [SerializeField] private GameObject fireballPrefab;
+    private GameObject _fireball;
+
     void Start()
     {
         _camera = GetComponent<Camera>();
         originalFOV = _camera.fieldOfView;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        equipado = false;
     }
     void Update()
     {
@@ -34,8 +39,15 @@ public class RayShooter : MonoBehaviour
                 if (item != null)
                 {
                     componenteReactivo = item.GetComponent<ObjetoReactivo>();
-                    Debug.Log(item + " seleccionado");
-                    componenteReactivo.ReactToCollect(item, _camera);
+                    if (componenteReactivo != null)
+                    {
+                        Debug.Log(item + " seleccionado");
+                        componenteReactivo.ReactToCollect(item, _camera);
+                        PlayerCharacter playerStats = _camera.GetComponentInParent<PlayerCharacter>();
+                        playerStats.SetItemEquipped(item);
+                        equipado = true;
+                    }
+                    
                 }
                 else
                 {
@@ -67,6 +79,7 @@ public class RayShooter : MonoBehaviour
                     {
                         componenteReactivo.ReactToDrop(itemEquipado, hit.point);
                         playerStats.SetItemEquipped(null);
+                        equipado = false;
                     }
 
                     else
@@ -77,38 +90,25 @@ public class RayShooter : MonoBehaviour
                 }
             }
         }
-            if (Input.GetMouseButton(1))
-            {
-                _camera.fieldOfView = originalFOV / 2;
-            }
-            else
-            {
-                _camera.fieldOfView = originalFOV;
-            }
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                Vector3 point = new Vector3(_camera.pixelWidth / 2, _camera.pixelHeight / 2, 0);
-                Ray ray = _camera.ScreenPointToRay(point);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit))
-                {
-                    var hitObject = hit.transform.gameObject;
-                    var target = hitObject.GetComponent<ReactiveTarget>();
-                    if (target != null)
-                    {
-                        //Debug.Log("Take that!");
-                        target.ReactToHit();
-                    }
-                    else
-                    {
-                        //Debug.Log("Hit " + hit.point + " (" + hit.transform.gameObject.name + ")");
-                        StartCoroutine(SphereIndicator(hit.point));
-                    }
-                }
-            }
+        if (Input.GetMouseButton(1))
+        {
+            _camera.fieldOfView = originalFOV / 2;
         }
-    
+        else
+        {
+            _camera.fieldOfView = originalFOV;
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (equipado)
+            {
+                shootProjectile();
+            }
+            
+        }
+    }
+
 
     void OnGUI()
     {  // se ejecuta después de dibujar el frame del juego
@@ -127,6 +127,13 @@ public class RayShooter : MonoBehaviour
         yield return new WaitForSeconds(5);
 
         Destroy(sphere);
+    }
+
+    void shootProjectile()
+    {
+        _fireball = Instantiate<GameObject>(fireballPrefab);
+        _fireball.transform.position = transform.TransformPoint(Vector3.forward * 1.5f);
+        _fireball.transform.rotation = transform.rotation;
     }
 
 }

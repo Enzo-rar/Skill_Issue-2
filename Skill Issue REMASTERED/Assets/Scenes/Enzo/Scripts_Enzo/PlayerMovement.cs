@@ -36,8 +36,7 @@ public class PlayerMovement : MonoBehaviour
 	// Start is called once before the first execution of Update after the MonoBehaviour is created
 	void Start()
     {
-        Debug.Log("a");
-		rb = GetComponent<Rigidbody>();
+   		rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
     }
 
@@ -64,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
         MovePlayer();
         SpeedControl();
 
-        Debug.Log("Speed is " + new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude);
+        //Debug.Log("Speed is " + new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude);
     }
 
     private void MyInput()
