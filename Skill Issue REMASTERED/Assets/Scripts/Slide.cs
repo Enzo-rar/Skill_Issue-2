@@ -24,6 +24,9 @@ public class Slide : MonoBehaviour
     private float initialSpeed;
     private Vector3 originalCameraLocalPos;
 
+    // ⚡ Estado del input de slide (lo actualiza FPSInput cada frame)
+    [HideInInspector] public bool slideButtonHeld;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -36,27 +39,26 @@ public class Slide : MonoBehaviour
             originalCameraLocalPos = playerCamera.localPosition;
     }
 
-    void Update()
-    {
-        UpdateSlide();
-        UpdateCameraPosition();
-    }
-
+    /// <summary>
+    /// Inicia el slide si el jugador se mueve y no está deslizando ya.
+    /// </summary>
     public void TryStartSlide(Vector3 currentVelocity)
     {
         if (IsSliding) return;
         if (currentVelocity.magnitude < 0.1f) return;
-        IsSliding = true;
 
+        IsSliding = true;
         slideTimer = slideDuration;
         initialDir = currentVelocity.normalized;
         initialSpeed = currentVelocity.magnitude * slideBoostMultiplier;
 
         controller.height = slideHeight;
         controller.center = new Vector3(controller.center.x, slideHeight / 2, controller.center.z);
-        Debug.Log("Slide is working");
     }
 
+    /// <summary>
+    /// Actualiza el slide cada frame. Detiene si se acaba el timer o se suelta el botón.
+    /// </summary>
     public void UpdateSlide()
     {
         if (!IsSliding) return;
@@ -66,31 +68,33 @@ public class Slide : MonoBehaviour
         float curveValue = slideCurve.Evaluate(1 - (slideTimer / slideDuration));
         float currentSpeed = Mathf.Lerp(initialSpeed, 0, curveValue);
         SlideVelocity = initialDir * currentSpeed;
-        Debug.Log("Sliding with speed: " + currentSpeed + " Slide Timer: " + slideTimer);
 
-        // Detener si acaba o suelta Shift
-        if (slideTimer <= 0 || Input.GetKey(KeyCode.LeftShift) == false)
+        if (slideTimer <= 0f || !slideButtonHeld)
         {
-            Debug.Log("Stopping Slide");
             StopSlide();
         }
     }
 
+
+    /// <summary>
+    /// Detiene el slide y restaura la altura del CharacterController.
+    /// </summary>
     public void StopSlide()
     {
         if (!IsSliding) return;
-        Debug.Log("Slide Stopped");
         IsSliding = false;
         controller.height = normalHeight;
         controller.center = new Vector3(controller.center.x, originalCenterY, controller.center.z);
     }
 
-    private void UpdateCameraPosition()
+    /// <summary>
+    /// Actualiza suavemente la cámara según el estado del slide.
+    /// </summary>
+    private void LateUpdate()
     {
         if (playerCamera == null) return;
 
         Vector3 targetPos = originalCameraLocalPos;
-
         if (IsSliding)
             targetPos.y -= cameraSlideOffset;
 

@@ -1,40 +1,55 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class MouseLook : MonoBehaviour
+[RequireComponent(typeof(PlayerInput))]
+public class PlayerLook : MonoBehaviour
 {
-    public enum RotationAxes
-    { // Movimiento rat�n
-        MouseXandY = 0,
-        MouseX = 1,
-        MouseY = 2
-    }
-    public RotationAxes axes = RotationAxes.MouseXandY;
-    public float sensitivityHor = 9.0f;    // velocidad
-    public float sensitivityVert = 9.0f;
-    public float minPitchAngle = -45.0f;   // rango de rotaci�n vertical
-    public float maxPitchAngle = 45.0f;
+    [Header("Referencias")]
+    public Transform playerBody;       // El transform del jugador (gira en Y)
+    public Transform playerCamera;     // La cámara (gira en X)
 
-    private float pitchAngle = 0;  // cabeceo (pitch) actual 
+    [Header("Sensibilidad")]
+    public float lookSensitivity = 100f;
+    public float minPitch = -45f;
+    public float maxPitch = 45f;
 
-    void Update()
+    private float pitch = 0f;          // Rotación vertical de la cámara
+    private Vector2 lookInput = Vector2.zero;
+
+    private PlayerInput playerInput;
+
+    void Awake()
     {
-        if (axes == RotationAxes.MouseX)
-        {
-            transform.Rotate(0, Input.GetAxis("Mouse X") * sensitivityHor, 0);
-        }
-        else
-        {
-            pitchAngle -= Input.GetAxis("Mouse Y") * sensitivityVert;
-            pitchAngle = Mathf.Clamp(pitchAngle, minPitchAngle, maxPitchAngle);
-            float yawAngle = transform.localEulerAngles.y; // mantener el mismo �ngulo de gui�ada (yaw)
-            if (axes == RotationAxes.MouseXandY)
-            {
-                yawAngle += Input.GetAxis("Mouse X") * sensitivityHor;
-            }
-            transform.localEulerAngles = new Vector3(pitchAngle, yawAngle, 0);
-        }
+        playerInput = GetComponent<PlayerInput>();
+    }
+
+    void OnEnable()
+    {
+        var map = playerInput.currentActionMap;
+
+        map["Look"].performed += ctx => lookInput = ctx.ReadValue<Vector2>();
+        map["Look"].canceled += ctx => lookInput = Vector2.zero;
+    }
+
+    void OnDisable()
+    {
+        var map = playerInput.currentActionMap;
+
+        map["Look"].performed -= ctx => lookInput = ctx.ReadValue<Vector2>();
+        map["Look"].canceled -= ctx => lookInput = Vector2.zero;
+    }
+
+    void LateUpdate()
+    {
+        // Rotación horizontal (Player)
+        float deltaX = lookInput.x * lookSensitivity * Time.deltaTime;
+        playerBody.Rotate(Vector3.up * deltaX);
+
+        // Rotación vertical (Cámara)
+        float deltaY = lookInput.y * lookSensitivity * Time.deltaTime;
+        pitch -= deltaY;
+        pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+
+        playerCamera.localRotation = Quaternion.Euler(pitch, 0f, 0f);
     }
 }
-

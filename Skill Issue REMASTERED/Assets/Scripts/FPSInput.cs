@@ -1,105 +1,127 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(CharacterController))] // obliga a que el GameObject tenga cierto componente
+[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(PlayerInput))]
 public class FPSInput : MonoBehaviour
 {
-	[Header("Movimiento")]
-	public float speed = 6.0f;
-	[Header("Salto y gravedad")]
-	public float jumpHeight = 2.5f;
-	public float gravity = -9.8f;
+    [Header("Movimiento")]
+    public float speed = 6.0f;
+    [Header("Salto y gravedad")]
+    public float jumpHeight = 2.5f;
+    public float gravity = -9.8f;
+    public float fallMultiplier = 1.5f;
+    public float jumpCutMultiplier = 0.5f;
 
-	public float fallMultiplier = 1.5f;   // multiplica gravedad al CAER
-	public float jumpCutMultiplier = 0.5f; // recorta salto al soltar Jump
-										   //public float maxFallSpeed = -50f;     // l�mite de ca�da 
+    private CharacterController controller;
+    private Slide slide;
 
-	private CharacterController _charController;
-	private Slide _slide;
-	private Vector3 velocity;
-	//private float verticalVelocity;
+    private Vector3 velocity;
+    private bool isGrounded;
 
-	private bool isGrounded;
+    [Header("Camera")]
+    public Transform cameraTransform;
+    public float lookSensitivity = 100f;
+    private float xRotation = 0f;
 
-	void Start()
+    // Variables de input
+    private Vector2 moveInput;
+    private Vector2 lookInput;
+    private bool jumpPressed;
+    private bool slidePressed;
+
+    private PlayerInput playerInput;
+
+    void Awake()
     {
-		_charController = GetComponent<CharacterController>();
-		_slide = GetComponent<Slide>();
+        controller = GetComponent<CharacterController>();
+        slide = GetComponent<Slide>();
+        playerInput = GetComponent<PlayerInput>();
     }
 
-	void Jump()
-	{
-        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+    void OnEnable()
+    {
+        var map = playerInput.currentActionMap;
+
+        map["Move"].performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        map["Move"].canceled += ctx => moveInput = Vector2.zero;
+
+        map["Look"].performed += ctx => lookInput = ctx.ReadValue<Vector2>();
+        map["Look"].canceled += ctx => lookInput = Vector2.zero;
+
+        map["Jump"].started += ctx => jumpPressed = true;
+        map["Jump"].canceled += ctx => jumpPressed = false;
+
+        map["Slide"].started += ctx => slidePressed = true;
+        map["Slide"].canceled += ctx => slidePressed = false;
+    }
+
+    void OnDisable()
+    {
+        var map = playerInput.currentActionMap;
+
+        map["Move"].performed -= ctx => moveInput = ctx.ReadValue<Vector2>();
+        map["Move"].canceled -= ctx => moveInput = Vector2.zero;
+
+        map["Look"].performed -= ctx => lookInput = ctx.ReadValue<Vector2>();
+        map["Look"].canceled -= ctx => lookInput = Vector2.zero;
+
+        map["Jump"].started -= ctx => jumpPressed = true;
+        map["Jump"].canceled -= ctx => jumpPressed = false;
+
+        map["Slide"].started -= ctx => slidePressed = true;
+        map["Slide"].canceled -= ctx => slidePressed = false;
     }
 
     void Update()
     {
-		// --- Movimiento del plano horizontal ---
+        // Movimiento horizontal
+        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
+        move = Vector3.ClampMagnitude(move, 1f) * speed;
 
-		float deltaX = Input.GetAxis("Horizontal"); // Las teclas asociadas est�n en:
-        float deltaZ = Input.GetAxis("Vertical");   // Edit\Project Settings\Input
-       // Vector3 movement = new Vector3(deltaX, 0, deltaZ);
-		Vector3 move = transform.right * deltaX + transform.forward * deltaZ;
-		//movement = Vector3.ClampMagnitude(movement, 1.0f) * speed;
-		move = Vector3.ClampMagnitude(move, 1f) * speed;
-		//movement.y = gravity;
+        isGrounded = controller.isGrounded;
+        if (isGrounded && velocity.y < 0)
+            velocity.y = -2f;
 
-		// --- Estado del suelo ---
-		isGrounded = _charController.isGrounded;
+        // Salto
+        if (jumpPressed && isGrounded)
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
 
-		if (isGrounded && velocity.y < 0)
-			velocity.y = -2f; // mantener pegado al suelo
+        // Gravedad
+        if (velocity.y < 0)
+            velocity.y += gravity * fallMultiplier * Time.deltaTime;
+        else
+            velocity.y += gravity * Time.deltaTime;
 
-		// --- Salto ---
-		if (Input.GetButtonDown("Jump") && isGrounded)
-		{
-			Jump();
-			//velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-		}
-		
-		
+        if (!isGrounded && !jumpPressed && velocity.y > 0f)
+            velocity.y *= jumpCutMultiplier;
 
-		// --- Gravedad ---
+        // Slide
+        slide.slideButtonHeld = slidePressed;
+        if (slidePressed && isGrounded)
+            slide.TryStartSlide(move);
 
-		//velocity.y += gravity * Time.deltaTime;
-		// m�s gravedad al caer
-		if (velocity.y < 0f)
-			velocity.y += gravity * fallMultiplier * Time.deltaTime;
-		else
-			velocity.y += gravity * Time.deltaTime;
+        slide.UpdateSlide();
 
-		// cortar salto si sueltas el bot�n mientras subes
-		if (!isGrounded && !Input.GetButton("Jump") && velocity.y > 0f)
-			velocity.y *= jumpCutMultiplier;
+        // Movimiento final
+        if (slide.IsSliding)
+            controller.Move(slide.SlideVelocity * Time.deltaTime);
+        else
+            controller.Move((move + Vector3.up * velocity.y) * Time.deltaTime);
 
-		velocity.y += gravity * Time.deltaTime;
+        // Rotación cámara
+        RotateCamera();
+    }
 
+    private void RotateCamera()
+    {
+        float mouseX = lookInput.x * lookSensitivity * Time.deltaTime;
+        float mouseY = lookInput.y * lookSensitivity * Time.deltaTime;
 
-		// --- Slide ---
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-		// Intentar iniciar slide
-        if (Input.GetKeyDown(KeyCode.LeftShift) && isGrounded)
-        {
-            Debug.Log("Trying to Slide");
-            _slide.TryStartSlide(move);
-        }
-			
-
-        // Actualizar el módulo de slide
-        _slide.UpdateSlide();
-
-		if (_slide.IsSliding){
-			Debug.Log("Sliding");
-			Debug.Log(_slide.SlideVelocity * Time.deltaTime);
-			_charController.Move(_slide.SlideVelocity * Time.deltaTime);
-		}
-		else
-		{
-			// --- Movimiento total ---
-			Vector3 finalMove = move + Vector3.up * velocity.y;
-			_charController.Move(finalMove * Time.deltaTime);
-		}
-		//movement = transform.TransformDirection(movement); // convierte desde el sistema local al global
-       // _charController.Move(movement * Time.deltaTime); // no movemos el transform para que se calculen
-    }						// las colisiones
+        cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        transform.Rotate(Vector3.up * mouseX);
+    }
 }
-
