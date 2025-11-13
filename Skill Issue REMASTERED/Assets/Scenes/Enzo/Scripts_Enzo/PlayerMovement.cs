@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
@@ -29,6 +30,10 @@ public class PlayerMovement : MonoBehaviour
     public float playerHeight;
     public LayerMask whatIsGround;
     bool grounded;
+
+    [Header("Slope Handling")]
+    public float maxSlopeAngle;
+    private RaycastHit slopeHit;
 
     public Transform orientation;
 
@@ -67,7 +72,6 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearDamping = 0;
         }
-        Debug.Log(rb.linearDamping);
     }
 
     //FixedUpdate se llama cada intervalos iguales, asi no se llaman mas o menos veces los métodos dependiendo de los FPS del jugador
@@ -84,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
 		verticalInput = Input.GetAxisRaw("Vertical");   // Edit\Project Settings\Input (según el codigo ejemplo del PDF)
 
         //Salto
-		if (Input.GetKey(jumpKey) && readyToJump && grounded)
+		if (Input.GetKeyDown(jumpKey) && readyToJump && grounded)
         {
             readyToJump = false;
 
@@ -123,6 +127,10 @@ public class PlayerMovement : MonoBehaviour
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         moveDirection.Normalize();
+        if (OnSlope())
+        {
+            rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 10f, ForceMode.Force);
+        }
         if (grounded)
         {
             rb.AddForce(new Vector3(moveDirection.x, 0, moveDirection.z) * moveSpeed * 10f, ForceMode.Force);
@@ -160,6 +168,8 @@ public class PlayerMovement : MonoBehaviour
     private void Crouch()
     {
         transform.localScale = new Vector3(originalSize.x, originalSize.y * 60 / 100, originalSize.z);
+        playerHeight = playerHeight * 60f / 100f;
+        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
         maxSpeed = maxSpeed / 2;
         moveSpeed = moveSpeed / 2;
         isCrouching = true;
@@ -168,6 +178,7 @@ public class PlayerMovement : MonoBehaviour
     private void CrouchEnd()
     {
         transform.localScale = new Vector3(originalSize.x, originalSize.y , originalSize.z);
+        playerHeight = (playerHeight * 100f / 60f);
         maxSpeed = maxSpeed * 2;
         moveSpeed = moveSpeed * 2;
         isCrouching = false;
@@ -177,7 +188,7 @@ public class PlayerMovement : MonoBehaviour
     {
         isSliding = true;
         transform.localScale = new Vector3(originalSize.x, originalSize.y * 60/100, originalSize.z);
-       
+        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
         moveSpeed = moveSpeed * 0.2f;
         maxSpeed = maxSpeed * 10f;
         rb.linearDamping = slideDeceleration;
@@ -199,5 +210,21 @@ public class PlayerMovement : MonoBehaviour
         moveSpeed = moveSpeed * 5f;
         maxSpeed = maxSpeed * 0.1f;
         isSliding = false;
+    }
+
+    private bool OnSlope()
+    {
+        if(Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle != 0;
+        }
+
+        return false;
+    }
+
+    private Vector3 GetSlopeMoveDirection()
+    {
+        return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal);
     }
 }
