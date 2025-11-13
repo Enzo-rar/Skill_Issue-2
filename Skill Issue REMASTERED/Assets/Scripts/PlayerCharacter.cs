@@ -7,7 +7,6 @@ public class PlayerCharacter : MonoBehaviour
     public ParticleSystem deathParticles;
     void Start()
     {
-        _health = 100;
         Debug.Log("Health: " + _health);
     }
 
@@ -16,7 +15,7 @@ public class PlayerCharacter : MonoBehaviour
         Debug.Log("Health: " + _health);
         _health = _health - damage;
         Debug.Log("Health: " + _health);
-        if( _health < 0)
+        if( _health <= 0)
         {
             Die();
         }
