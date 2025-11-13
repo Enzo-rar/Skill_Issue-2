@@ -14,8 +14,11 @@ public class PlayerMovement : MonoBehaviour
     public float jumpForce;
     public float jumpCooldown;
     public float airMultiplier;
-    bool readyToJump = true;
 
+    public float slideSpeed;
+    public float slideDeceleration;
+
+    bool readyToJump = true;
     bool isCrouching = false;
     bool isSliding = false;
 
@@ -34,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 moveDirection;
     Vector3 originalSize;
+    Vector3 flatVelocity;
 
     Rigidbody rb;
 
@@ -55,14 +59,15 @@ public class PlayerMovement : MonoBehaviour
 
         MyInput();
 
-        if (grounded)
+        if (grounded && !isSliding)
         {
             rb.linearDamping = groundDrag;
         }
-        else
+        else if (!grounded)
         {
             rb.linearDamping = 0;
         }
+        Debug.Log(rb.linearDamping);
     }
 
     //FixedUpdate se llama cada intervalos iguales, asi no se llaman mas o menos veces los métodos dependiendo de los FPS del jugador
@@ -70,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
     {
         MovePlayer();
         SpeedControl();
-
+        
     }
 
     private void MyInput()
@@ -126,6 +131,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(new Vector3(moveDirection.x, 0, moveDirection.z) * moveSpeed * 10f * airMultiplier, ForceMode.Force);
         }
+        flatVelocity = new Vector3(rb.angularVelocity.x, rb.angularVelocity.y, rb.angularVelocity.z);
     }
 
     private void SpeedControl()
@@ -169,11 +175,29 @@ public class PlayerMovement : MonoBehaviour
 
     private void Slide()
     {
-
+        isSliding = true;
+        transform.localScale = new Vector3(originalSize.x, originalSize.y * 60/100, originalSize.z);
+       
+        moveSpeed = moveSpeed * 0.2f;
+        maxSpeed = maxSpeed * 10f;
+        rb.linearDamping = slideDeceleration;
+        rb.AddForce(moveDirection * slideSpeed, ForceMode.Impulse);
     }
 
     private void SlideEnd()
     {
-
+        transform.localScale = originalSize;
+        if (grounded)
+        {
+            rb.angularVelocity = new Vector3(flatVelocity.x * 0.3f, flatVelocity.y, flatVelocity.z * 0.3f);
+            rb.linearDamping = groundDrag;
+        }
+        else
+        {
+            rb.linearDamping = 0;
+        }
+        moveSpeed = moveSpeed * 5f;
+        maxSpeed = maxSpeed * 0.1f;
+        isSliding = false;
     }
 }
