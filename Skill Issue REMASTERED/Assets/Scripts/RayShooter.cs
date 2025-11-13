@@ -9,7 +9,8 @@ public class RayShooter : MonoBehaviour
     private bool equipado;
     private GameObject _armaEquipada;
     private ObjetoReactivo componenteReactivo;
-
+    PlayerCam posicionCamara;
+      
     [SerializeField] private GameObject fireballPrefab;
     private GameObject _fireball;
 
@@ -132,6 +133,8 @@ public class RayShooter : MonoBehaviour
     void shootProjectile()
     {
         _fireball = Instantiate<GameObject>(fireballPrefab);
+        posicionCamara = GetComponentInParent<PlayerCam>();
+        _fireball.transform.Translate(posicionCamara.transform.position.x, posicionCamara.transform.position.y, posicionCamara.transform.position.z);
         _fireball.transform.position = transform.TransformPoint(Vector3.forward * 1.5f);
         _fireball.transform.rotation = transform.rotation;
     }

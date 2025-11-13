@@ -2,12 +2,20 @@ using UnityEngine;
 
 public class Fireball : MonoBehaviour
 {
-    public float speed = 200f;
+    public float speed = 20f;
     public int damage = 25;
+    PlayerCam posicionCamara;
 
+    void Start()
+    {
+      //  posicionCamara = GetComponentInParent<PlayerCam>();
+     //   transform.Translate(posicionCamara.transform.position.x, posicionCamara.transform.position.y, posicionCamara.transform.position.z);
+    }
     void Update()
     {
-        transform.Translate(0, 0, speed * Time.deltaTime);
+        //posicionCamara = GetComponentInParent<PlayerCam>();
+        transform.Translate(0,0, speed * Time.deltaTime);
+        //transform.Translate(posicionCamara.transform.position.x, posicionCamara.transform.position.y, speed * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
