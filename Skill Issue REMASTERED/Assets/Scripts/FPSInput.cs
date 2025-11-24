@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class FPSInput : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed = 6f;

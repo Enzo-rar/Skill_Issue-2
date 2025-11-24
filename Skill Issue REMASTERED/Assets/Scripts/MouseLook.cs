@@ -1,16 +1,15 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-[RequireComponent(typeof(PlayerInput))]
 public class MouseLook : MonoBehaviour
 {
     [Header("Referencias")]
-    public Transform playerBody;       // El objeto padre (debe tener el Rigidbody)
-    public Transform playerCamera;     // La cámara (Transform)
-    public Transform orientation;      // Orientación auxiliar
+    public Transform playerBody;       // Referencia al cuerpo (DEBE ESTAR FIJO/NO ROTAR)
+    // Se elimina la referencia pública a 'playerCamera' ya que este script está adjunto a la cámara.
+    public Transform orientation;      // Orientación auxiliar (maneja la rotación horizontal del cuerpo para PlayerMovement)
 
     [Header("Componente Cámara")]
     // REFERENCIA PÚBLICA: Esto es crucial para el Raycast de disparo del jugador.
+    // Esta referencia ahora apunta al componente Camera del GameObject actual.
     public Camera PlayerCameraComponent; 
 
     [Header("Puntero (Crosshair)")]
@@ -35,48 +34,20 @@ public class MouseLook : MonoBehaviour
     private Vector2 rawInput;
 
     private PlayerInput playerInput;
-    private Rigidbody rb;
 
     void Awake()
     {
-        playerInput = GetComponent<PlayerInput>();
+        playerInput = GetComponentInParent<PlayerInput>(); // Se busca el PlayerInput en el padre
         
+        // Asumimos que este script está en el GameObject de la cámara
+        PlayerCameraComponent = GetComponent<Camera>();
+
         // CORRECCIÓN CRÍTICA PARA SPLIT-SCREEN: Ocultar cursor.
         Cursor.visible = false; 
-
-        if (playerBody != null)
-        {
-            rb = playerBody.GetComponent<Rigidbody>();
-            if (rb == null)
-            {
-                Debug.LogError($"MouseLook ({gameObject.name} - Player ID: {playerInput.playerIndex}): El playerBody no tiene un Rigidbody. La rotación física no funcionará.");
-            }
-        }
-
-        // --- CORRECCIÓN CRÍTICA PARA SPLIT-SCREEN: BÚSQUEDA DE CÁMARA ROBUSTA ---
         
-        // 1. Si playerCamera (Transform) está asignado, intentamos obtener el componente Camera desde allí.
-        if (playerCamera != null)
-        {
-            // Si PlayerCameraComponent NO está asignado manualmente, lo buscamos en el Transform 'playerCamera'.
-            if (PlayerCameraComponent == null)
-            {
-                PlayerCameraComponent = playerCamera.GetComponent<Camera>();
-            }
-        }
-        
-        // 2. Si PlayerCameraComponent sigue siendo nulo, buscamos una Cámara en los hijos.
-        // Esto cubre el caso en que playerCamera no fue asignado o la instancia falló al crear la referencia.
         if (PlayerCameraComponent == null)
         {
-             PlayerCameraComponent = GetComponentInChildren<Camera>();
-        }
-        
-        // --- FIN DE CORRECCIÓN ---
-
-        if (PlayerCameraComponent == null)
-        {
-             Debug.LogError($"MouseLook ({gameObject.name} - Player ID: {playerInput.playerIndex}): Error CRÍTICO. No se encontró el componente Camera en la jerarquía del jugador.");
+             Debug.LogError($"MouseLook ({gameObject.name} - Player ID: {playerInput.playerIndex}): Error CRÍTICO. Este script debe estar adjunto directamente al GameObject de la cámara.");
         }
 
         // --- INICIALIZACIÓN DEL PUNTERO ---
@@ -88,6 +59,9 @@ public class MouseLook : MonoBehaviour
 
     void OnEnable()
     {
+        // Se busca el PlayerInput en el padre si aún no se ha hecho
+        if (playerInput == null) playerInput = GetComponentInParent<PlayerInput>();
+
         var map = playerInput.currentActionMap;
         if (map != null)
         {
@@ -98,52 +72,46 @@ public class MouseLook : MonoBehaviour
 
     void OnDisable()
     {
-        if (playerInput != null)
-        {
-            var map = playerInput.currentActionMap;
-            if (map != null)
-            {
-                map["Look"].performed -= ctx => rawInput = Vector2.zero;
-                map["Look"].canceled -= ctx => rawInput = Vector2.zero;
-            }
-        }
+        if (playerInput == null) return;
+        var map = playerInput.currentActionMap;
+        if (map == null) return;
+
+        map["Look"].performed -= ctx => rawInput = Vector2.zero;
+        map["Look"].canceled -= ctx => rawInput = Vector2.zero;
     }
 
     void Update()
     {
-        // Suavizado de Input
+        // 1. INPUT (Suavizado)
         currentInputVector = Vector2.SmoothDamp(currentInputVector, rawInput, ref smoothInputVelocity, smoothTime);
 
         float deltaX = currentInputVector.x * lookSensitivity * Time.deltaTime;
         float deltaY = currentInputVector.y * lookSensitivity * Time.deltaTime;
-
-        // --- ROTACIÓN VERTICAL (CÁMARA) ---
-        pitch -= deltaY;
-        pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
-        playerCamera.localRotation = Quaternion.Euler(pitch, 0f, 0f);
-
-        // --- ACUMULAR ROTACIÓN HORIZONTAL ---
+        
+        // 2. ROTACIÓN VERTICAL (Pitch)
+        pitch -= deltaY; 
+        pitch = Mathf.Clamp(pitch, minPitch, maxPitch); 
+        
+        // 3. ROTACIÓN HORIZONTAL (Yaw)
         yRotation += deltaX;
 
-        // Sincronizar orientación auxiliar
+        // CAMBIO CRÍTICO: Aplicamos la rotación COMBINADA (Pitch y Yaw) al transform de la cámara.
+        // Esto hace que la cámara maneje toda la rotación visual, siempre que su padre esté fijo.
+        transform.localRotation = Quaternion.Euler(pitch, yRotation, 0f); 
+
+        // 4. SINCRONIZACIÓN DE MOVIMIENTO:
+        // El Transform 'orientation' DEBE rotar para que el script PlayerMovement sepa hacia dónde moverse.
         if (orientation != null)
         {
-            orientation.rotation = Quaternion.Euler(0f, yRotation, 0f);
+            orientation.rotation = Quaternion.Euler(0f, yRotation, 0f); 
         }
+
+        // Se elimina la rotación del playerBody para asegurar que la cámara lo controle.
     }
 
     void FixedUpdate()
     {
-        // --- ROTACIÓN HORIZONTAL (CUERPO FÍSICO) ---
-        if (rb != null)
-        {
-            Quaternion targetRotation = Quaternion.Euler(0f, yRotation, 0f);
-            rb.MoveRotation(targetRotation);
-        }
-        else
-        {
-            playerBody.rotation = Quaternion.Euler(0f, yRotation, 0f);
-        }
+        // Este bloque se mantiene vacío, según tu petición.
     }
 
     void OnGUI()
@@ -165,12 +133,6 @@ public class MouseLook : MonoBehaviour
             // Nota: Unity GUI usa (0,0) en la esquina superior izquierda. viewport.y es desde abajo.
             float yCenterGUI = screenH - yCenter; // Invertir Y para el contexto de GUI
 
-            // DEBUG: Confirma que la función se ejecuta y las coordenadas
-            if (playerInput != null && playerInput.playerIndex == 1) 
-            {
-              //   Debug.Log($"Puntero P2 dibujando. Viewport rect: {viewportRect}. Centro P2 (Screen/GUI): {xCenter:F0},{yCenterGUI:F0}");
-            }
-
             // 2. Definir el Rect del puntero usando las coordenadas de pantalla calculadas
             crosshairRect = new Rect(xCenter - crosshairSize / 2f, 
                                      yCenterGUI - crosshairSize / 2f, 
@@ -179,12 +141,6 @@ public class MouseLook : MonoBehaviour
 
             // 3. Dibuja la textura del puntero en el centro
             GUI.DrawTexture(crosshairRect, crosshairTexture);
-        }
-        else 
-        {
-            // Mensaje de Debug más informativo. Esto te dirá si el problema es la referencia (NULL) o la activación.
-            string status = PlayerCameraComponent == null ? "NULL" : "Inactiva";
-            Debug.LogWarning($"MouseLook ({gameObject.name} - Player ID: {playerInput.playerIndex}): La cámara no está lista ({status}).");
         }
     }
 }

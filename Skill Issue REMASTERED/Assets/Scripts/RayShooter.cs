@@ -8,6 +8,8 @@ public class RayShooter : MonoBehaviour
     public InputActionAsset inputActions;
     private InputAction attackAction;
     private InputAction zoomAction;
+    private InputAction interactAction;
+    private InputAction tirarAction;
 
     [Header("Zoom Settings")]
     public float zoomMultiplier = 0.5f;
@@ -28,15 +30,21 @@ public class RayShooter : MonoBehaviour
 
         attackAction = map.FindAction("Attack");
         zoomAction  = map.FindAction("Zoom");
+        interactAction = map.FindAction("Interact");
+        tirarAction  = map.FindAction("Tirar Arma");
 
         attackAction.Enable();
         zoomAction.Enable();
+        interactAction.Enable();
+        tirarAction.Enable();
     }
 
     private void OnDisable()
     {
         attackAction.Disable();
         zoomAction.Disable();
+        interactAction.Disable();
+        tirarAction.Disable();
     }
 
     private void Start()
@@ -52,7 +60,7 @@ public class RayShooter : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (interactAction.WasPressedThisFrame())
         {
             Debug.Log("EEEEEEEEEEEE");
             Vector3 point = new Vector3(_camera.pixelWidth / 2, _camera.pixelHeight / 2, 0);
@@ -87,7 +95,7 @@ public class RayShooter : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (tirarAction.WasPressedThisFrame())
         {
             Debug.Log("QQQQQQQ");
             Vector3 point = new Vector3(_camera.pixelWidth / 2, _camera.pixelHeight / 2, 0);
