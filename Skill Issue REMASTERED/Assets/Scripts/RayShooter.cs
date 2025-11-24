@@ -1,71 +1,106 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class RayShooter : MonoBehaviour
 {
-    private Camera _camera;
+    [Header("Input System")]
+    public InputActionAsset inputActions;
+    private InputAction attackAction;
+    private InputAction zoomAction;
+
+    [Header("Zoom Settings")]
+    public float zoomMultiplier = 0.5f;
+    public float zoomSpeed = 10f; // para zoom suave
     private float originalFOV;
-    void Start()
+    private Camera _camera;
+
+    private void OnEnable()
+    {
+        var map = inputActions.FindActionMap("Player");
+
+        attackAction = map.FindAction("Attack");
+        zoomAction  = map.FindAction("Zoom");
+
+        attackAction.Enable();
+        zoomAction.Enable();
+    }
+
+    private void OnDisable()
+    {
+        attackAction.Disable();
+        zoomAction.Disable();
+    }
+
+    private void Start()
     {
         _camera = GetComponent<Camera>();
-
         originalFOV = _camera.fieldOfView;
+
+        // Bloqueo del cursor SOLO si esta c√°mara pertenece al jugador local real
+        // (si no quieres esto en multiplayer local, lo puedes quitar)
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-    void Update()
-    {
-        if (Input.GetMouseButton(1))
-        {
-            _camera.fieldOfView = originalFOV / 2;
-        } else
-        {
-            _camera.fieldOfView = originalFOV;
-        }
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector3 point = new Vector3(_camera.pixelWidth / 2, _camera.pixelHeight / 2, 0);
-            Ray ray = _camera.ScreenPointToRay(point);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                var hitObject = hit.transform.gameObject;
-                var target = hitObject.GetComponent<ReactiveTarget>();
-                if (target != null)
-                {
-                    //Debug.Log("Take that!");
-                    target.ReactToHit();
-                }
-                else
-                {
-                    //Debug.Log("Hit " + hit.point + " (" + hit.transform.gameObject.name + ")");
-                    StartCoroutine(SphereIndicator(hit.point));
-                }
-            }
-        }
+    private void Update()
+    {
+        HandleZoom();
+        HandleAttack();
     }
 
-    void OnGUI()
-    {  // se ejecuta despuÈs de dibujar el frame del juego
-        int size = 12;
-        float posX = _camera.pixelWidth / 2 - size / 4;
-        float posY = _camera.pixelHeight / 2 - size / 2;
-        GUI.Label(new Rect(posX, posY, size, size), "*"); // puede mostrar texto e im·genes
+    private void HandleZoom()
+    {
+        float targetFOV = zoomAction.IsPressed() ? originalFOV * zoomMultiplier : originalFOV;
+
+        // Zoom suave
+        _camera.fieldOfView = Mathf.Lerp(
+            _camera.fieldOfView,
+            targetFOV,
+            Time.deltaTime * zoomSpeed
+        );
+    }
+
+    private void HandleAttack()
+    {
+        if (!attackAction.WasPressedThisFrame())
+            return;
+
+        // EL CAMBIO CR√çTICO: viewport-centro para evitar los 90 grados de error
+        Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            var target = hit.transform.GetComponent<ReactiveTarget>();
+
+            if (target != null)
+            {
+                target.ReactToHit();
+            }
+            else
+            {
+                StartCoroutine(SphereIndicator(hit.point));
+            }
+        }
     }
 
     private IEnumerator SphereIndicator(Vector3 pos)
     {
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         sphere.transform.position = pos;
+
         Destroy(sphere.GetComponent<SphereCollider>());
-
         yield return new WaitForSeconds(5);
-
         Destroy(sphere);
     }
 
-}
+    private void OnGUI()
+    {
+        int size = 12;
+        float posX = _camera.pixelWidth / 2 - size / 4;
+        float posY = _camera.pixelHeight / 2 - size / 2;
 
+        GUI.Label(new Rect(posX, posY, size, size), "*");
+    }
+}
