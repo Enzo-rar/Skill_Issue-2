@@ -21,6 +21,7 @@ public class RayShooter : MonoBehaviour
     PlayerCam posicionCamara;
       
     [SerializeField] private GameObject fireballPrefab;
+    [SerializeField] private PlayerCharacter playerStats;
     private GameObject _fireball;
     private Camera _camera;
 
@@ -52,6 +53,10 @@ public class RayShooter : MonoBehaviour
         _camera = GetComponent<Camera>();
         originalFOV = _camera.fieldOfView;
 
+        if (playerStats == null)
+        {
+            Debug.LogError("RayShooter: playerStats no asignado en el inspector.");
+        }
         // Bloqueo del cursor SOLO si esta cámara pertenece al jugador local real
         // (si no quieres esto en multiplayer local, lo puedes quitar)
         Cursor.lockState = CursorLockMode.Locked;
@@ -80,7 +85,6 @@ public class RayShooter : MonoBehaviour
                     {
                         Debug.Log(item + " seleccionado");
                         componenteReactivo.ReactToCollect(item, _camera);
-                        PlayerCharacter playerStats = _camera.GetComponentInParent<PlayerCharacter>();
                         playerStats.SetItemEquipped(item);
                         equipado = true;
                     }
@@ -108,7 +112,7 @@ public class RayShooter : MonoBehaviour
                 if (superficie != null)
                 {
                     Debug.Log("Dropear en superficie: ", superficie);
-                    PlayerCharacter playerStats = _camera.GetComponentInParent<PlayerCharacter>();
+                    
                     //componenteReactivo = playerStats._armaEquipada.GetComponent<ObjetoReactivo>();
                     var itemEquipado = playerStats._armaEquipada;
                     ObjetoReactivo componenteReactivo = itemEquipado.GetComponent<ObjetoReactivo>();

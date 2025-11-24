@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 445710295855434028}
   - component: {fileID: 2911898683942163213}
   - component: {fileID: 4237635750048872896}
+  - component: {fileID: 1654419653368520126}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -154,6 +155,20 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
+--- !u!114 &1654419653368520126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2123807700500578346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2165ebd0fbda6c94199586f819243ea3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 100
+  deathParticles: {fileID: 0}
 --- !u!1 &2956648141909648753
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,6 +315,7 @@ MonoBehaviour:
   zoomMultiplier: 0.5
   zoomSpeed: 10
   fireballPrefab: {fileID: 8147669148645074578, guid: 90a7c78b38e6c504285f1191fb4259dd, type: 3}
+  playerStats: {fileID: 1654419653368520126}
 --- !u!114 &3458883669204911760
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6785,10 +6785,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerJose
       objectReference: {fileID: 0}
-    - target: {fileID: 2911898683942163213, guid: 12eacc2dbe97e1647b84367f031146c8, type: 3}
-      propertyPath: whatIsGround.m_Bits
-      value: 1032
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
