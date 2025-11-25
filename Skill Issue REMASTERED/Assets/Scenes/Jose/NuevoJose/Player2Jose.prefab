@@ -311,11 +311,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afd6d9aa36689c642be63ac95cc0d6d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputActions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  playerInput: {fileID: 2648411278547494069}
   zoomMultiplier: 0.5
   zoomSpeed: 10
   fireballPrefab: {fileID: 8147669148645074578, guid: 90a7c78b38e6c504285f1191fb4259dd, type: 3}
   playerStats: {fileID: 1654419653368520126}
+  _camera: {fileID: 3387654867923258075}
 --- !u!114 &3458883669204911760
 MonoBehaviour:
   m_ObjectHideFlags: 0

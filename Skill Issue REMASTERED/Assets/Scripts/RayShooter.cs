@@ -5,7 +5,7 @@ using System.Collections;
 public class RayShooter : MonoBehaviour
 {
     [Header("Input System")]
-    public InputActionAsset inputActions;
+    [SerializeField] private PlayerInput playerInput;
     private InputAction attackAction;
     private InputAction zoomAction;
     private InputAction interactAction;
@@ -18,35 +18,38 @@ public class RayShooter : MonoBehaviour
     private bool equipado;
     private GameObject _armaEquipada;
     private ObjetoReactivo componenteReactivo;
-    PlayerCam posicionCamara;
       
     [SerializeField] private GameObject fireballPrefab;
     [SerializeField] private PlayerCharacter playerStats;
     private GameObject _fireball;
-    private Camera _camera;
+    [SerializeField] private Camera _camera;
 
-    private void OnEnable()
-    {
-        var map = inputActions.FindActionMap("Player");
 
-        attackAction = map.FindAction("Attack");
-        zoomAction  = map.FindAction("Zoom");
-        interactAction = map.FindAction("Interact");
-        tirarAction  = map.FindAction("Tirar Arma");
 
-        attackAction.Enable();
-        zoomAction.Enable();
-        interactAction.Enable();
-        tirarAction.Enable();
-    }
+   private void OnEnable()
+{
+    // Cada PlayerInput tiene su propio ActionMap instanciado,
+    // por lo que NO se comparte entre jugadores.
+    var map = playerInput.currentActionMap;
 
-    private void OnDisable()
-    {
-        attackAction.Disable();
-        zoomAction.Disable();
-        interactAction.Disable();
-        tirarAction.Disable();
-    }
+    attackAction   = map["Attack"];
+    interactAction = map["Interact"];
+    tirarAction    = map["Tirar Arma"];
+    zoomAction     = map["Zoom"];
+
+    attackAction.Enable();
+    interactAction.Enable();
+    tirarAction.Enable();
+    zoomAction.Enable();
+}
+
+private void OnDisable()
+{
+    attackAction.Disable();
+    interactAction.Disable();
+    tirarAction.Disable();
+    zoomAction.Disable();
+}
 
     private void Start()
     {
@@ -68,32 +71,46 @@ public class RayShooter : MonoBehaviour
         if (interactAction.WasPressedThisFrame())
         {
             Debug.Log("EEEEEEEEEEEE");
-            Vector3 point = new Vector3(_camera.pixelWidth / 2, _camera.pixelHeight / 2, 0);
-            Ray ray = _camera.ScreenPointToRay(point);
+            
+            Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             RaycastHit hit;
+
             if (Physics.Raycast(ray, out hit))
             {
                 var item = hit.transform.gameObject;
-                //si no tiene componenteReactivo salta error
-                // var componenteReactivo = item.GetComponent<ObjetoReactivo>();
                 Debug.Log("camara: ", _camera);
-                Debug.Log("");
+                
                 if (item != null)
                 {
                     componenteReactivo = item.GetComponent<ObjetoReactivo>();
+                    Debug.Log("componenteReactivo del item al que has hecho Raycast: ", componenteReactivo);
                     if (componenteReactivo != null)
                     {
-                        Debug.Log(item + " seleccionado");
-                        componenteReactivo.ReactToCollect(item, _camera);
-                        playerStats.SetItemEquipped(item);
-                        equipado = true;
+                        Debug.Log(item.name + " seleccionado");
+                        //En esta condicion puedes implementar una ventaja que te permita recoger el item aunque otro jugador lo tenga equipado (quitarselo de las manos)
+                        if (componenteReactivo.IsGrabbed() == true)
+                        {
+                            Debug.Log("El item ya está equipado por otro jugador.");
+
+                        } else
+                        {
+                            //Si tienes ya un arma en la mano que no puedas pillar otra, ¿se podria implementar una segunda arma?
+                            if (!equipado)
+                            {
+                            componenteReactivo.ReactToCollect(item, _camera);
+                            playerStats.SetItemEquipped(item);
+                            equipado = true;  
+                            }
+                           
+                        }
+                        
                     }
                     
                 }
                 else
                 {
                     Debug.Log("Seleccionado: " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido");
-                    //StartCoroutine(SphereIndicator(hit.point));
+                   
                 }
 
             }
@@ -102,8 +119,8 @@ public class RayShooter : MonoBehaviour
         if (tirarAction.WasPressedThisFrame())
         {
             Debug.Log("QQQQQQQ");
-            Vector3 point = new Vector3(_camera.pixelWidth / 2, _camera.pixelHeight / 2, 0);
-            Ray ray = _camera.ScreenPointToRay(point);
+            
+            Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
@@ -111,21 +128,21 @@ public class RayShooter : MonoBehaviour
 
                 if (superficie != null)
                 {
-                    Debug.Log("Dropear en superficie: ", superficie);
+                    Debug.Log("Dropear en superficie: " + superficie.name);
                     
                     //componenteReactivo = playerStats._armaEquipada.GetComponent<ObjetoReactivo>();
-                    var itemEquipado = playerStats._armaEquipada;
-                    ObjetoReactivo componenteReactivo = itemEquipado.GetComponent<ObjetoReactivo>();
+                    var itemEquipado = playerStats.GetItemEquipped();
+                    
                     if (itemEquipado != null)
                     {
+                        ObjetoReactivo componenteReactivo = itemEquipado.GetComponent<ObjetoReactivo>();
                         componenteReactivo.ReactToDrop(itemEquipado, hit.point);
                         playerStats.SetItemEquipped(null);
                         equipado = false;
-                    }
-
-                    else
+                        componenteReactivo.setGrabbed(false);
+                    }else
                     {
-                        Debug.Log("Seleccionado: " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido");
+                        Debug.Log("En la superficie -> " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido ó no tienes nada equipado");
                         //StartCoroutine(SphereIndicator(hit.point));
                     }
                 }
@@ -198,11 +215,15 @@ public class RayShooter : MonoBehaviour
     }
 
     void shootProjectile()
-    {
-        _fireball = Instantiate<GameObject>(fireballPrefab);
-        posicionCamara = GetComponentInParent<PlayerCam>();
-        _fireball.transform.Translate(posicionCamara.transform.position.x, posicionCamara.transform.position.y, posicionCamara.transform.position.z);
-        _fireball.transform.position = transform.TransformPoint(Vector3.forward * 1.5f);
-        _fireball.transform.rotation = transform.rotation;
+    {   
+        
+              // Punto exacto frente a la cámara (1.5m delante)
+    Vector3 spawnPos = _camera.transform.position + _camera.transform.forward * 1.5f;
+
+    // Orientación igual a la cámara
+    Quaternion spawnRot = _camera.transform.rotation;
+
+    _fireball = Instantiate(fireballPrefab, spawnPos, spawnRot);
+   
     }
 }

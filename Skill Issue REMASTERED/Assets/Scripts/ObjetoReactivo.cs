@@ -11,7 +11,9 @@ public class ObjetoReactivo : MonoBehaviour
     private Collider _collider;
     private Rigidbody _rigidbody;
     private Camera _camara;
+    private bool isGrabbed = false;
 
+     private
     void Awake()
     { // Guardamos referencias si existen
         _collider = GetComponent<Collider>();
@@ -20,6 +22,7 @@ public class ObjetoReactivo : MonoBehaviour
     // Reacciona al ser recogido
     public void ReactToCollect(GameObject item, Camera camara)
     {
+
         Debug.Log("Metodo reactToCollect:", item);
         _camara = camara;
 
@@ -38,18 +41,18 @@ public class ObjetoReactivo : MonoBehaviour
         transform.localPosition = new Vector3(0.5f, -0.3f, 0.8f); // posici�n �en mano�
         transform.localRotation = Quaternion.identity;
 
+        isGrabbed = true;
+       
+    }
 
-        //_armaEquipada = item;
-        // Registrar el item en PlayerCharacter
-        var player = camara.GetComponentInParent<PlayerCharacter>();
-        if (player != null)
-            player.SetItemEquipped(gameObject);
+    public bool IsGrabbed()
+    {
+        return isGrabbed;
+    }
 
-        // Destroy(_armaEquipada.GetComponent<BoxCollider>());
-
-        var playerStats = camara.GetComponentInParent<PlayerCharacter>();
-        if (playerStats != null) { playerStats.SetItemEquipped(item); }
-        Debug.Log("Objeto recogido y equipado: " + gameObject.name);
+    public void setGrabbed(bool estado)
+    {
+        isGrabbed = estado;
     }
 
     //   // Reacciona al ser soltado, TP A DONDE APUNTAS

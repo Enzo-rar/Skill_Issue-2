@@ -102,7 +102,7 @@ public class FPSInput : MonoBehaviour
 
         originalSize = transform.localScale;
 
-        // --- SOLUCIÓN JITTER EN PAREDES (CRÍTICO) ---
+       
         // Creamos un material sin fricción en tiempo de ejecución.
         // Esto evita que el jugador se "trabe" al rozar paredes, eliminando el jitter lateral.
         CapsuleCollider col = GetComponent<CapsuleCollider>();
@@ -115,6 +115,7 @@ public class FPSInput : MonoBehaviour
             slipperyMat.bounceCombine = PhysicsMaterialCombine.Minimum;
             col.material = slipperyMat;
         }
+        
     }
 
     void Update()
@@ -202,6 +203,27 @@ public class FPSInput : MonoBehaviour
         }
 
         rb.useGravity = !OnSlope();
+
+        // --- WALL FRICTION FIX: evita frenarse contra muros ---
+        if (rb.linearVelocity.magnitude > 0.1f)
+        {
+            // Detecta si hay muro adelante
+            if (Physics.Raycast(transform.position, rb.linearVelocity.normalized, out RaycastHit wallHit, 0.6f))
+            {
+                Vector3 wallNormal = wallHit.normal;
+
+                // Proyecta la velocidad para quitar la parte que empuja contra el muro
+                Vector3 vel = rb.linearVelocity;
+                float dot = Vector3.Dot(vel, wallNormal);
+
+                if (dot < 0) // Si estás empujando contra la pared
+                {
+                    vel -= wallNormal * dot; // Quita solo el frenado lateral
+                    rb.linearVelocity = vel;
+                }
+            }
+        }
+
     }
 
     private void SpeedControl()

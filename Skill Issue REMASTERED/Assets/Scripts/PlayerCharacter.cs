@@ -3,7 +3,7 @@ public class PlayerCharacter : MonoBehaviour
 {
     [SerializeField] private int _health;
     //private GameObject _armaEquipada;
-    public GameObject _armaEquipada { get; private set; } //getter y setter automatico. Lectura publica pero escritora privada
+    private GameObject _armaEquipada; //getter y setter automatico. Lectura publica pero escritora privada
     public ParticleSystem deathParticles;
     void Start()
     {
@@ -24,6 +24,11 @@ public class PlayerCharacter : MonoBehaviour
     {
         _armaEquipada = item;
         // Debug.Log("Arma equipada: " + _armaEquipada.name);
+    }
+
+    public GameObject GetItemEquipped()
+    {
+        return _armaEquipada;
     }
 
     private void Die()
