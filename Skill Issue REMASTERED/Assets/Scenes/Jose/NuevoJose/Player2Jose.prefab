@@ -168,7 +168,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 100
+  _playerInput: {fileID: 2648411278547494069}
+  _playerCamera: {fileID: 3387654867923258075}
   deathParticles: {fileID: 0}
+  playerId: -1
 --- !u!1 &2956648141909648753
 GameObject:
   m_ObjectHideFlags: 0
