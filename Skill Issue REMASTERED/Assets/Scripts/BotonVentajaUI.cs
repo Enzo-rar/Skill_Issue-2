@@ -43,4 +43,18 @@ public class BotonVentajaUI : MonoBehaviour
         botonComponente.onClick.RemoveAllListeners(); // Limpieza por si acaso
         botonComponente.onClick.AddListener(() => alHacerClick());
     }
+
+    public void SetResaltado(bool seleccionado)
+    {
+        // 1. Efecto 1: Borde
+        if (bordeResaltado != null)
+        {
+            // Activa o desactiva el borde o la luz
+            bordeResaltado.SetActive(seleccionado); 
+        }
+        
+        // 2. Efecto 2: Escala 
+        // Aqui se podria hacer con una transicion suave 
+        transform.localScale = seleccionado ? escalaSeleccionada : Vector3.one;
+    }
 }

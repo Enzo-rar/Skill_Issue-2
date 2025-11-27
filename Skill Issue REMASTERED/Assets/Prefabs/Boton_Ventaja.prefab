@@ -585,7 +585,7 @@ MonoBehaviour:
   descripcionTxt: {fileID: 4232574156752055863}
   fondoRareza: {fileID: 8530465016555389596}
   botonComponente: {fileID: 8891322123621221977}
-  bordeResaltado: {fileID: 0}
+  bordeResaltado: {fileID: 3288578492218145568}
   escalaSeleccionada: {x: 1.1, y: 1.1, z: 1.1}
   colorComun: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   colorRaro: {r: 0, g: 0, b: 1, a: 1}

@@ -95,12 +95,13 @@ public class GameManager : MonoBehaviour
     // Aqui se puede cambiar la logica para que el que se lleve la ventaja sea el que
     // menos sets ganados tenga en computo total, pero faltaria una variable adicional.
     // *** De momento se lo lleva el perdedor del set. ****
-    public void RegistrarVictoriaSet(int idJugadorGanador)
+    public void RegistrarVictoriaSet(int idJugadorMuerto)
     {
-        if (idJugadorGanador == 1) scoreP1_Sets++;
-        else scoreP2_Sets++;
-        int idPerdedor = (idJugadorGanador == 1) ? 2 : 1;
-        VerificarEstadoRonda(idJugadorGanador, idPerdedor);
+        if (idJugadorMuerto == 1) scoreP2_Sets++;
+        else scoreP1_Sets++;
+        int idPerdedor = idJugadorMuerto;
+        int idGanador = (idJugadorMuerto == 1) ? 2 : 1;
+        VerificarEstadoRonda(idGanador, idPerdedor);
     }
 
     private void VerificarEstadoRonda(int ultimoGanador, int ultimoPerdedor)
@@ -116,11 +117,13 @@ public class GameManager : MonoBehaviour
             // La ronda sigue, solo reiniciamos posiciones para el siguiente set
             Debug.Log("Set terminado. Iniciando siguiente set...");
             ReiniciarArenaParaSiguienteSet();
-            if (scoreP1_Sets > scoreP2_Sets)
-            {
+                
             // Abrir la UI de selección de perks para el perdedor del set para escoger una ventaja
+            // Aqui se puede cambiar la logica para que sea el que lleve menos sets ganados en total
             perkSelectorUI.InicializarSeleccion(ultimoPerdedor, ultimoGanador);
-            }
+            
+            
+
         }
 
       

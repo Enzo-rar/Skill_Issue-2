@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 public class PlayerCharacter : MonoBehaviour
 {
     [SerializeField] private int _baseHealth = 100;
-    [SerializeField] private int _remainingHealth = 100;
+    [SerializeField] private int _remainingHealth = 1;
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private Camera _playerCamera;
     [SerializeField] private Collider _collisionHandler;

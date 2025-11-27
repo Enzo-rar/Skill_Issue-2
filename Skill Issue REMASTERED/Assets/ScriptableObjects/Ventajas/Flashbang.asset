@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Flashbang
   m_EditorClassIdentifier: 
   nombreVentaja: Flashbang
-  descripcion: adfasfa
+  descripcion: Repetidos flashes en la camara del enemigo
   icono: {fileID: 0}
   rareza: 2
   tipoFavorable: 0

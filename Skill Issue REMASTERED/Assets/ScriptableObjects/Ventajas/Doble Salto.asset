@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Doble Salto
   m_EditorClassIdentifier: 
   nombreVentaja: Doble Salto
-  descripcion: asdasdasd
+  descripcion: Capacidad de realizar un segundo salto en el aire
   icono: {fileID: 0}
   rareza: 0
   tipoFavorable: 1

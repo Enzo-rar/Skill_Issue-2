@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Robo de Arma
   m_EditorClassIdentifier: 
   nombreVentaja: Robo de arma
-  descripcion: amdfasdfa
+  descripcion: Robale el arma a tu enemigo presionando interactuar
   icono: {fileID: 0}
   rareza: 1
   tipoFavorable: 0

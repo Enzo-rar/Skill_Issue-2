@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Municion Infinita
   m_EditorClassIdentifier: 
   nombreVentaja: "Munici\xF3n infinita"
-  descripcion: asdvadsv
+  descripcion: Disparar sin recargar
   icono: {fileID: 0}
   rareza: 2
-  tipoFavorable: 6
+  tipoFavorable: 5
   tipoDebuff: 0
