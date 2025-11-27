@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6828120824610988916}
   - component: {fileID: 5336480860787036593}
+  - component: {fileID: 2005444204304686037}
+  - component: {fileID: 7955418227731962715}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -76,3 +78,45 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &2005444204304686037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8193792966314588504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d224fccab4e56f498dcdeec554461a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setsParaGanarRonda: 2
+  rondasParaGanarPartida: 3
+  scoreP1_Sets: 0
+  scoreP2_Sets: 0
+  rondaActual: 1
+  OnRoundEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSetEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  perkSelectorUI: {fileID: 0}
+--- !u!114 &7955418227731962715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8193792966314588504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5317fcd24633e344a9b29795e1db3361, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  todasLasVentajas:
+  - {fileID: 11400000, guid: f24263b377503d84dbfe58bbbefee099, type: 2}
+  - {fileID: 11400000, guid: 41c77e30f9b9a044785855960576f4c6, type: 2}
+  - {fileID: 11400000, guid: 2323f665116f3f643bbaaf5e34868072, type: 2}
+  - {fileID: 11400000, guid: ef2c522a53bd5ec48babf2aae53ac139, type: 2}
+  - {fileID: 11400000, guid: efb704fc4fe79764aae8933f6d3a379a, type: 2}

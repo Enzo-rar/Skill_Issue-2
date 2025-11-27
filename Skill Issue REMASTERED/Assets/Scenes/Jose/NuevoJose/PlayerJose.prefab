@@ -167,10 +167,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2165ebd0fbda6c94199586f819243ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 1
+  _baseHealth: 100
+  _remainingHealth: 100
   _playerInput: {fileID: 2648411278547494069}
+  _playerCamera: {fileID: 3387654867923258075}
+  _collisionHandler: {fileID: 7715411391216644317}
   deathParticles: {fileID: 0}
   playerId: -1
+  estaVivo: 1
 --- !u!1 &2956648141909648753
 GameObject:
   m_ObjectHideFlags: 0
