@@ -4,14 +4,16 @@ using System.Collections;
 using UnityEngine.InputSystem;
 public class PlayerCharacter : MonoBehaviour
 {
-    [SerializeField] private int _health;
+    [SerializeField] private int _baseHealth = 100;
+    [SerializeField] private int _remainingHealth = 100;
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private Camera _playerCamera;
+    [SerializeField] private Collider _collisionHandler;
     //private GameObject _armaEquipada;
     private GameObject _armaEquipada; //getter y setter automatico. Lectura publica pero escritora privada
     public ParticleSystem deathParticles;
     public int playerId = -1; // 1 o 2
-    
+    public bool estaVivo = true;
    private HashSet<Ventajas> historialVentajas = new HashSet<Ventajas>();
 
     // Variables de estado (flags)
@@ -23,7 +25,7 @@ public class PlayerCharacter : MonoBehaviour
     {   
         _playerInput = GetComponentInParent<PlayerInput>();
         if(_playerInput != null){
-        playerId = GameManager.Instance.RegistrarJugador(_playerInput,_playerCamera);
+        playerId = GameManager.Instance.RegistrarJugador(_playerInput,_playerCamera, this);
         }
         else
         {
@@ -31,7 +33,9 @@ public class PlayerCharacter : MonoBehaviour
         }
         
         
-        Debug.Log("Se ha unido el jugador-> " + playerId + " con Health: " + _health);
+        Debug.Log("Se ha unido el jugador-> " + playerId + " con Health: " + _remainingHealth);
+        
+        _remainingHealth = _baseHealth;
     }
 
 
@@ -81,7 +85,7 @@ public class PlayerCharacter : MonoBehaviour
                 //Aumentar vida en 50, al igual vale la pena hacer un método en HealthSystem para esto y separar este script para ventajas y quizas armas
               //  GetComponent<HealthSystem>().Curar(50);
               Debug.Log("Vida aumentada en Ventaja +50");
-              _health += 50;
+              _remainingHealth += 50;
                 break;
                 
             case VentajaFavorable.Velocidad:
@@ -109,8 +113,8 @@ public class PlayerCharacter : MonoBehaviour
                 
             case VentajaDebuff.ReduccionVida:
               //  GetComponent<HealthSystem>().RecibirDañoDirecto(20);
-                _health -= 20;
-                Debug.Log("Vida reducida en Desventaja -20: " + _health);
+                _remainingHealth -= 20;
+                Debug.Log("Vida reducida en Desventaja -20: " + _remainingHealth);
                 break;
 
         
@@ -118,7 +122,7 @@ public class PlayerCharacter : MonoBehaviour
     }
 
     // Corutina para manejar el efecto de ceguera
-    private System.Collections.IEnumerator RutinaCeguera(float duracion)
+    private IEnumerator RutinaCeguera(float duracion)
     {
         estaCegado = true;
         // Aquí poner como funciona la ceguera visualmente, por ejemplo con un overlay en blanco para flashear la pantalla
@@ -132,10 +136,9 @@ public class PlayerCharacter : MonoBehaviour
    
     public void Hurt(int damage)
     {
-        Debug.Log("Health: " + _health);
-        _health = _health - damage;
-        Debug.Log("Health: " + _health);
-        if( _health <= 0)
+        _remainingHealth = _remainingHealth - damage;
+        Debug.Log("Jugador " + playerId + " ha recibido daño: " + damage + " Vida restante: " + _remainingHealth);
+        if( _remainingHealth <= 0 && estaVivo)
         {
             Die();
         }
@@ -153,10 +156,14 @@ public class PlayerCharacter : MonoBehaviour
 
     private void Die()
     {
+        //Emepzar corrutina de muerte y desactivar colisiones con este jugador para que no interfiera en la partida
+       
+        estaVivo = false;
         StartCoroutine(ActionsAfterDeath());
 
         
     }
+
 
     IEnumerator ActionsAfterDeath()
     {
@@ -169,6 +176,16 @@ public class PlayerCharacter : MonoBehaviour
         // Aqui ponemos logica destruccion del objeto jugador? al igual es mejor manejarlo desde el GameManager directamente
         // Resetear el mapa poner otro o reiniciar posiciones
         //Destroy(this.gameObject);
+    }
+
+    public void RevivirJugador()
+    {
+        estaVivo = true;
+        // En caso de una ventaja para aumentar HP cambiar _baseHealth antes de revivir
+        _remainingHealth = _baseHealth; 
+        Debug.Log("Jugador " + playerId + " ha sido revivido con vida: " + _remainingHealth);
+        // Aqui faltaria resetear la posición, animaciones, etc.
+        // Esta funciona la tendra que llamar el GameManager cuando reinicie el set
     }
    
 }

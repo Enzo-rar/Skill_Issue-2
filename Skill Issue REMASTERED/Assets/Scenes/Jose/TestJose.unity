@@ -562,6 +562,11 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!136 &814046738 stripped
+CapsuleCollider:
+  m_CorrespondingSourceObject: {fileID: 7715411391216644317, guid: 12eacc2dbe97e1647b84367f031146c8, type: 3}
+  m_PrefabInstance: {fileID: 5205692481388354490}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &870894869
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -900,10 +905,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   perkSelectorUI: {fileID: 1470891974}
-  Jugador1RondasGanadas: 0
-  Jugador2RondasGanadas: 0
-  playerCamera1: {fileID: 0}
-  playerCamera2: {fileID: 0}
 --- !u!20 &1964365268 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 3387654867923258075, guid: 12eacc2dbe97e1647b84367f031146c8, type: 3}
@@ -995,6 +996,10 @@ PrefabInstance:
       propertyPath: _playerCamera
       value: 
       objectReference: {fileID: 1964365268}
+    - target: {fileID: 610532349864617317, guid: 12eacc2dbe97e1647b84367f031146c8, type: 3}
+      propertyPath: _collisionHandler
+      value: 
+      objectReference: {fileID: 814046738}
     - target: {fileID: 664457784873025298, guid: 12eacc2dbe97e1647b84367f031146c8, type: 3}
       propertyPath: m_Name
       value: PlayerJose

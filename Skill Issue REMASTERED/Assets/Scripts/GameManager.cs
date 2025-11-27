@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -25,29 +26,42 @@ public class GameManager : MonoBehaviour
 
     //Variables de los jugadores
     private int jugadoresRegistradosID = 1;
+    [NonSerialized]
     public int Jugador1RondasGanadas = 0;
+    [NonSerialized]
     public int Jugador2RondasGanadas = 0;
 
+    [NonSerialized]
     public Camera playerCamera1;
+    [NonSerialized]
     public Camera playerCamera2;
-    private PlayerInput playerInput1;
-    private PlayerInput playerInput2;
+    
+    //Referencias alcanzables globalmente desde otros scripts
+    [NonSerialized]
+    public PlayerInput playerInput1;
+    [NonSerialized]
+    public PlayerInput playerInput2;
+    private PlayerCharacter playerCharacter1;
+    private PlayerCharacter playerCharacter2;
     private void Awake()
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
 
-    public int RegistrarJugador(PlayerInput playerInput, Camera camaraJugador)
+    public int RegistrarJugador(PlayerInput playerInput, Camera camaraJugador, PlayerCharacter personaje = null)
     {   
+        //Aqui basicamente solo queremos referencias necesarias en otros scripts como las camaras para la UI de perks
         if (jugadoresRegistradosID == 1)
         {
+            playerCharacter1 = personaje;
             playerInput1 = playerInput;
             playerCamera1 = camaraJugador;
             
         }
         else if (jugadoresRegistradosID == 2)
         {
+            playerCharacter2 = personaje;
             playerInput2 = playerInput;
             playerCamera2 = camaraJugador;
             //Configurar vista dividida vertical esto puede variar segun como quieras la division, se podria hacer una funcion en los jugadores 
@@ -58,14 +72,35 @@ public class GameManager : MonoBehaviour
         return jugadoresRegistradosID++;
     }
 
-    // Llama a esto cuando alguien muere o se acaba el tiempo del set
+    public PlayerCharacter GetPlayerById(int id)
+    {
+        if (id == 1)
+        {
+            return playerCharacter1;
+        }
+        else if (id == 2)
+        {
+            return playerCharacter2;
+        }
+        else
+        {
+            Debug.LogError("El jugador que buscas en GameManager con ID " + id + " no fue encontrado.");
+            return null;
+        }
+
+    }
+
+    // Esto lo llama el jugador que muere o cuando se acaba el tiempo del set
+    // Preguntas: ¿Quién ganó? ¿Quién perdió?
+    // Aqui se puede cambiar la logica para que el que se lleve la ventaja sea el que
+    // menos sets ganados tenga en computo total, pero faltaria una variable adicional.
+    // *** De momento se lo lleva el perdedor del set. ****
     public void RegistrarVictoriaSet(int idJugadorGanador)
     {
         if (idJugadorGanador == 1) scoreP1_Sets++;
         else scoreP2_Sets++;
         int idPerdedor = (idJugadorGanador == 1) ? 2 : 1;
         VerificarEstadoRonda(idJugadorGanador, idPerdedor);
-
     }
 
     private void VerificarEstadoRonda(int ultimoGanador, int ultimoPerdedor)

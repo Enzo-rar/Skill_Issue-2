@@ -65,14 +65,13 @@ public void AplicarVentajaSeleccionada(Ventajas ventaja, int idPerdedor, int idG
         
         // Si no hay cartas de esa rareza, devolvemos una cualquiera para evitar errores
         if (pool.Count == 0) return todasLasVentajas[Random.Range(0, todasLasVentajas.Count)];
-
+        
         return pool[Random.Range(0, pool.Count)];
     }
 
     private PlayerCharacter ObtenerJugador(int id)
-    {   //Esta funcion probablemente cambie para comunicarse con el GameManager, de manera que un jugador se registre en el GameManager al iniciar la partida
-        //Luego esta funcion preguntara por ID al GameManager para devolver la referencia correcta
+    {   
         //lógica para buscar al jugador por ID
-        return FindObjectsByType<PlayerCharacter>(FindObjectsSortMode.None).FirstOrDefault(p => p.playerId == id);
+        return GameManager.Instance.GetPlayerById(id);
     }
 }
