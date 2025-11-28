@@ -623,6 +623,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameLogic
       objectReference: {fileID: 0}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630, type: 3}
+      propertyPath: mapasDisponibles.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630, type: 3}
+      propertyPath: 'mapasDisponibles.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 1b8b4cb148b315c49a2d116da761300e, type: 2}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630, type: 3}
+      propertyPath: 'mapasDisponibles.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: e5cd8c85458139b4bbc6e27e7abbcd8e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

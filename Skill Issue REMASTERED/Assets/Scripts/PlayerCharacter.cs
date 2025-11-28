@@ -21,6 +21,8 @@ public class PlayerCharacter : MonoBehaviour
     private bool estaCegado = false;
     private float velocidadBase = 5f;
 
+    private 
+
      void Start()
     {   
         _playerInput = GetComponentInParent<PlayerInput>();
@@ -34,10 +36,26 @@ public class PlayerCharacter : MonoBehaviour
         
         
         Debug.Log("Se ha unido el jugador-> " + playerId + " con Health: " + _remainingHealth);
-        
-        _remainingHealth = _baseHealth;
+
+        //_remainingHealth = _baseHealth;
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.OnSetEnded.AddListener(RevivirJugadorSiguienteSet);
+        }
+        else
+        {
+            Debug.LogWarning("GameManager Instance es nulo en PlayerCharacter Start(). Podria deberse al orden de creacion de los objetos.");
+        }
     }
 
+    //Esto solo es para probar, luego se quita
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            GameManager.Instance.RegistrarVictoriaSet(playerId);
+        }
+    }
 
     // --- PUNTO DE ENTRADA UNICO ---
     public void ActivarVentaja(Ventajas nuevaVentaja)
@@ -156,8 +174,8 @@ public class PlayerCharacter : MonoBehaviour
 
     private void Die()
     {
-        //Emepzar corrutina de muerte y desactivar colisiones con este jugador para que no interfiera en la partida
-       
+        //Emepzar corrutina de muerte 
+        //estaVivo a false permite que no salte de nuevo la funcion de morir al disparar cadaver.
         estaVivo = false;
         StartCoroutine(ActionsAfterDeath());
 
@@ -178,7 +196,7 @@ public class PlayerCharacter : MonoBehaviour
         //Destroy(this.gameObject);
     }
 
-    public void RevivirJugador()
+    public void RevivirJugadorSiguienteSet()
     {
         estaVivo = true;
         // En caso de una ventaja para aumentar HP cambiar _baseHealth antes de revivir
@@ -186,6 +204,7 @@ public class PlayerCharacter : MonoBehaviour
         Debug.Log("Jugador " + playerId + " ha sido revivido con vida: " + _remainingHealth);
         // Aqui faltaria resetear la posición, animaciones, etc.
         // Esta funciona la tendra que llamar el GameManager cuando reinicie el set
+
     }
    
 }

@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +17,8 @@ public class GameManager : MonoBehaviour
     public int scoreP2_Sets = 0;
     public int rondaActual = 1;
     
+    [Header("Mapas")]
+    public List<Mapas> mapasDisponibles;
    
     // Eventos para actualizar UI u otras cosas
     public UnityEvent<int> OnRoundEnded; // Pasa el ID del ganador (1 o 2)
@@ -165,10 +169,30 @@ public class GameManager : MonoBehaviour
         Debug.Log("Nueva ronda comenzada.");
     }
 
+    private Vector2[] GenerarMapaSet()
+    {
+        
+        Vector2[] posicionesSpawnArray = new Vector2[2]; 
+        // Aqui faltaria una llamada a una funcion que tenga la lista de Escenas de mapas creados
+        // Sacar uno que no sea el actual y revisar que posiciones tiene como spawns posibles.
+        // Se va a necesitar tener Scriptable objects que contengan la informacion:
+        // Nombre mapa, Escena del mapa, posiciones spawn para ese mapa.
+        
+        // Guardar la escena en una variable para mas tarde usarla para cambiar de mapa en ReiniciarArena.
+        Mapas mapaSeleccionado = mapasDisponibles[UnityEngine.Random.Range(0, mapasDisponibles.Count)];
+        
+        SceneManager.LoadScene(mapaSeleccionado.scenePath);
+        return posicionesSpawnArray;
+
+    }
+
     private void ReiniciarArenaParaSiguienteSet()
     {
         // Aquí se resetean posiciones, vida, munición, etc, habra que añadir lógica específica para cada uno por ejemplo jugador, objetos etc.
         // No olvidar suscribir a este evento desde el script que quiera hacer algo cuando termine un set.
+        GenerarMapaSet();
         OnSetEnded?.Invoke();
+
+        //Ahora cambiamos a la escena del nuevo mapa.
     }
 }
