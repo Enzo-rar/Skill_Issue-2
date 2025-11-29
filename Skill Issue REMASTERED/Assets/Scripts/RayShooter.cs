@@ -24,9 +24,11 @@ public class RayShooter : MonoBehaviour
     private GameObject _fireball;
     [SerializeField] private Camera _camera;
 
+    // Punto desde el que sale la bala
+    private Transform bStartShoot;
 
 
-   private void OnEnable()
+    private void OnEnable()
 {
     // Cada PlayerInput tiene su propio ActionMap instanciado,
     // por lo que NO se comparte entre jugadores.
@@ -97,9 +99,10 @@ private void OnDisable()
                             //Si tienes ya un arma en la mano que no puedas pillar otra, ¿se podria implementar una segunda arma?
                             if (!equipado)
                             {
-                            componenteReactivo.ReactToCollect(item, _camera);
-                            playerStats.SetItemEquipped(item);
-                            equipado = true;  
+                                componenteReactivo.ReactToCollect(item, _camera);
+                                playerStats.SetItemEquipped(item);
+                                equipado = true;
+                                bStartShoot = componenteReactivo.transform.Find("bulletExit");
                             }
                            
                         }
@@ -215,15 +218,16 @@ private void OnDisable()
     }
 
     void shootProjectile()
-    {   
-        
-              // Punto exacto frente a la cámara (1.5m delante)
-    Vector3 spawnPos = _camera.transform.position + _camera.transform.forward * 1.5f;
+    {
 
-    // Orientación igual a la cámara
-    Quaternion spawnRot = _camera.transform.rotation;
+        // Punto exacto frente a la cámara (1.5m delante)
+        // Vector3 spawnPos = _camera.transform.position + _camera.transform.forward * 1.5f;
+        Vector3 spawnPos = bStartShoot.position;
 
-    _fireball = Instantiate(fireballPrefab, spawnPos, spawnRot);
-   
+        // Orientación igual a la cámara
+        Quaternion spawnRot = bStartShoot.rotation;
+        fireballPrefab.GetComponent<Fireball>().damage = componenteReactivo.GetComponent<AKScript>().weapon.damage;
+        _fireball = Instantiate(fireballPrefab, spawnPos, spawnRot);
+        Debug.Log("Damage :" + fireballPrefab.GetComponent<Fireball>().damage);
     }
 }
