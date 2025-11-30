@@ -29,4 +29,8 @@ public class Fireball : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+    public void SetDamage(int dmg)
+    {
+        damage = dmg;
+    }
 }
