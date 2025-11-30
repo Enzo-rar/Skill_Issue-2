@@ -82,7 +82,7 @@ private void OnDisable()
                 var item = hit.transform.gameObject;
                 Debug.Log("camara: ", _camera);
                 
-                if (item != null)
+                if (item != null && hit.distance <= 3)
                 {
                     componenteReactivo = item.GetComponent<ObjetoReactivo>();
                     Debug.Log("componenteReactivo del item al que has hecho Raycast: ", componenteReactivo);
