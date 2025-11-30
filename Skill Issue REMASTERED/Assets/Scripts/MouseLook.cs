@@ -60,14 +60,25 @@ public class MouseLook : MonoBehaviour
     void OnEnable()
     {
         // Se busca el PlayerInput en el padre si aún no se ha hecho
-        if (playerInput == null) playerInput = GetComponentInParent<PlayerInput>();
+        if (playerInput == null) {
+            playerInput = GetComponentInParent<PlayerInput>();
+        }else{
+            Debug.LogWarning("PlayerInput es nulo en MouseLook OnEnable para el jugador con ID: " + playerInput.playerIndex);
+        }
 
+        
         var map = playerInput.currentActionMap;
         if (map != null)
         {
             map["Look"].performed += ctx => rawInput = ctx.ReadValue<Vector2>();
             map["Look"].canceled += ctx => rawInput = Vector2.zero;
         }
+
+        if (playerInput.currentControlScheme == "Gamepad")
+        {
+            lookSensitivity = 220;
+        }
+        
     }
 
     void OnDisable()
@@ -95,7 +106,7 @@ public class MouseLook : MonoBehaviour
         // 3. ROTACIÓN HORIZONTAL (Yaw)
         yRotation += deltaX;
 
-        // CAMBIO CRÍTICO: Aplicamos la rotación COMBINADA (Pitch y Yaw) al transform de la cámara.
+       
         // Esto hace que la cámara maneje toda la rotación visual, siempre que su padre esté fijo.
         transform.localRotation = Quaternion.Euler(pitch, yRotation, 0f); 
 

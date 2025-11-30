@@ -623,6 +623,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameLogic
       objectReference: {fileID: 0}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630, type: 3}
+      propertyPath: mapasDisponibles.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630, type: 3}
+      propertyPath: 'mapasDisponibles.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 30ac24dba0dbc7c40924ebdd650b8ba9, type: 2}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630, type: 3}
+      propertyPath: 'mapasDisponibles.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: dbb8fd0141dbf08498270c5f8951199a, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -679,6 +691,18 @@ PrefabInstance:
     - target: {fileID: 664457784873025298, guid: 12eacc2dbe97e1647b84367f031146c8, type: 3}
       propertyPath: m_Name
       value: PlayerJose
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719040362193100688, guid: 12eacc2dbe97e1647b84367f031146c8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719040362193100688, guid: 12eacc2dbe97e1647b84367f031146c8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3719040362193100688, guid: 12eacc2dbe97e1647b84367f031146c8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

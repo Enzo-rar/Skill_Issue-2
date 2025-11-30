@@ -28,8 +28,13 @@ public class PlayerCharacter : MonoBehaviour
         _playerInput = GetComponentInParent<PlayerInput>();
         if(_playerInput != null){
         playerId = GameManager.Instance.RegistrarJugador(_playerInput,_playerCamera, this);
+        bool checkForAudio = playerId == 1 ? false : true;
+        Debug.Log("Player ID: " + playerId+" Check Audio: " + checkForAudio);
+        if (checkForAudio)
+        {
+            DeactivateAudioForSecondPlayer();
         }
-        else
+        }else
         {
             Debug.LogWarning("El player Input es nulo para el jugador con ID: " + playerId + ". Asegúrate de que su objeto Parent tenga componente Player Input.");
         }
@@ -56,6 +61,21 @@ public class PlayerCharacter : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             GameManager.Instance.RegistrarVictoriaSet(playerId);
+        }
+    }
+    
+    //Desactivar el componente de audio al segundo jugador para evitar problemas.
+    private void DeactivateAudioForSecondPlayer()
+    {
+        AudioListener audioListener = _playerCamera.GetComponent<AudioListener>();
+        if (audioListener != null)
+        {
+            audioListener.enabled = false;
+            Debug.Log("AudioListener desactivado para el jugador con ID: " + playerId);
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró AudioListener en el Camera para jugador de ID: " + playerId);
         }
     }
 
@@ -200,14 +220,60 @@ public class PlayerCharacter : MonoBehaviour
     }
 
     public void RevivirJugadorSiguienteSet(Transform respawnPoint)
+{
+    estaVivo = true;
+    _remainingHealth = _baseHealth;
+    Debug.Log("Jugador " + playerId + " reviviendo en: " + respawnPoint.position);
+
+    Transform jugadorRoot = transform.root;
+    Rigidbody rb = GetComponent<Rigidbody>(); 
+    
+
+    // --- 2. DESACTIVAR RIGIDBODY ---
+    if (rb != null)
     {
-        estaVivo = true;
-        // En caso de una ventaja para aumentar HP cambiar _baseHealth antes de revivir
-        _remainingHealth = _baseHealth; 
-        Debug.Log("Jugador " + playerId + " ha sido revivido con vida: " + _remainingHealth);
-        // Aqui faltaria resetear las animaciones,eliminar las ventajas anteriores, etc.
-        GetComponentInParent<Transform>().position = respawnPoint.position;
-        GetComponentInParent<Transform>().rotation = respawnPoint.rotation;
+        rb.isKinematic = true; 
+        rb.linearVelocity = Vector3.zero; 
+        rb.angularVelocity = Vector3.zero;
+        rb.Sleep(); // Pone el RB a dormir para que deje de calcular colisiones
     }
-   
+
+    // --- 3. TELETRANSPORTAR ---
+    
+    //  Mover Transform
+    jugadorRoot.position = respawnPoint.position;
+    //jugadorRoot.rotation = respawnPoint.rotation;
+
+    //  Mover Rigidbody explícitamente 
+    if (rb != null)
+    {
+        rb.position = respawnPoint.position;
+       // rb.rotation = respawnPoint.rotation;
+    }
+    
+    //  Corregir posición local si es necesario
+    if (jugadorRoot != transform) 
+    {
+        transform.localPosition = Vector3.zero;
+        transform.localRotation = Quaternion.identity;
+    }
+
+    // --- 4. FORZAR SINCRONIZACIÓN DE FÍSICAS ---
+    
+    Physics.SyncTransforms(); 
+
+
+    // --- 5. REACTIVAR ---
+    if (rb != null)
+    {
+        rb.isKinematic = false;
+        rb.WakeUp(); // Despertar el RB
+    }
+    
+    Debug.Log("Teletransporte completado a: " + transform.position);
 }
+
+    }
+
+   
+

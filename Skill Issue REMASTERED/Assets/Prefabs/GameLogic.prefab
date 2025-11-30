@@ -436,6 +436,10 @@ PrefabInstance:
       propertyPath: 'mapasDisponibles.Array.data[1]'
       value: 
       objectReference: {fileID: 11400000, guid: e5cd8c85458139b4bbc6e27e7abbcd8e, type: 2}
+    - target: {fileID: 5336480860787036593, guid: 190c5cc087d1cb3478db44b2b6a7f95b, type: 3}
+      propertyPath: m_PlayerPrefab
+      value: 
+      objectReference: {fileID: 664457784873025298, guid: 12eacc2dbe97e1647b84367f031146c8, type: 3}
     - target: {fileID: 6828120824610988916, guid: 190c5cc087d1cb3478db44b2b6a7f95b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -262.45938

@@ -202,6 +202,7 @@ public class FPSInput : MonoBehaviour
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
         }
 
+
         rb.useGravity = !OnSlope();
 
         // --- WALL FRICTION FIX: evita frenarse contra muros ---
@@ -211,7 +212,7 @@ public class FPSInput : MonoBehaviour
             if (Physics.Raycast(transform.position, rb.linearVelocity.normalized, out RaycastHit wallHit, 0.6f))
             {
                 Vector3 wallNormal = wallHit.normal;
-
+                Debug.Log("Wall detected with normal: " + wallNormal);
                 // Proyecta la velocidad para quitar la parte que empuja contra el muro
                 Vector3 vel = rb.linearVelocity;
                 float dot = Vector3.Dot(vel, wallNormal);

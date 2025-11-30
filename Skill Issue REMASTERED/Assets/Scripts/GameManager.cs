@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviour
         }  
         
         perkSelectorUI.InicializarSeleccion(idPerdedor, idGanadorRonda);
-
+        ComenzarNuevaRonda();
         // Resetear scores de sets para la nueva ronda
         scoreP1_Sets = 0;
         scoreP2_Sets = 0;
@@ -223,7 +223,11 @@ public class GameManager : MonoBehaviour
         // 6. Descargar la escena vieja (si es diferente a la nueva y es válida)
         if (escenaAntigua.IsValid() && escenaAntigua != nuevaEscena)
         {
-            SceneManager.UnloadSceneAsync(escenaAntigua);
+           AsyncOperation operacionDescarga = SceneManager.UnloadSceneAsync(escenaAntigua);
+           while (!operacionDescarga.isDone)
+           {
+                yield return null;
+           }
         }
 
         // 7. Reposicionar Jugadores (Spawns)
