@@ -40,7 +40,9 @@ public class PlayerCharacter : MonoBehaviour
         //_remainingHealth = _baseHealth;
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.OnSetEnded.AddListener(RevivirJugadorSiguienteSet);
+           //Esta seria la forma alternativa de Respawnear al jugador desde el GameManager
+           // GameManager.Instance.OnSetEnded.AddListener(RevivirJugadorSiguienteSet);
+           
         }
         else
         {
@@ -186,25 +188,26 @@ public class PlayerCharacter : MonoBehaviour
     IEnumerator ActionsAfterDeath()
     {
         // Basicamente podemos dejar un tiempo para ver las particulas de muerte o animaciones, o hacer otras cosas para celebrar la muerte
+        if(deathParticles != null) deathParticles.Play();
         yield return new WaitForSeconds(3f);
         Debug.Log("Jugador " + playerId + " ha muerto -> Procedo a llamar a RegistrarVictoriaSet en GameManager");
         GameManager.Instance.RegistrarVictoriaSet(playerId);
-        if(deathParticles != null) deathParticles.Play();
+        
         
         // Aqui ponemos logica destruccion del objeto jugador? al igual es mejor manejarlo desde el GameManager directamente
         // Resetear el mapa poner otro o reiniciar posiciones
         //Destroy(this.gameObject);
     }
 
-    public void RevivirJugadorSiguienteSet()
+    public void RevivirJugadorSiguienteSet(Transform respawnPoint)
     {
         estaVivo = true;
         // En caso de una ventaja para aumentar HP cambiar _baseHealth antes de revivir
         _remainingHealth = _baseHealth; 
         Debug.Log("Jugador " + playerId + " ha sido revivido con vida: " + _remainingHealth);
-        // Aqui faltaria resetear la posición, animaciones, etc.
-        // Esta funciona la tendra que llamar el GameManager cuando reinicie el set
-
+        // Aqui faltaria resetear las animaciones,eliminar las ventajas anteriores, etc.
+        GetComponentInParent<Transform>().position = respawnPoint.position;
+        GetComponentInParent<Transform>().rotation = respawnPoint.rotation;
     }
    
 }

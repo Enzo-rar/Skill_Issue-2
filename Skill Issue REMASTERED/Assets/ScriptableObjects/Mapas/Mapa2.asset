@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2411e570dbc7b4c43aa492d1508d5c64, type: 3}
   m_Name: Mapa2
   m_EditorClassIdentifier: 
-  name: Map2
-  scene: {fileID: 102900000, guid: b98c615880858764583dccfaaa3721d5, type: 3}
+  sceneAsset: {fileID: 102900000, guid: b98c615880858764583dccfaaa3721d5, type: 3}
+  scenePath: Assets/Maps/MapaPrueba2.unity

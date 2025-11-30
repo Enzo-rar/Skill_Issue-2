@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -8,6 +10,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    [SerializeField]
+    private GameObject _gameLogicObject;
 
     [Header("Configuración")]
     public int setsParaGanarRonda = 2; // Best of 3 (quien llegue a 2 gana)
@@ -19,7 +23,7 @@ public class GameManager : MonoBehaviour
     
     [Header("Mapas")]
     public List<Mapas> mapasDisponibles;
-   
+    private Mapas mapaActualData;
     // Eventos para actualizar UI u otras cosas
     public UnityEvent<int> OnRoundEnded; // Pasa el ID del ganador (1 o 2)
     public UnityEvent OnSetEnded;
@@ -169,30 +173,103 @@ public class GameManager : MonoBehaviour
         Debug.Log("Nueva ronda comenzada.");
     }
 
-    private Vector2[] GenerarMapaSet()
+    private IEnumerator GenerarMapaSet()
     {
+        // 1. Elegir un mapa aleatorio (evitando repetir el actual si es posible)
+        Mapas nuevoMapa = null;
         
-        Vector2[] posicionesSpawnArray = new Vector2[2]; 
-        // Aqui faltaria una llamada a una funcion que tenga la lista de Escenas de mapas creados
-        // Sacar uno que no sea el actual y revisar que posiciones tiene como spawns posibles.
-        // Se va a necesitar tener Scriptable objects que contengan la informacion:
-        // Nombre mapa, Escena del mapa, posiciones spawn para ese mapa.
-        
-        // Guardar la escena en una variable para mas tarde usarla para cambiar de mapa en ReiniciarArena.
-        Mapas mapaSeleccionado = mapasDisponibles[UnityEngine.Random.Range(0, mapasDisponibles.Count)];
-        
-        SceneManager.LoadScene(mapaSeleccionado.scenePath);
-        return posicionesSpawnArray;
+        if (mapasDisponibles.Count > 0)
+        {
+            List<Mapas> poolMapas = new List<Mapas>(mapasDisponibles);
+            if (mapaActualData != null && poolMapas.Count > 1) 
+            {
+                poolMapas.Remove(mapaActualData); // Evitar repetir el mismo mapa seguido
+            }
+            nuevoMapa = poolMapas[UnityEngine.Random.Range(0, poolMapas.Count)];
+        }
 
+        if (nuevoMapa == null)
+        {
+            Debug.LogError("No hay mapas disponibles en el GameManager.");
+            yield break;
+        }
+
+        // 2. Guardar referencia de la escena vieja para descargarla luego
+        Scene escenaAntigua = SceneManager.GetActiveScene();
+        Debug.Log("Escena antigua a descargar: " + escenaAntigua.path);
+        Debug.Log("Cargando nuevo mapa: " + nuevoMapa.scenePath);
+        // 3. Cargar la nueva escena de forma ADITIVA (para no borrar el GameManager ni los Players)
+        AsyncOperation carga = SceneManager.LoadSceneAsync(nuevoMapa.scenePath, LoadSceneMode.Additive);
+        
+        // Esperar a que cargue
+        while (!carga.isDone) yield return null;
+
+        // 4. Configurar la nueva escena como activa
+        Scene nuevaEscena = SceneManager.GetSceneByPath(nuevoMapa.scenePath);
+        SceneManager.SetActiveScene(nuevaEscena);
+        mapaActualData = nuevoMapa;
+
+        // 5. Mover Jugadores y logica a la nueva escena
+        // Si no cuando descarguemos la 'escenaAntigua' se borrarán
+        if (playerCharacter1 != null) SceneManager.MoveGameObjectToScene(playerCharacter1.transform.root.gameObject, nuevaEscena);
+        if (playerCharacter2 != null) SceneManager.MoveGameObjectToScene(playerCharacter2.transform.root.gameObject, nuevaEscena);
+        if (_gameLogicObject != null){ 
+            SceneManager.MoveGameObjectToScene(_gameLogicObject, nuevaEscena);
+        }
+        else
+        {
+            Debug.LogError("No tienes una referencia al GameLogic mira el inspector.");
+        }
+        // 6. Descargar la escena vieja (si es diferente a la nueva y es válida)
+        if (escenaAntigua.IsValid() && escenaAntigua != nuevaEscena)
+        {
+            SceneManager.UnloadSceneAsync(escenaAntigua);
+        }
+
+        // 7. Reposicionar Jugadores (Spawns)
+        PosicionarJugadoresEnNuevaEscena();
+
+        // 8. Avisar al resto de sistemas que el set ha terminado y que ejecuten su logica necesaria.
+        // En un principio nadie depende de este evento, pero por si acaso.
+        OnSetEnded?.Invoke();
+        Debug.Log("Mapa cargado y jugadores posicionados.");
     }
+
+    private void PosicionarJugadoresEnNuevaEscena()
+    {
+        // Buscar objetos vacíos en la escena nueva que tengan un tag RespawnPoint
+        GameObject[] spawns = GameObject.FindGameObjectsWithTag("Respawn");
+
+        if (spawns.Length >= 2)
+        {
+            // Mezclar spawns para que sea aleatorio quién sale dónde
+            System.Random rnd = new System.Random();
+            spawns = spawns.OrderBy(x => rnd.Next()).ToArray();
+
+            if (playerCharacter1 != null) 
+            {
+                // Asumiendo que usas CharacterController o Rigidbody, a veces hay que desactivarlo para teletransportar
+                playerCharacter1.RevivirJugadorSiguienteSet(spawns[0].transform);
+                
+            }
+
+            if (playerCharacter2 != null) 
+            {
+                playerCharacter2.RevivirJugadorSiguienteSet(spawns[1].transform);
+                
+            }
+        }
+        else
+        {
+            Debug.LogError("No se encontraron suficientes puntos de spawn (Tag 'Respawn') en el mapa cargado.");
+        }
+    }
+    
 
     private void ReiniciarArenaParaSiguienteSet()
     {
         // Aquí se resetean posiciones, vida, munición, etc, habra que añadir lógica específica para cada uno por ejemplo jugador, objetos etc.
-        // No olvidar suscribir a este evento desde el script que quiera hacer algo cuando termine un set.
-        GenerarMapaSet();
-        OnSetEnded?.Invoke();
-
-        //Ahora cambiamos a la escena del nuevo mapa.
+        StartCoroutine(GenerarMapaSet());
+        
     }
 }
