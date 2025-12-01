@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 3896430531117259712}
   - component: {fileID: 7368639729716061259}
   - component: {fileID: 6672686097075370361}
-  - component: {fileID: 3839330108914410288}
+  - component: {fileID: 2102975827265115351}
   m_Layer: 0
   m_Name: FN_Five_Seven
   m_TagString: Untagged
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4c78e0a17d7d5c4ab587096de777a29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &3839330108914410288
+--- !u!114 &2102975827265115351
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -192,13 +192,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1509864171033576916}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 386864350547a8144aaa1c4640762d52, type: 3}
+  m_Script: {fileID: 11500000, guid: dc67a001633b2a84cbccc1408b55ac88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
-  AKdamage: 0
-  AKbulletCooldown: 0
-  AKnumberOfBullets: 0
+  damage: 12
+  bulletXShot: 1
+  bulletCooldown: 0.1
+  numberOfBullets: 25
+  isAutomatic: 0
+  fireballPrefab: {fileID: 8147669148645074578, guid: 90a7c78b38e6c504285f1191fb4259dd, type: 3}
 --- !u!1 &4580184173898960937
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +211,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3873966597486788041}
   m_Layer: 0
-  m_Name: bulletExit
+  m_Name: bulletExit0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
