@@ -224,6 +224,7 @@ public class GameManager : MonoBehaviour
         if (escenaAntigua.IsValid() && escenaAntigua != nuevaEscena)
         {
            AsyncOperation operacionDescarga = SceneManager.UnloadSceneAsync(escenaAntigua);
+           Debug.Log("Descargando escena antigua: " + escenaAntigua.path+" ... OperacionDescarga estado ->"+operacionDescarga);
            while (!operacionDescarga.isDone)
            {
                 yield return null;
