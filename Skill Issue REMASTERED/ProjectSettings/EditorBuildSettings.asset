@@ -23,6 +23,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Maps/CastleMap.unity
     guid: 4e0b2b51b6662be4f9d98e95645aff16
+  - enabled: 1
+    path: Assets/Scenes/Splash.unity
+    guid: ca918942d34617b4299b480bf1f6431d
+  - enabled: 1
+    path: Assets/Scenes/Miguel/CastilloFuncional.unity
+    guid: c48d6cad714d8be47b1b3554a22fa293
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
