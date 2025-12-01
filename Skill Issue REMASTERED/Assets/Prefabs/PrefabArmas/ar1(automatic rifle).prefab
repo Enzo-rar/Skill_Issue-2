@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 632704189018411006}
   m_Layer: 0
-  m_Name: bulletExit
+  m_Name: bulletExit0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -285,10 +285,10 @@ PrefabInstance:
       addedObject: {fileID: 1788491203058665456}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7ee290c88843d2c49be639ef4dea8a73, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6932344135481072933}
+      addedObject: {fileID: 1089979636082074151}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7ee290c88843d2c49be639ef4dea8a73, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1089979636082074151}
+      addedObject: {fileID: 6562564920293677648}
     - targetCorrespondingSourceObject: {fileID: -5520790981654203718, guid: 7ee290c88843d2c49be639ef4dea8a73, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5804903098041057092}
@@ -368,22 +368,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4c78e0a17d7d5c4ab587096de777a29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6932344135481072933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4255776817354491389}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 386864350547a8144aaa1c4640762d52, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weapon: {fileID: 0}
-  AKdamage: 0
-  AKbulletCooldown: 0
-  AKnumberOfBullets: 0
 --- !u!65 &1089979636082074151
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -405,3 +389,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7039634, y: 0.7451982, z: 2.273103}
   m_Center: {x: 0.37, y: 0.01, z: 1.14}
+--- !u!114 &6562564920293677648
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4255776817354491389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc67a001633b2a84cbccc1408b55ac88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 27
+  bulletXShot: 1
+  bulletCooldown: 0.1
+  numberOfBullets: 60
+  isAutomatic: 1
+  fireballPrefab: {fileID: 8147669148645074578, guid: 90a7c78b38e6c504285f1191fb4259dd, type: 3}

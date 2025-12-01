@@ -4,6 +4,8 @@ using System.Collections;
 
 public class RayShooter : MonoBehaviour
 {
+    public bool shooting = true;
+
     [Header("Input System")]
     [SerializeField] private PlayerInput playerInput;
     private InputAction attackAction;
@@ -26,6 +28,7 @@ public class RayShooter : MonoBehaviour
 
     // Punto desde el que sale la bala
     private Transform bStartShoot;
+
 
 
     private void OnEnable()
@@ -151,6 +154,7 @@ private void OnDisable()
 				playerStats.SetItemEquipped(null);
                 equipado = false;
                 componenteReactivo.setGrabbed(false);
+                shooting = true;
             }else
             {
                 Debug.Log("En la superficie -> " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido ó no tienes nada equipado");
@@ -191,10 +195,14 @@ private void OnDisable()
         if (!attackAction.WasPressedThisFrame())
             return;
 
-        if (equipado)
-            {
-                shootProjectile();
-            }
+        WeaponClass wp = componenteReactivo.GetComponent<WeaponClass>();
+        if (wp.numberOfBullets == 0) {
+            
+        }
+        else if (equipado && shooting)
+        {
+            StartCoroutine(Shoot(wp));
+        }
 
         // EL CAMBIO CRÍTICO: viewport-centro para evitar los 90 grados de error
         // Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -215,6 +223,34 @@ private void OnDisable()
         // }
     }
 
+    private IEnumerator Shoot(WeaponClass wp)
+    {
+
+        if (wp.isAutomatic)
+        {
+            while (attackAction.inProgress && wp.numberOfBullets !=0)
+            {
+                
+                wp.shootProjectile();
+                shooting = false;
+                yield return new WaitForSeconds(wp.bulletCooldown);
+                shooting = true;
+                wp.numberOfBullets -= wp.bulletXShot;
+
+            }
+        }
+        else
+        {
+            wp.shootProjectile();
+            shooting = false;
+            yield return new WaitForSeconds(wp.bulletCooldown);
+            wp.numberOfBullets -= wp.bulletXShot;
+            Debug.Log(shooting);
+        }
+        shooting = true;
+        Debug.Log(wp.numberOfBullets);
+    }
+
     private IEnumerator SphereIndicator(Vector3 pos)
     {
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -224,18 +260,5 @@ private void OnDisable()
         yield return new WaitForSeconds(5);
         Destroy(sphere);
     }
-
-    void shootProjectile()
-    {
-
-        // Punto exacto frente a la cámara (1.5m delante)
-        // Vector3 spawnPos = _camera.transform.position + _camera.transform.forward * 1.5f;
-        Vector3 spawnPos = bStartShoot.position;
-
-        // Orientación igual a la cámara
-        Quaternion spawnRot = bStartShoot.rotation;
-        fireballPrefab.GetComponent<Fireball>().damage = componenteReactivo.GetComponent<AKScript>().weapon.damage;
-        _fireball = Instantiate(fireballPrefab, spawnPos, spawnRot);
-        Debug.Log("Damage :" + fireballPrefab.GetComponent<Fireball>().damage);
-    }
+    
 }

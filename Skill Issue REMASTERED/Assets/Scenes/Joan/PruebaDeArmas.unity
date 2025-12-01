@@ -456,6 +456,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: FN_Five_Seven
       objectReference: {fileID: 0}
+    - target: {fileID: 2102975827265115351, guid: acbf3bcc61ccfdc4492e4d626c5506e3, type: 3}
+      propertyPath: damage
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2102975827265115351, guid: acbf3bcc61ccfdc4492e4d626c5506e3, type: 3}
+      propertyPath: bulletXShot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2102975827265115351, guid: acbf3bcc61ccfdc4492e4d626c5506e3, type: 3}
+      propertyPath: bulletCooldown
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2102975827265115351, guid: acbf3bcc61ccfdc4492e4d626c5506e3, type: 3}
+      propertyPath: fireballPrefab
+      value: 
+      objectReference: {fileID: 8147669148645074578, guid: 90a7c78b38e6c504285f1191fb4259dd, type: 3}
+    - target: {fileID: 2102975827265115351, guid: acbf3bcc61ccfdc4492e4d626c5506e3, type: 3}
+      propertyPath: numberOfBullets
+      value: 25
+      objectReference: {fileID: 0}
     - target: {fileID: 5597184405279319408, guid: acbf3bcc61ccfdc4492e4d626c5506e3, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.9283421
@@ -753,6 +773,10 @@ PrefabInstance:
     - target: {fileID: 6442906642468509246, guid: 38b341af66a18834ea1485a9b3d1694a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6735491825548411189, guid: 38b341af66a18834ea1485a9b3d1694a, type: 3}
+      propertyPath: numberOfBullets
+      value: 56
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
