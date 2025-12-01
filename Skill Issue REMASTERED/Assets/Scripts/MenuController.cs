@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -5,11 +6,13 @@ public class MenuController : MonoBehaviour
 {
 	[Header("Panels")]
 	public GameObject panelMenu;
-	public GameObject panelCreditos;
+	
 	public GameObject CreditosImagen;
+	public GameObject ImagenMenu;
 
 	private bool creditosAbiertos = false;
 
+	
 
 	[Header("Nombre de la escena del juego")]
 	public string primeraEscena = "CastilloFuncional";
@@ -38,35 +41,28 @@ public class MenuController : MonoBehaviour
 			Debug.LogWarning("PrimeraEscena no está configurada en MenuController.");
 		}
 	}
-	public void AbrirCreditos()
-	{
-		panelCreditos.SetActive(true);
-		creditosAbiertos = true;
 
-	}
 
 	public void CerrarCreditos()
 	{
-		panelCreditos.SetActive(false);
+		ImagenMenu.SetActive(true);
+		panelMenu.SetActive(true);
 		creditosAbiertos = false;
-
 	}
 	// Llamado por el botón Créditos
 	public void MostrarCreditos()
-	{
-		if (panelMenu != null && panelCreditos != null)
-		{
-			panelMenu.SetActive(false);
-			panelCreditos.SetActive(true);
-		}
+	{ print("Mostrar Créditos");
+		panelMenu.SetActive(false);
+		ImagenMenu.SetActive(false);
+		creditosAbiertos = true;
 	}
 
 	// Llamado por el botón Volver
 	public void VolverAlMenu()
 	{
-		if (panelMenu != null && panelCreditos != null)
+		if (panelMenu != null && CreditosImagen != null)
 		{
-			panelCreditos.SetActive(false);
+			CreditosImagen.SetActive(false);
 			panelMenu.SetActive(true);
 		}
 	}
@@ -74,7 +70,7 @@ public class MenuController : MonoBehaviour
 	// Llamado por el botón Salir
 	public void Salir()
 	{	
-		Debug.Log("Salir del juego (en editor no se cierra)");
+		Debug.Log("Salir del juego (en editor no se cierra2)");
 		Application.Quit();
 	}
 
