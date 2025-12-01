@@ -43,19 +43,11 @@ public class PlayerCharacter : MonoBehaviour
         Debug.Log("Se ha unido el jugador-> " + playerId + " con Health: " + _remainingHealth);
 
         //_remainingHealth = _baseHealth;
-        if (GameManager.Instance != null)
-        {
-           //Esta seria la forma alternativa de Respawnear al jugador desde el GameManager
-           // GameManager.Instance.OnSetEnded.AddListener(RevivirJugadorSiguienteSet);
-           
-        }
-        else
-        {
-            Debug.LogWarning("GameManager Instance es nulo en PlayerCharacter Start(). Podria deberse al orden de creacion de los objetos.");
-        }
+        
     }
 
-    //Esto solo es para probar, luego se quita
+    //Esto solo es para probar, luego se quita, cuidado por que probablemente se esta activando mas de una vez.
+     private
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
