@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     [Header("Configuración")]
     public int setsParaGanarRonda = 2; // Best of 3 (quien llegue a 2 gana)
     public int rondasParaGanarPartida = 3; // Best of 5 (quien llegue a 3 gana)
+    public GameObject SpawnPlayerPrefab;
     [Header("Estado Actual")]
     public int scoreP1_Sets = 0;
     public int scoreP2_Sets = 0;
@@ -277,4 +278,75 @@ public class GameManager : MonoBehaviour
         StartCoroutine(GenerarMapaSet());
         
     }
+
+   /* public void IniciarJuego()
+    {
+        Debug.Log("Iniciando juego...");
+        StartCoroutine(IniciarJuegoCoroutine());
+       
+    }
+
+    private IEnumerator IniciarJuegoCoroutine()
+    {
+         Mapas mapaInicial = null;
+         if (mapasDisponibles.Count > 0)
+        {
+            List<Mapas> poolMapas = new List<Mapas>(mapasDisponibles);
+            if (mapaActualData != null && poolMapas.Count > 1) 
+            {
+                poolMapas.Remove(mapaActualData); // Evitar repetir el mismo mapa seguido
+            }
+            mapaInicial = poolMapas[UnityEngine.Random.Range(0, poolMapas.Count)];
+        }
+
+
+        // 2. Guardar referencia de la escena vieja para descargarla luego
+        Scene escenaAntigua = SceneManager.GetActiveScene();
+        Debug.Log("Escena antigua a descargar: " + escenaAntigua.path);
+        Debug.Log("Cargando nuevo mapa: " + mapaInicial.scenePath);
+        // 3. Cargar la nueva escena de forma ADITIVA (para no borrar el GameManager ni los Players)
+        AsyncOperation carga = SceneManager.LoadSceneAsync(mapaInicial.scenePath, LoadSceneMode.Additive);
+        
+        // Esperar a que cargue
+        while (!carga.isDone) yield return null;
+
+        // 4. Configurar la nueva escena como activa
+        Scene nuevaEscena = SceneManager.GetSceneByPath(mapaInicial.scenePath);
+        SceneManager.SetActiveScene(nuevaEscena);
+        mapaActualData = mapaInicial;
+
+        // 5. Mover lógica a la nueva escena
+        SceneManager.MoveGameObjectToScene(_gameLogicObject, nuevaEscena);
+
+        // 6. Descargar la escena vieja (si es diferente a la nueva y es válida)
+        if (escenaAntigua.IsValid() && escenaAntigua != nuevaEscena)
+        {
+           AsyncOperation operacionDescarga = SceneManager.UnloadSceneAsync(escenaAntigua);
+           Debug.Log("Descargando escena antigua: " + escenaAntigua.path+" ... OperacionDescarga estado ->"+operacionDescarga);
+           while (!operacionDescarga.isDone)
+           {
+                yield return null;
+           }
+        
+
+        }
+
+        //Spawnear jugadores
+        GameObject InstantiatePlayer1 = Instantiate(SpawnPlayerPrefab);
+
+         // Buscar objetos vacíos en la escena nueva que tengan un tag RespawnPoint
+        GameObject[] spawns = GameObject.FindGameObjectsWithTag("Respawn");
+
+        if (spawns.Length >= 2)
+        {
+            // Mezclar spawns para que sea aleatorio quién sale dónde
+            System.Random rnd = new System.Random();
+            spawns = spawns.OrderBy(x => rnd.Next()).ToArray();
+        }
+
+
+        
+
+    }
+    */
 }
