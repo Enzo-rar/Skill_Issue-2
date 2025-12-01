@@ -94,7 +94,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 7934386345384561103}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1321034493929217366}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 97497cbfbcfda4f40ad96e29701ff980, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -248,15 +248,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 7
+  maxSpeed: 15
   groundDrag: 5
   jumpForce: 12
   jumpCooldown: 0.25
-  airMultiplier: 0.4
+  airMultiplier: 0.15
+  slideSpeed: 12
+  slideDeceleration: 2
   jumpKey: 32
   playerHeight: 2
   whatIsGround:
     serializedVersion: 2
     m_Bits: 1024
+  maxSlopeAngle: 45
   orientation: {fileID: 7986639160689909758}
 --- !u!1 &5836793151099519894
 GameObject:
