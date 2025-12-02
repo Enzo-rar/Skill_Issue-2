@@ -12,6 +12,7 @@ public class RayShooter : MonoBehaviour
     private InputAction zoomAction;
     private InputAction interactAction;
     private InputAction tirarAction;
+    private InputAction moveAction;
 
     [Header("Zoom Settings")]
     public float zoomMultiplier = 0.5f;
@@ -29,6 +30,7 @@ public class RayShooter : MonoBehaviour
     // Punto desde el que sale la bala
     private Transform bStartShoot;
 
+    public WeaponClass wp;
 
 
     private void OnEnable()
@@ -41,6 +43,7 @@ public class RayShooter : MonoBehaviour
     interactAction = map["Interact"];
     tirarAction    = map["Tirar Arma"];
     zoomAction     = map["Zoom"];
+    moveAction     = map["Move"];
 
     attackAction.Enable();
     interactAction.Enable();
@@ -73,54 +76,56 @@ private void OnDisable()
     }
     void Update()
     {
+        
+
         if (interactAction.WasPressedThisFrame())
-        {
-            Debug.Log("EEEEEEEEEEEE");
-            
-            Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
             {
-                var item = hit.transform.gameObject;
-                Debug.Log("camara: ", _camera);
-                
-                if (item != null && hit.distance <= 3)
+                Debug.Log("EEEEEEEEEEEE");
+
+                Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit))
                 {
-                    componenteReactivo = item.GetComponent<ObjetoReactivo>();
-                    Debug.Log("componenteReactivo del item al que has hecho Raycast: ", componenteReactivo);
-                    if (componenteReactivo != null)
+                    var item = hit.transform.gameObject;
+                    Debug.Log("camara: ", _camera);
+
+                    if (item != null && hit.distance <= 3)
                     {
-                        Debug.Log(item.name + " seleccionado");
-                        //En esta condicion puedes implementar una ventaja que te permita recoger el item aunque otro jugador lo tenga equipado (quitarselo de las manos)
-                        if (componenteReactivo.IsGrabbed() == true)
+                        componenteReactivo = item.GetComponent<ObjetoReactivo>();
+                        Debug.Log("componenteReactivo del item al que has hecho Raycast: ", componenteReactivo);
+                        if (componenteReactivo != null)
                         {
-                            Debug.Log("El item ya está equipado por otro jugador.");
-
-                        } else
-                        {
-                            //Si tienes ya un arma en la mano que no puedas pillar otra, ¿se podria implementar una segunda arma?
-                            if (!equipado)
+                            Debug.Log(item.name + " seleccionado");
+                            //En esta condicion puedes implementar una ventaja que te permita recoger el item aunque otro jugador lo tenga equipado (quitarselo de las manos)
+                            if (componenteReactivo.IsGrabbed() == true)
                             {
-                                componenteReactivo.ReactToCollect(item, _camera);
-                                playerStats.SetItemEquipped(item);
-                                equipado = true;
-                                bStartShoot = componenteReactivo.transform.Find("bulletExit");
-                            }
-                           
-                        }
-                        
-                    }
-                    
-                }
-                else
-                {
-                    Debug.Log("Seleccionado: " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido");
-                   
-                }
+                                Debug.Log("El item ya está equipado por otro jugador.");
 
+                            } else
+                            {
+                                //Si tienes ya un arma en la mano que no puedas pillar otra, ¿se podria implementar una segunda arma?
+                                if (!equipado)
+                                {
+                                    componenteReactivo.ReactToCollect(item, _camera);
+                                    playerStats.SetItemEquipped(item);
+                                    equipado = true;
+                                    bStartShoot = componenteReactivo.transform.Find("bulletExit");
+                                }
+
+                            }
+
+                        }
+
+                    }
+                    else
+                    {
+                        Debug.Log("Seleccionado: " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido");
+
+                    }
+
+                }
             }
-        }
 
         if (tirarAction.WasPressedThisFrame())
         {
@@ -148,6 +153,8 @@ private void OnDisable()
                     
             if (itemEquipado != null)
             {
+                wp.anim.SetBool("onMovement", false);
+
                 ObjetoReactivo componenteReactivo = itemEquipado.GetComponent<ObjetoReactivo>();
 				componenteReactivo.ReactToDrop(itemEquipado, dropPos);
 
@@ -155,13 +162,24 @@ private void OnDisable()
                 equipado = false;
                 componenteReactivo.setGrabbed(false);
                 shooting = true;
-            }else
+                
+            }
+            else
             {
                 Debug.Log("En la superficie -> " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido ó no tienes nada equipado");
                 //StartCoroutine(SphereIndicator(hit.point));
             }
                 
             
+        }
+
+        wp = componenteReactivo.GetComponent<WeaponClass>();
+        if ((moveAction.IsPressed() || moveAction.inProgress) && playerStats.GetItemEquipped() != null)
+        {
+            wp.anim.SetBool("onMovement", true);
+        } else
+        {
+            wp.anim.SetBool("onMovement", false);
         }
 
         HandleZoom();
@@ -194,9 +212,8 @@ private void OnDisable()
     {
         if (!attackAction.WasPressedThisFrame())
             return;
-
-        WeaponClass wp = componenteReactivo.GetComponent<WeaponClass>();
-        if (wp.numberOfBullets == 0) {
+        wp.anim.SetBool("onMovement", false);
+        if (wp.numberOfBullets <= 0) {
             
         }
         else if (equipado && shooting)
@@ -225,15 +242,18 @@ private void OnDisable()
 
     private IEnumerator Shoot(WeaponClass wp)
     {
-
+        
         if (wp.isAutomatic)
         {
             while (attackAction.inProgress && wp.numberOfBullets !=0)
             {
-                
                 wp.shootProjectile();
                 shooting = false;
-                yield return new WaitForSeconds(wp.bulletCooldown);
+
+                wp.anim.SetBool("inAction", true);
+                yield return new WaitForSeconds(wp.bulletCooldown-0.000001f);
+                wp.anim.SetBool("inAction", false);
+
                 shooting = true;
                 wp.numberOfBullets -= wp.bulletXShot;
 
@@ -243,12 +263,13 @@ private void OnDisable()
         {
             wp.shootProjectile();
             shooting = false;
-            yield return new WaitForSeconds(wp.bulletCooldown);
+            wp.anim.SetBool("inAction", true);
+            yield return new WaitForSeconds(wp.bulletCooldown+0.001f);
+            
             wp.numberOfBullets -= wp.bulletXShot;
-            Debug.Log(shooting);
         }
+        wp.anim.SetBool("inAction", false);
         shooting = true;
-        Debug.Log(wp.numberOfBullets);
     }
 
     private IEnumerator SphereIndicator(Vector3 pos)

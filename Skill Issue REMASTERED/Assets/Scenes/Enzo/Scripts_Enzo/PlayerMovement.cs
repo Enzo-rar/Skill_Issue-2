@@ -45,7 +45,6 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
-
 	
 	void Start()
     {
@@ -78,7 +77,6 @@ public class PlayerMovement : MonoBehaviour
     {
         MovePlayer();
         SpeedControl();
-        
     }
 
     private void MyInput()

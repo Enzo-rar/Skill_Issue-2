@@ -10,9 +10,16 @@ public class WeaponClass : MonoBehaviour
     public int numberOfBullets;
     public bool isAutomatic;
 
+    public Animator anim;
+
     [SerializeField] private GameObject fireballPrefab;
     private GameObject _fireball;
     private Transform bStartShoot;
+
+    void Start()
+    {
+        anim = GetComponentInChildren<Animator>();
+    }
 
     public void shootProjectile()
     {
