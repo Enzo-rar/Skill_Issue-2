@@ -381,6 +381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSoundManager: {fileID: 8305645692717954911}
+  playerCharacter: {fileID: 3613942685663302443}
   playerInput: {fileID: 3730927884577715939}
   moveSpeed: 12
   maxSpeed: 12
@@ -878,6 +879,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2165ebd0fbda6c94199586f819243ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rayShooter: {fileID: 3656461554514861406}
   _SoundManager: {fileID: 8305645692717954911}
   _baseHealth: 100
   _remainingHealth: 1
@@ -886,6 +888,8 @@ MonoBehaviour:
   _collisionHandler: {fileID: 0}
   deathParticles: {fileID: 0}
   playerId: -1
+  canMove: 1
+  canShoot: 1
   estaVivo: 1
 --- !u!114 &8305645692717954911
 MonoBehaviour:
@@ -900,6 +904,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SoundSource: {fileID: 3574519724417435218}
-  onHitSound: {fileID: 0}
+  onHitSound: {fileID: 8300000, guid: 50f4aebc81abbaa478e27341f947c6a0, type: 3}
   onDeathSound: {fileID: 8300000, guid: acf69449c73f99948a2ef8e440a2450f, type: 3}
   onSlideSound: {fileID: 8300000, guid: fbd71cd8bc9f9c642b55c81404f55edc, type: 3}

@@ -182,11 +182,57 @@ private void OnDisable()
             wp.anim.SetBool("onMovement", false);
         }
 
+
+        if (playerStats.canShoot)
+        {
         HandleZoom();
         HandleAttack();
+        }
+      
        
     }
 
+    public void dropWeaponOnDeath()
+    {
+         Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            RaycastHit hit;
+			Vector3 dropPos;
+
+
+			// Si golpea algo, soltamos en hit.point
+			if (Physics.Raycast(ray, out hit, 3f))
+			{
+				dropPos = hit.point;
+			}
+			else
+			{
+				// Si NO golpea nada, soltamos a 1 metro delante de la cámara
+				dropPos = _camera.transform.position + _camera.transform.forward * 1f;
+			}
+
+
+			//componenteReactivo = playerStats._armaEquipada.GetComponent<ObjetoReactivo>();
+			var itemEquipado = playerStats.GetItemEquipped();
+                    
+            if (itemEquipado != null)
+            {
+                wp.anim.SetBool("onMovement", false);
+
+                ObjetoReactivo componenteReactivo = itemEquipado.GetComponent<ObjetoReactivo>();
+				componenteReactivo.ReactToDrop(itemEquipado, dropPos);
+
+				playerStats.SetItemEquipped(null);
+                equipado = false;
+                componenteReactivo.setGrabbed(false);
+                shooting = true;
+                
+            }
+            else
+            {
+                Debug.Log("En la superficie -> " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido ó no tienes nada equipado");
+                //StartCoroutine(SphereIndicator(hit.point));
+            }
+    }
 
     void OnGUI()
     {  // se ejecuta despu�s de dibujar el frame del juego
