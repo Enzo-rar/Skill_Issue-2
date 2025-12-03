@@ -28,7 +28,7 @@ public class MainMenuSceneManager : MonoBehaviour
 
 	public void StartGame()
 	{
-		SceneManager.LoadScene("03LevelOne");
+		SceneManager.LoadScene("TestJose");
 	}
 
 	public void QuitGame()
