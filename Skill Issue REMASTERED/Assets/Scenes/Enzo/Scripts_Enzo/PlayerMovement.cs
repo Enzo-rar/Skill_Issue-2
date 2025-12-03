@@ -2,9 +2,12 @@ using System;
 using UnityEditor;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Input System")]
+    [SerializeField] private PlayerInput playerInput;
 
     [Header("Movement")]
     public float moveSpeed;
@@ -38,6 +41,8 @@ public class PlayerMovement : MonoBehaviour
 
     float horizontalInput;
     float verticalInput;
+    private Vector2 moveInput;
+    private bool jumpPressed;
 
     Vector3 moveDirection;
     Vector3 originalSize;
@@ -45,14 +50,79 @@ public class PlayerMovement : MonoBehaviour
 
     Rigidbody rb;
 
-	
-	void Start()
+
+    void OnEnable()
+    {
+        if (playerInput == null) { Debug.LogError("PlayerInput no asignado en PlayerMovement"); return; }
+
+        var map = playerInput.currentActionMap;
+
+        // Enlazamos eventos. Asegúrate que en tu Input Actions se llamen "Move", "Jump" y "Crouch"
+        map["Move"].performed += OnMovePerformed;
+        map["Move"].canceled += OnMoveCanceled;
+
+        map["Jump"].started += OnJumpStarted;
+        map["Jump"].canceled += OnJumpCanceled;
+
+        map["Crouch"].started += OnCrouchStarted;
+        map["Crouch"].canceled += OnCrouchCanceled;
+    }
+
+    void OnDisable()
+    {
+        if (playerInput == null) return;
+        var map = playerInput.currentActionMap;
+
+        map["Move"].performed -= OnMovePerformed;
+        map["Move"].canceled -= OnMoveCanceled;
+
+        map["Jump"].started -= OnJumpStarted;
+        map["Jump"].canceled -= OnJumpCanceled;
+
+        map["Crouch"].started -= OnCrouchStarted;
+        map["Crouch"].canceled -= OnCrouchCanceled;
+    }
+
+    private void OnCrouchStarted(InputAction.CallbackContext ctx)
+    {
+        if (!isCrouching && !isSliding && grounded)
+        {
+            
+            Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+
+            
+            if (flatVel.magnitude < moveSpeed * 0.60f)
+            {
+                Crouch();
+            }
+            else
+            {
+                Slide();
+            }
+        }
+    }
+
+    private void OnCrouchCanceled(InputAction.CallbackContext ctx)
+    {
+        if (isCrouching) CrouchEnd();
+        else if (isSliding) SlideEnd();
+    }
+
+    private void OnMovePerformed(InputAction.CallbackContext ctx) => moveInput = ctx.ReadValue<Vector2>();
+    private void OnMoveCanceled(InputAction.CallbackContext ctx) => moveInput = Vector2.zero;
+
+    private void OnJumpStarted(InputAction.CallbackContext ctx) => jumpPressed = true;
+    private void OnJumpCanceled(InputAction.CallbackContext ctx) => jumpPressed = false;
+
+    void Start()
     {
         //Necesitamos el rigidbody para aplicar las fuerzas, y el tamaño para agacharnos
 
    		rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         originalSize = GetComponent<Transform>().localScale;
+
+        
     }
 
     void Update()
@@ -70,6 +140,7 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.linearDamping = 0;
         }
+
     }
 
     //FixedUpdate se llama cada intervalos iguales, asi no se llaman mas o menos veces los métodos dependiendo de los FPS del jugador
@@ -77,15 +148,17 @@ public class PlayerMovement : MonoBehaviour
     {
         MovePlayer();
         SpeedControl();
+
+
     }
 
     private void MyInput()
     {
-        horizontalInput = Input.GetAxisRaw("Horizontal"); // Las teclas asociadas están en:
-		verticalInput = Input.GetAxisRaw("Vertical");   // Edit\Project Settings\Input (según el codigo ejemplo del PDF)
+        horizontalInput = moveInput.x; // Las teclas asociadas están en:
+		verticalInput = moveInput.y;   // Edit\Project Settings\Input (según el codigo ejemplo del PDF)
 
         //Salto
-		if (Input.GetKeyDown(jumpKey) && readyToJump && grounded)
+		if (jumpPressed && readyToJump && grounded)
         {
             readyToJump = false;
 
