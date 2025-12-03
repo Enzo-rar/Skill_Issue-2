@@ -798,6 +798,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameLogic
       objectReference: {fileID: 0}
+    - target: {fileID: 2602305342943157359, guid: eaf7afdffb895ba4abea102bc51e2630, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: b4a878e867a93944e83222982157f30d, type: 2}
+    - target: {fileID: 2602305342943157359, guid: eaf7afdffb895ba4abea102bc51e2630, type: 3}
+      propertyPath: m_fontStyle
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2602305342943157359, guid: eaf7afdffb895ba4abea102bc51e2630, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 7421042868548137886, guid: b4a878e867a93944e83222982157f30d, type: 2}
+    - target: {fileID: 2602305342943157359, guid: eaf7afdffb895ba4abea102bc51e2630, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
