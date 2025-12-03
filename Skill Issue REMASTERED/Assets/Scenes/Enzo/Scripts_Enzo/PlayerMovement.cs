@@ -167,30 +167,8 @@ public class PlayerMovement : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown); //habria que hacerlo con corutina?
         }
 
-        //Agacharse / Deslizarse
-        if (Input.GetKeyDown(KeyCode.LeftControl) && !isCrouching && !isSliding && grounded)
-        {
-            if(new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude < moveSpeed*0.60f)
-            {
-                Crouch();
-            }
-            else
-            {
-                Slide();
-            }
-        }
-
-        else if (Input.GetKeyUp(KeyCode.LeftControl))
-        {
-            if (isCrouching)
-            {
-                CrouchEnd();
-            }
-            else if (isSliding)
-            {
-                SlideEnd();
-            }
-        }
+        
+        
     }
 
     private void MovePlayer()
