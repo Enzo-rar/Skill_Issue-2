@@ -2,16 +2,20 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     [SerializeField]
     private GameObject _gameLogicObject;
+     [SerializeField]
+    private TextMeshProUGUI _UITextRondasSet;
 
     [Header("Configuración")]
     public int setsParaGanarRonda = 2; // Best of 3 (quien llegue a 2 gana)
@@ -124,9 +128,11 @@ public class GameManager : MonoBehaviour
         else
         {
             // La ronda sigue, solo reiniciamos posiciones para el siguiente set
+
             Debug.Log("Set terminado. Iniciando siguiente set...");
+            _UITextRondasSet.text = $"Rondas: {Jugador1RondasGanadas} - {Jugador2RondasGanadas}   Sets: {scoreP1_Sets} - {scoreP2_Sets}";
             ReiniciarArenaParaSiguienteSet();
-                
+            
             // Abrir la UI de selección de perks para el perdedor del set para escoger una ventaja
             // Aqui se puede cambiar la logica para que sea el que lleve menos sets ganados en total
             perkSelectorUI.InicializarSeleccion(ultimoPerdedor, ultimoGanador);
@@ -151,13 +157,14 @@ public class GameManager : MonoBehaviour
         if (Jugador1RondasGanadas >= rondasParaGanarPartida || Jugador2RondasGanadas >= rondasParaGanarPartida)
         {
             Debug.Log($"Partida terminada. Ganador final: Jugador {idGanadorRonda}");
-            // Aquí puedes agregar lógica para finalizar la partida completa
+            // Aquí puedes agregar lógica para finalizar la partida completa como llevarte a la pantalla de volver a jugar o menu principal
+            _UITextRondasSet.text += $"HA GANADO EL JUGADOR {idGanadorRonda}!";
         }
         else
         {
             if (idGanadorRonda == 1) Jugador1RondasGanadas++;
             else Jugador2RondasGanadas++;
-        }  
+         
         
         perkSelectorUI.InicializarSeleccion(idPerdedor, idGanadorRonda);
         ComenzarNuevaRonda();
@@ -165,6 +172,10 @@ public class GameManager : MonoBehaviour
         scoreP1_Sets = 0;
         scoreP2_Sets = 0;
         rondaActual++;
+
+        //Actualiza las rondas en el UI
+        _UITextRondasSet.text = $"Rondas: {Jugador1RondasGanadas} - {Jugador2RondasGanadas}   Sets: {scoreP1_Sets} - {scoreP2_Sets}";
+        } 
     }
 
     public void ComenzarNuevaRonda()

@@ -589,7 +589,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5597184405279319408, guid: acbf3bcc61ccfdc4492e4d626c5506e3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.05510521
+      value: 0.185
       objectReference: {fileID: 0}
     - target: {fileID: 5597184405279319408, guid: acbf3bcc61ccfdc4492e4d626c5506e3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -636,6 +636,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2625091219060540730, guid: 92032104906d0164b9fe22f9cb2e49f6, type: 3}
+      propertyPath: m_Volume
+      value: 0.288
+      objectReference: {fileID: 0}
     - target: {fileID: 3478009107925016391, guid: 92032104906d0164b9fe22f9cb2e49f6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.404641
@@ -737,6 +741,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GamePlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 8305645692717954911, guid: 4188056d9d1b72e4b983814f306c63a4, type: 3}
+      propertyPath: onHitSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 50f4aebc81abbaa478e27341f947c6a0, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -794,10 +802,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameLogic
       objectReference: {fileID: 0}
-    - target: {fileID: 3144367791424117210, guid: eaf7afdffb895ba4abea102bc51e2630, type: 3}
-      propertyPath: m_PlayerPrefab
-      value: 
-      objectReference: {fileID: 6613384800543429132, guid: 4188056d9d1b72e4b983814f306c63a4, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
