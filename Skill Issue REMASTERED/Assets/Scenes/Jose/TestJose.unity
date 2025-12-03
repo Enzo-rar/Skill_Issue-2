@@ -798,10 +798,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameLogic
       objectReference: {fileID: 0}
-    - target: {fileID: 9062033466867895377, guid: eaf7afdffb895ba4abea102bc51e2630, type: 3}
-      propertyPath: m_Volume
-      value: 0.201
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

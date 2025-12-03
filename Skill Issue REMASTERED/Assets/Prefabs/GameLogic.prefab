@@ -801,16 +801,16 @@ PrefabInstance:
       objectReference: {fileID: 1276167090798223181}
     - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b, type: 3}
       propertyPath: mapasDisponibles.Array.size
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b, type: 3}
       propertyPath: 'mapasDisponibles.Array.data[0]'
       value: 
-      objectReference: {fileID: 11400000, guid: 1b8b4cb148b315c49a2d116da761300e, type: 2}
+      objectReference: {fileID: 11400000, guid: 30ac24dba0dbc7c40924ebdd650b8ba9, type: 2}
     - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b, type: 3}
       propertyPath: 'mapasDisponibles.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: e5cd8c85458139b4bbc6e27e7abbcd8e, type: 2}
+      objectReference: {fileID: 11400000, guid: dbb8fd0141dbf08498270c5f8951199a, type: 2}
     - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b, type: 3}
       propertyPath: 'mapasDisponibles.Array.data[2]'
       value: 
