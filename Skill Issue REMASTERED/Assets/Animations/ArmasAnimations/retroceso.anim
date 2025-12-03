@@ -379,4 +379,11 @@ AnimationClip:
     flags: 0
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0
+    functionName: PlayOneShot
+    data: 
+    objectReferenceParameter: {fileID: 8300000, guid: a14427c0f2021d445bbd24633946ba06, type: 3}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
