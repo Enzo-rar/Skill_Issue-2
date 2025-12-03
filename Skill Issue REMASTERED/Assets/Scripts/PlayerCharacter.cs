@@ -25,7 +25,7 @@ public class PlayerCharacter : MonoBehaviour
     private bool estaCegado = false;
     private float velocidadBase = 5f;
     private bool ventajaHP = false;
-
+    public bool grabEnemyWeapon = false;
 
      void Start()
     {   
@@ -128,9 +128,9 @@ public class PlayerCharacter : MonoBehaviour
             case VentajaFavorable.MasVida:
                 //Aumentar vida en 50, al igual vale la pena hacer un método en HealthSystem para esto y separar este script para ventajas y quizas armas
               //  GetComponent<HealthSystem>().Curar(50);
-              Debug.Log("Vida aumentada en Ventaja +50");
+              Debug.Log("Vida aumentada en Ventaja +100");
               ventajaHP = true;
-              _remainingHealth += 50;
+              _remainingHealth += 100;
                 break;
                 
             case VentajaFavorable.Velocidad:
@@ -234,7 +234,7 @@ public class PlayerCharacter : MonoBehaviour
         //Aqui se desharian las ventajas al final de cada set, si es que tienen duracion limitada.
         tieneDobleSalto = false;
         estaCegado = false;
-
+        ventajaHP = false;
 
     }
     public void RevivirJugadorSiguienteSet(Transform respawnPoint)
@@ -242,15 +242,12 @@ public class PlayerCharacter : MonoBehaviour
     canMove = true;
     canShoot = true;
     estaVivo = true;
-    if (ventajaHP)
-        {
-         _remainingHealth = _baseHealth+100;
-        }
-        else
-        {
-            _remainingHealth = _baseHealth;
-        }
-   
+    
+    _remainingHealth = _baseHealth;
+    //Elimina ventajas temporales
+    deshazVentajas();
+
+
     Debug.Log("Jugador " + playerId + " reviviendo en: " + respawnPoint.position);
 
     Transform jugadorRoot = transform.root;
@@ -297,6 +294,8 @@ public class PlayerCharacter : MonoBehaviour
         rb.isKinematic = false;
         rb.WakeUp(); // Despertar el RB
     }
+
+    
     
     Debug.Log("Teletransporte completado a: " + transform.position);
 }

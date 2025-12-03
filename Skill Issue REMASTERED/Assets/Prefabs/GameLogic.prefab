@@ -70,7 +70,7 @@ MonoBehaviour:
     Set: 0-0'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b4a878e867a93944e83222982157f30d, type: 2}
-  m_sharedMaterial: {fileID: -8828519650329488949, guid: b4a878e867a93944e83222982157f30d, type: 2}
+  m_sharedMaterial: {fileID: 7421042868548137886, guid: b4a878e867a93944e83222982157f30d, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -100,7 +100,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 3
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -369,7 +369,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 8a2934e4bf342f1458985499a315577d, type: 3}
   m_Resource: {fileID: 8300000, guid: 8a2934e4bf342f1458985499a315577d, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.356
+  m_Volume: 0.201
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -863,6 +863,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7955418227731962715, guid: 190c5cc087d1cb3478db44b2b6a7f95b, type: 3}
+      propertyPath: todasLasVentajas.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7955418227731962715, guid: 190c5cc087d1cb3478db44b2b6a7f95b, type: 3}
+      propertyPath: 'todasLasVentajas.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: ef2c522a53bd5ec48babf2aae53ac139, type: 2}
+    - target: {fileID: 7955418227731962715, guid: 190c5cc087d1cb3478db44b2b6a7f95b, type: 3}
+      propertyPath: 'todasLasVentajas.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: efb704fc4fe79764aae8933f6d3a379a, type: 2}
     - target: {fileID: 8193792966314588504, guid: 190c5cc087d1cb3478db44b2b6a7f95b, type: 3}
       propertyPath: m_Name
       value: GameManager

@@ -172,8 +172,11 @@ private void OnDisable()
                 
             
         }
-
-        wp = componenteReactivo.GetComponent<WeaponClass>();
+        if (componenteReactivo != null)
+        {
+            wp = componenteReactivo.GetComponent<WeaponClass>();
+        }
+        
         if ((moveAction.IsPressed() || moveAction.inProgress) && playerStats.GetItemEquipped() != null)
         {
             wp.anim.SetBool("onMovement", true);
