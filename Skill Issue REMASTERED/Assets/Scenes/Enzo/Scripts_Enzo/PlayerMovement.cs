@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField]
+    private PlayerSoundManager playerSoundManager;
     [Header("Input System")]
     [SerializeField] private PlayerInput playerInput;
 
@@ -57,7 +59,7 @@ public class PlayerMovement : MonoBehaviour
 
         var map = playerInput.currentActionMap;
 
-        // Enlazamos eventos. Asegúrate que en tu Input Actions se llamen "Move", "Jump" y "Crouch"
+        // Enlazamos eventos. Asegï¿½rate que en tu Input Actions se llamen "Move", "Jump" y "Crouch"
         map["Move"].performed += OnMovePerformed;
         map["Move"].canceled += OnMoveCanceled;
 
@@ -116,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        //Necesitamos el rigidbody para aplicar las fuerzas, y el tamaño para agacharnos
+        //Necesitamos el rigidbody para aplicar las fuerzas, y el tamaï¿½o para agacharnos
 
    		rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
@@ -127,7 +129,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        //Comprueba que debajo del jugador hay suelo, para verificar si podemos saltar y añadir rozamiento
+        //Comprueba que debajo del jugador hay suelo, para verificar si podemos saltar y aï¿½adir rozamiento
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
@@ -143,7 +145,7 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    //FixedUpdate se llama cada intervalos iguales, asi no se llaman mas o menos veces los métodos dependiendo de los FPS del jugador
+    //FixedUpdate se llama cada intervalos iguales, asi no se llaman mas o menos veces los mï¿½todos dependiendo de los FPS del jugador
     private void FixedUpdate()
     {
         MovePlayer();
@@ -154,8 +156,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void MyInput()
     {
-        horizontalInput = moveInput.x; // Las teclas asociadas están en:
-		verticalInput = moveInput.y;   // Edit\Project Settings\Input (según el codigo ejemplo del PDF)
+        horizontalInput = moveInput.x; // Las teclas asociadas estï¿½n en:
+		verticalInput = moveInput.y;   // Edit\Project Settings\Input (segï¿½n el codigo ejemplo del PDF)
 
         //Salto
 		if (jumpPressed && readyToJump && grounded)
@@ -241,6 +243,7 @@ public class PlayerMovement : MonoBehaviour
         maxSpeed = maxSpeed * 10f;
         rb.linearDamping = slideDeceleration;
         rb.AddForce(moveDirection * slideSpeed, ForceMode.Impulse);
+        playerSoundManager.playSlideSound();
     }
 
     private void SlideEnd()
