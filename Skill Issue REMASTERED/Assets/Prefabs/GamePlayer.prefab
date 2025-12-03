@@ -878,6 +878,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2165ebd0fbda6c94199586f819243ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _SoundManager: {fileID: 8305645692717954911}
   _baseHealth: 100
   _remainingHealth: 1
   _playerInput: {fileID: 3730927884577715939}
@@ -900,5 +901,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SoundSource: {fileID: 3574519724417435218}
   onHitSound: {fileID: 0}
-  onDeathSound: {fileID: 0}
+  onDeathSound: {fileID: 8300000, guid: acf69449c73f99948a2ef8e440a2450f, type: 3}
   onSlideSound: {fileID: 8300000, guid: fbd71cd8bc9f9c642b55c81404f55edc, type: 3}

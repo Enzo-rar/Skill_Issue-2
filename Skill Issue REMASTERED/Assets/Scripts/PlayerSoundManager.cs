@@ -27,6 +27,8 @@ public class PlayerSoundManager : MonoBehaviour
         if (onDeathSound != null)
         {
             m_SoundSource.PlayOneShot(onDeathSound);
+        }else{
+            Debug.LogWarning("Death sound clip is not assigned in PlayerSoundManager.");
         }
     }
 

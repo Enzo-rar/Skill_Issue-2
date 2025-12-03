@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine.InputSystem;
 public class PlayerCharacter : MonoBehaviour
 {
+    [SerializeField] private PlayerSoundManager _SoundManager;
     [SerializeField] private int _baseHealth = 100;
     [SerializeField] private int _remainingHealth = 1;
     [SerializeField] private PlayerInput _playerInput;
@@ -162,6 +163,7 @@ public class PlayerCharacter : MonoBehaviour
         yield return new WaitForSeconds(duracion);
         estaCegado = false;
         Debug.Log("Jugador RECUPERADO");
+
     }
 
 
@@ -170,6 +172,7 @@ public class PlayerCharacter : MonoBehaviour
     {
         _remainingHealth = _remainingHealth - damage;
         Debug.Log("Jugador " + playerId + " ha recibido daño: " + damage + " Vida restante: " + _remainingHealth);
+        _SoundManager.playHitSound();
         if( _remainingHealth <= 0 && estaVivo)
         {
             Die();
@@ -191,6 +194,7 @@ public class PlayerCharacter : MonoBehaviour
         //Emepzar corrutina de muerte 
         //estaVivo a false permite que no salte de nuevo la funcion de morir al disparar cadaver.
         estaVivo = false;
+        _SoundManager.playDeathSound();
         StartCoroutine(ActionsAfterDeath());
 
         
