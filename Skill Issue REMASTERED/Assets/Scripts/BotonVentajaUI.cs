@@ -13,7 +13,7 @@ public class BotonVentajaUI : MonoBehaviour
 
     [Header("Resaltado Visual")]
     public GameObject bordeResaltado; // Un GameObject hijo que es el borde resaltado
-    public Vector3 escalaSeleccionada = new Vector3(1.1f, 1.1f, 1.1f);
+    public Vector3 escalaSeleccionada = new Vector3(4f, 4f, 4f);
 
     // Colores para las rarezas configurables desde el inspector
     [Header("Configuración de Colores")]
