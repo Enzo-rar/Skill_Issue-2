@@ -74,65 +74,65 @@ private void OnDisable()
         Cursor.visible = false;
         equipado = false;
     }
-    void Update()
-    {
-        
+	void Update()
+	{
 
-        if (interactAction.WasPressedThisFrame())
-            {
-                Debug.Log("EEEEEEEEEEEE");
 
-                Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-                RaycastHit hit;
+		if (interactAction.WasPressedThisFrame())
+		{
+			Debug.Log("EEEEEEEEEEEE");
 
-                if (Physics.Raycast(ray, out hit))
-                {
-                    var item = hit.transform.gameObject;
-                    Debug.Log("camara: ", _camera);
+			Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+			RaycastHit hit;
 
-                    if (item != null && hit.distance <= 3)
-                    {
-                        componenteReactivo = item.GetComponent<ObjetoReactivo>();
-                        Debug.Log("componenteReactivo del item al que has hecho Raycast: ", componenteReactivo);
-                        if (componenteReactivo != null)
-                        {
-                            Debug.Log(item.name + " seleccionado");
-                            //En esta condicion puedes implementar una ventaja que te permita recoger el item aunque otro jugador lo tenga equipado (quitarselo de las manos)
-                            if (componenteReactivo.IsGrabbed() == true)
-                            {
-                                Debug.Log("El item ya está equipado por otro jugador.");
+			if (Physics.Raycast(ray, out hit))
+			{
+				var item = hit.transform.gameObject;
+				Debug.Log("camara: ", _camera);
 
-                            } else
-                            {
-                                //Si tienes ya un arma en la mano que no puedas pillar otra, ¿se podria implementar una segunda arma?
-                                if (!equipado)
-                                {
-                                    componenteReactivo.ReactToCollect(item, _camera);
-                                    playerStats.SetItemEquipped(item);
-                                    equipado = true;
-                                    bStartShoot = componenteReactivo.transform.Find("bulletExit");
-                                }
+				if (item != null && hit.distance <= 3)
+				{
+					componenteReactivo = item.GetComponent<ObjetoReactivo>();
+					Debug.Log("componenteReactivo del item al que has hecho Raycast: ", componenteReactivo);
+					if (componenteReactivo != null)
+					{
+						Debug.Log(item.name + " seleccionado");
+						//En esta condicion puedes implementar una ventaja que te permita recoger el item aunque otro jugador lo tenga equipado (quitarselo de las manos)
+						if (componenteReactivo.IsGrabbed() == true)
+						{
+							Debug.Log("El item ya está equipado por otro jugador.");
 
-                            }
+						} else
+						{
+							//Si tienes ya un arma en la mano que no puedas pillar otra, ¿se podria implementar una segunda arma?
+							if (!equipado)
+							{
+								componenteReactivo.ReactToCollect(item, _camera);
+								playerStats.SetItemEquipped(item);
+								equipado = true;
+								bStartShoot = componenteReactivo.transform.Find("bulletExit");
+							}
 
-                        }
+						}
 
-                    }
-                    else
-                    {
-                        Debug.Log("Seleccionado: " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido");
+					}
 
-                    }
+				}
+				else
+				{
+					Debug.Log("Seleccionado: " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido");
 
-                }
-            }
+				}
 
-        if (tirarAction.WasPressedThisFrame())
-        {
-            Debug.Log("QQQQQQQ");
-            
-            Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-            RaycastHit hit;
+			}
+		}
+
+		if (tirarAction.WasPressedThisFrame())
+		{
+			Debug.Log("QQQQQQQ");
+
+			Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+			RaycastHit hit;
 			Vector3 dropPos;
 
 
@@ -150,41 +150,40 @@ private void OnDisable()
 
 			//componenteReactivo = playerStats._armaEquipada.GetComponent<ObjetoReactivo>();
 			var itemEquipado = playerStats.GetItemEquipped();
-                    
-            if (itemEquipado != null)
-            {
-                wp.anim.SetBool("onMovement", false);
 
-                ObjetoReactivo componenteReactivo = itemEquipado.GetComponent<ObjetoReactivo>();
+			if (itemEquipado != null)
+			{
+				wp.anim.SetBool("onMovement", false);
+
+				ObjetoReactivo componenteReactivo = itemEquipado.GetComponent<ObjetoReactivo>();
 				componenteReactivo.ReactToDrop(itemEquipado, dropPos);
 
 				playerStats.SetItemEquipped(null);
-                equipado = false;
-                componenteReactivo.setGrabbed(false);
-                shooting = true;
-                
-            }
-            else
-            {
-                Debug.Log("En la superficie -> " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido ó no tienes nada equipado");
-                //StartCoroutine(SphereIndicator(hit.point));
-            }
-                
-            
-        }
-        if (componenteReactivo != null)
-        {
-            wp = componenteReactivo.GetComponent<WeaponClass>();
-        }
-        
-        if ((moveAction.IsPressed() || moveAction.inProgress) && playerStats.GetItemEquipped() != null)
-        {
-            wp.anim.SetBool("onMovement", true);
-        } else
-        {
-            wp.anim.SetBool("onMovement", false);
-        }
+				equipado = false;
+				componenteReactivo.setGrabbed(false);
+				shooting = true;
 
+			}
+			else
+			{
+				Debug.Log("En la superficie -> " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido ó no tienes nada equipado");
+				//StartCoroutine(SphereIndicator(hit.point));
+			}
+
+
+		}
+		if (componenteReactivo != null)
+		{
+			wp = componenteReactivo.GetComponent<WeaponClass>();
+		
+		if ((moveAction.IsPressed() || moveAction.inProgress) && playerStats.GetItemEquipped() != null)
+		{
+			wp.anim.SetBool("onMovement", true);
+		} else
+		{
+			wp.anim.SetBool("onMovement", false);
+		}
+		}
 
         if (playerStats.canShoot)
         {
