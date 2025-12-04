@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombreVentaja: "Munici\xF3n infinita"
   descripcion: Disparar sin recargar
-  icono: {fileID: 0}
+  icono: {fileID: 21300000, guid: 9550694710981054695d97ed4ce59e2f, type: 3}
   rareza: 2
   tipoFavorable: 5
   tipoDebuff: 0

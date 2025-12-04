@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Configuración")]
     public int setsParaGanarRonda = 2; // Best of 3 (quien llegue a 2 gana)
-    public int rondasParaGanarPartida = 3; // Best of 5 (quien llegue a 3 gana)
+    public int rondasParaGanarPartida = 2; // Best of 5 (quien llegue a 3 gana)
     public GameObject SpawnPlayerPrefab;
     [Header("Estado Actual")]
     public int scoreP1_Sets = 0;
