@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombreVentaja: Flashbang
   descripcion: Repetidos flashes en la camara del enemigo
-  icono: {fileID: 21300000, guid: bc55152c6de50fa45a3f06facdd3ad51, type: 3}
+  icono: {fileID: 21300000, guid: 22994de60640d1f4981d6f496b8f9b25, type: 3}
   rareza: 2
   tipoFavorable: 0
   tipoDebuff: 1

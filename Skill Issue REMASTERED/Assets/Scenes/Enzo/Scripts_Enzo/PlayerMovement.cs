@@ -192,7 +192,7 @@ public class PlayerMovement : MonoBehaviour
         }
         if (grounded)
         {
-            rb.AddForce(new Vector3(moveDirection.x, 0, moveDirection.z) * moveSpeed * 10f, ForceMode.Force);
+            rb.AddForce(new Vector3(moveDirection.x, 0, moveDirection.z) * moveSpeed * 10f *playerCharacter.velocidadBase, ForceMode.Force);
         }
         else
         {
