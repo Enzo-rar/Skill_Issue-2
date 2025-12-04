@@ -10,15 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08076296f535fef4683b629ca26406df, type: 3}
-  m_Name: Robo de Arma
+  m_Name: Lentitud
   m_EditorClassIdentifier: 
-  nombreVentaja: Robo de arma
-  descripcion: Robale el arma a tu enemigo presionando interactuar
-<<<<<<< HEAD
-  icono: {fileID: 21300000, guid: bd9a12fe0370ebe4d8835ae7d2692f24, type: 3}
-=======
-  icono: {fileID: 21300000, guid: 6e715b7e8ec0ee34685aef17e9af5cf3, type: 3}
->>>>>>> TestJose
+  nombreVentaja: Lentitud
+  descripcion: Ralentiza considerablemente a tu enemigo!
+  icono: {fileID: 0}
   rareza: 1
   tipoFavorable: 0
-  tipoDebuff: 4
+  tipoDebuff: 3

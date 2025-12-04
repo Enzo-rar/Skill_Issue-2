@@ -14,7 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombreVentaja: Aumento de Vida
   descripcion: Aumento de HP en 100 puntos
+<<<<<<< HEAD
   icono: {fileID: 21300000, guid: a09085b91c4205e4c807b8e8340f91ae, type: 3}
+=======
+  icono: {fileID: 21300000, guid: 698c43f11bc5b274abf7c5d003b6c95b, type: 3}
+>>>>>>> TestJose
   rareza: 0
   tipoFavorable: 3
   tipoDebuff: 0

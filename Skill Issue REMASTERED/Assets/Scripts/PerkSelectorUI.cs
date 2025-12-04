@@ -181,7 +181,7 @@ public class PerkSelectorUI : MonoBehaviour
 
     public void AsignarControlUI(PlayerInput InputJugador)
     {
-        Debug.Log("Asignando control UI al jugador con ID: " + InputJugador.playerIndex);
+        Debug.Log("Asignando control UI al jugador con ID: " + InputJugador.playerIndex+" con IdDeJugadorPerdedor ->"+idPerdedorActual);
         if (uiInputModule == null) return;
 
         uiInputModule.actionsAsset = InputJugador.actions;          

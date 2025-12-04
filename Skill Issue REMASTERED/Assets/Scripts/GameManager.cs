@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Configuración")]
     public int setsParaGanarRonda = 2; // Best of 3 (quien llegue a 2 gana)
-    public int rondasParaGanarPartida = 3; // Best of 5 (quien llegue a 3 gana)
+    public int rondasParaGanarPartida = 2; // Best of 5 (quien llegue a 3 gana)
     public GameObject SpawnPlayerPrefab;
     [Header("Estado Actual")]
     public int scoreP1_Sets = 0;
@@ -136,11 +136,12 @@ public class GameManager : MonoBehaviour
             Debug.Log("Set terminado. Iniciando siguiente set...");
             _UITextRondasSet.text = $"Rondas: {Jugador1RondasGanadas} - {Jugador2RondasGanadas}   Sets: {scoreP1_Sets} - {scoreP2_Sets}";
             ReiniciarArenaParaSiguienteSet();
+             perkSelectorUI.InicializarSeleccion(ultimoPerdedor, ultimoGanador);
             playerCharacter1.dropWeapon();
             playerCharacter2.dropWeapon();
             // Abrir la UI de selección de perks para el perdedor del set para escoger una ventaja
             // Aqui se puede cambiar la logica para que sea el que lleve menos sets ganados en total
-            perkSelectorUI.InicializarSeleccion(ultimoPerdedor, ultimoGanador);
+           
             
             
 

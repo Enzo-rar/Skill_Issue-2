@@ -697,16 +697,22 @@ PrefabInstance:
     m_TransformParent: {fileID: 3124204145845356872}
     m_Modifications:
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> TestJose
     - target: {fileID: 1239909122826714552, guid: 3e8c7672e105b2c4782cccb81d30d7f5,
         type: 3}
       propertyPath: orientation
       value: 
       objectReference: {fileID: 7986639160689909758}
+<<<<<<< HEAD
     - target: {fileID: 2306042594015082660, guid: 3e8c7672e105b2c4782cccb81d30d7f5,
         type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 65463
       objectReference: {fileID: 0}
+=======
+>>>>>>> TestJose
     - target: {fileID: 2451124450760251298, guid: 3e8c7672e105b2c4782cccb81d30d7f5,
         type: 3}
       propertyPath: m_Name
@@ -723,13 +729,17 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2708499827825216924, guid: 3e8c7672e105b2c4782cccb81d30d7f5,
+<<<<<<< HEAD
 =======
     - target: {fileID: 547995660922968427, guid: 3e8c7672e105b2c4782cccb81d30d7f5,
 >>>>>>> main
+=======
+>>>>>>> TestJose
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     - target: {fileID: 1239909122826714552, guid: 3e8c7672e105b2c4782cccb81d30d7f5,
@@ -758,6 +768,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
 >>>>>>> main
+=======
+>>>>>>> TestJose
     - target: {fileID: 2708499827825216924, guid: 3e8c7672e105b2c4782cccb81d30d7f5,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -848,6 +860,7 @@ MonoBehaviour:
   orientation: {fileID: 7986639160689909758}
   PlayerCameraComponent: {fileID: 4009812637954889028}
   crosshairSize: 20
+  crosshairSize: 5
   lookSensitivity: 15
   minPitch: -85
   maxPitch: 85
@@ -869,16 +882,19 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 1.8
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6007180743642840524, guid: 5a796ed211b2cec468ecadad11acb207,
         type: 3}
       propertyPath: m_LocalScale.y
       value: 1.8
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6007180743642840524, guid: 5a796ed211b2cec468ecadad11acb207,
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1.8
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6007180743642840524, guid: 5a796ed211b2cec468ecadad11acb207,
         type: 3}
@@ -1078,6 +1094,7 @@ MonoBehaviour:
   canMove: 1
   canShoot: 1
   estaVivo: 1
+  velocidadBase: 1
   grabEnemyWeapon: 0
 --- !u!114 &8305645692717954911
 MonoBehaviour:

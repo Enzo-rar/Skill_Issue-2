@@ -13,8 +13,13 @@ MonoBehaviour:
   m_Name: Doble Salto
   m_EditorClassIdentifier: 
   nombreVentaja: Doble Salto
+<<<<<<< HEAD
   descripcion: Capacidad de realizar un segundo salto en el aire
   icono: {fileID: 21300000, guid: 88e4bc6d2f76b8f489b38258168d33c1, type: 3}
+=======
+  descripcion: Podras saltar una segunda vez en el aire
+  icono: {fileID: 21300000, guid: be027839a9e969d49ba1c86f592b778c, type: 3}
+>>>>>>> TestJose
   rareza: 0
   tipoFavorable: 1
   tipoDebuff: 0
