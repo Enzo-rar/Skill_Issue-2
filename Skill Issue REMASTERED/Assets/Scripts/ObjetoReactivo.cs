@@ -38,7 +38,7 @@ public class ObjetoReactivo : MonoBehaviour
 
         // Hacer hijo de la camara (equiparlo visualmente)
         transform.SetParent(camara.transform);
-        transform.localPosition = new Vector3(0.5f, -0.3f, 0.8f); // posici�n �en mano�
+        transform.localPosition = new Vector3(0.2f, -0.3f, 0.8f); // posici�n �en mano�
         transform.localRotation = Quaternion.identity;
 
         isGrabbed = true;
