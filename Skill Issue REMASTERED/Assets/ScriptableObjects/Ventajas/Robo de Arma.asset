@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nombreVentaja: Robo de arma
   descripcion: Robale el arma a tu enemigo presionando interactuar
-  icono: {fileID: 0}
+  icono: {fileID: 21300000, guid: bd9a12fe0370ebe4d8835ae7d2692f24, type: 3}
   rareza: 1
   tipoFavorable: 0
   tipoDebuff: 4
