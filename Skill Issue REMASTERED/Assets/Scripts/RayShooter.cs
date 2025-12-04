@@ -176,19 +176,18 @@ private void OnDisable()
 		{
 			wp = componenteReactivo.GetComponent<WeaponClass>();
 		
-		if ((moveAction.IsPressed() || moveAction.inProgress) && playerStats.GetItemEquipped() != null)
-		{
-			wp.anim.SetBool("onMovement", true);
-		} else
-		{
-			wp.anim.SetBool("onMovement", false);
-		}
+		    if ((moveAction.IsPressed() || moveAction.inProgress) && playerStats.GetItemEquipped() != null)
+		    {
+			    wp.anim.SetBool("onMovement", true);
+		    } else {
+			    wp.anim.SetBool("onMovement", false);
+		    }
 		}
 
         if (playerStats.canShoot)
         {
-        HandleZoom();
-        HandleAttack();
+            HandleZoom();
+            HandleAttack();
         }
       
        

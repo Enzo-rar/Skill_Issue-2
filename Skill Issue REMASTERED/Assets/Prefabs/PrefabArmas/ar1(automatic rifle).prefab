@@ -285,7 +285,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2490425717506282103}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0021655038, y: 0.0000013548452, z: -0.0000000029342655, w: 0.9999977}
+  m_LocalRotation: {x: -0.0021655038, y: 0.0000013548452, z: -0.0000000029342655,
+    w: 0.9999977}
   m_LocalPosition: {x: 0.00032393873, y: -0.000077227676, z: 0.00056010456}
   m_LocalScale: {x: 0.99999994, y: 0.9999998, z: 0.99999994}
   m_ConstrainProportionsScale: 0
@@ -505,7 +506,8 @@ MonoBehaviour:
   numberOfBullets: 60
   isAutomatic: 1
   anim: {fileID: 0}
-  fireballPrefab: {fileID: 8147669148645074578, guid: 90a7c78b38e6c504285f1191fb4259dd, type: 3}
+  fireballPrefab: {fileID: 8147669148645074578, guid: 90a7c78b38e6c504285f1191fb4259dd,
+    type: 3}
 --- !u!1 &4878471829712211184
 GameObject:
   m_ObjectHideFlags: 0
