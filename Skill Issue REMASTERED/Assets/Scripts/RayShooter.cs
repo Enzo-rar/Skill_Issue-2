@@ -73,7 +73,7 @@ private void OnDisable()
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         equipado = false;
-    }
+    }//
 	void Update()
 	{
 
