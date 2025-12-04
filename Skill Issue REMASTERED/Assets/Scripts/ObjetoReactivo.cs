@@ -4,14 +4,16 @@ using UnityEngine.ProBuilder.Shapes;
 public class ObjetoReactivo : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
- 
-	//private bool _isCollected = false;
-	private GameObject _armaEquipada;
-	private GameObject _armaEnPedestal;
+
+    //private bool _isCollected = false;
+    private GameObject _armaEquipada;
+    private GameObject _armaEnPedestal;
     private Collider _collider;
     private Rigidbody _rigidbody;
     private Camera _camara;
+    private bool isGrabbed = false;
 
+     private
     void Awake()
     { // Guardamos referencias si existen
         _collider = GetComponent<Collider>();
@@ -20,6 +22,7 @@ public class ObjetoReactivo : MonoBehaviour
     // Reacciona al ser recogido
     public void ReactToCollect(GameObject item, Camera camara)
     {
+
         Debug.Log("Metodo reactToCollect:", item);
         _camara = camara;
 
@@ -33,23 +36,23 @@ public class ObjetoReactivo : MonoBehaviour
             _rigidbody.useGravity = false;
         }
 
-        // Hacer hijo de la c�mara (equiparlo visualmente)
+        // Hacer hijo de la camara (equiparlo visualmente)
         transform.SetParent(camara.transform);
         transform.localPosition = new Vector3(0.5f, -0.3f, 0.8f); // posici�n �en mano�
         transform.localRotation = Quaternion.identity;
 
+        isGrabbed = true;
+       
+    }
 
-        //_armaEquipada = item;
-        // Registrar el item en PlayerCharacter
-        var player = camara.GetComponentInParent<PlayerCharacter>();
-        if (player != null)
-            player.SetItemEquipped(gameObject);
+    public bool IsGrabbed()
+    {
+        return isGrabbed;
+    }
 
-       // Destroy(_armaEquipada.GetComponent<BoxCollider>());
-
-        var playerStats = camara.GetComponentInParent<PlayerCharacter>();
-        if (playerStats != null) { playerStats.SetItemEquipped(item); }
-        Debug.Log("Objeto recogido y equipado: " + gameObject.name);
+    public void setGrabbed(bool estado)
+    {
+        isGrabbed = estado;
     }
 
     //   // Reacciona al ser soltado, TP A DONDE APUNTAS
@@ -77,7 +80,7 @@ public class ObjetoReactivo : MonoBehaviour
     //       Debug.Log("Objeto dropeado: " + gameObject.name);
     //   }
 
-     // Reacciona al ser soltado, LANZAR A DONDE APUNTAS
+    // Reacciona al ser soltado, LANZAR A DONDE APUNTAS
 
     public void ReactToDrop(GameObject item, Vector3 pos)
     {
@@ -96,11 +99,11 @@ public class ObjetoReactivo : MonoBehaviour
             _rigidbody.useGravity = true;
             _rigidbody.linearVelocity = Vector3.zero;
 
-            // 💥 Aplicar impulso hacia delante
+            //  Aplicar impulso hacia delante
             _rigidbody.AddForce(_camara.transform.forward * 8f, ForceMode.VelocityChange);
         }
 
-        // (Opcional) Desregistrar el arma del jugador
+        // Desregistrar el arma del jugador
         var player = _camara.GetComponentInParent<PlayerCharacter>();
         if (player != null) player.SetItemEquipped(null);
     }

@@ -1,82 +1,312 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(CharacterController))] // obliga a que el GameObject tenga cierto componente
 public class FPSInput : MonoBehaviour
 {
-	[Header("Movimiento")]
-	public float speed = 6.0f;
-	[Header("Salto y gravedad")]
-	public float jumpHeight = 2.5f;
-	public float gravity = -9.8f;
+    [Header("Movement")]
+    public float moveSpeed = 6f;
+    public float maxSpeed = 10f;
+    public float groundDrag = 6f;
+    public float jumpForce = 12f;
+    public float jumpCooldown = 0.25f;
+    public float airMultiplier = 0.4f;
 
-	public float fallMultiplier = 1.5f;   // multiplica gravedad al CAER
-	public float jumpCutMultiplier = 0.5f; // recorta salto al soltar Jump
-	//public float maxFallSpeed = -50f;     // l�mite de ca�da 
+    [Header("Slide")]
+    public float slideSpeed = 12f;
+    public float slideDeceleration = 2f; // Importante para que el slide no sea infinito
 
-	private CharacterController _charController;
-	private Vector3 velocity;
-	//private float verticalVelocity;
+    bool readyToJump = true;
+    bool isCrouching = false;
+    bool isSliding = false;
 
-	private bool isGrounded;
+    [Header("Ground Check")]
+    public float playerHeight = 2f;
+    public LayerMask whatIsGround;
+    bool grounded;
 
-	void Start()
+    [Header("Slope Handling")]
+    public float maxSlopeAngle = 40f;
+    private RaycastHit slopeHit;
+
+    public Transform orientation;
+
+    [SerializeField] private PlayerInput playerInput;
+
+    private Vector2 moveInput;
+    private bool jumpPressed;
+    private bool crouchHeld;
+
+    float horizontalInput;
+    float verticalInput;
+
+    Vector3 moveDirection;
+    Vector3 originalSize;
+
+    Rigidbody rb;
+
+    /* ----------------------------------------------------------
+                     REGISTRO INPUT
+    ---------------------------------------------------------- */
+
+    void OnEnable()
     {
-        _charController = GetComponent<CharacterController>();
+        var map = playerInput.currentActionMap;
+        if(map == null) return; // Seguridad
+
+        map["Move"].performed += OnMovePerformed;
+        map["Move"].canceled += OnMoveCanceled;
+
+        map["Jump"].started += OnJumpStarted;
+        map["Jump"].canceled += OnJumpCanceled;
+
+        map["Crouch"].started += OnCrouchStarted;
+        map["Crouch"].canceled += OnCrouchCanceled;
     }
 
-	void Jump()
-	{
-        velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+    void OnDisable()
+    {
+        if (playerInput == null) return;
+        var map = playerInput.currentActionMap;
+        if (map == null) return;
+
+        map["Move"].performed -= OnMovePerformed;
+        map["Move"].canceled -= OnMoveCanceled;
+
+        map["Jump"].started -= OnJumpStarted;
+        map["Jump"].canceled -= OnJumpCanceled;
+
+        map["Crouch"].started -= OnCrouchStarted;
+        map["Crouch"].canceled -= OnCrouchCanceled;
+    }
+
+    private void OnMovePerformed(InputAction.CallbackContext ctx) => moveInput = ctx.ReadValue<Vector2>();
+    private void OnMoveCanceled(InputAction.CallbackContext ctx) => moveInput = Vector2.zero;
+    private void OnJumpStarted(InputAction.CallbackContext ctx) => jumpPressed = true;
+    private void OnJumpCanceled(InputAction.CallbackContext ctx) => jumpPressed = false;
+    private void OnCrouchStarted(InputAction.CallbackContext ctx) => crouchHeld = true;
+    private void OnCrouchCanceled(InputAction.CallbackContext ctx) => crouchHeld = false;
+
+    /* ----------------------------------------------------------
+                     UNITY LOOP
+    ---------------------------------------------------------- */
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+        
+        // 1. Interpolación activada para suavidad visual
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+
+        originalSize = transform.localScale;
+
+       
+        // Creamos un material sin fricción en tiempo de ejecución.
+        // Esto evita que el jugador se "trabe" al rozar paredes, eliminando el jitter lateral.
+        CapsuleCollider col = GetComponent<CapsuleCollider>();
+        if (col != null)
+        {
+            PhysicsMaterial slipperyMat = new PhysicsMaterial("ZeroFriction");
+            slipperyMat.dynamicFriction = 0f;
+            slipperyMat.staticFriction = 0f;
+            slipperyMat.frictionCombine = PhysicsMaterialCombine.Minimum;
+            slipperyMat.bounceCombine = PhysicsMaterialCombine.Minimum;
+            col.material = slipperyMat;
+        }
+        
     }
 
     void Update()
     {
-		// --- Movimiento del plano horizontal ---
+        // Ground Check
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
-		float deltaX = Input.GetAxis("Horizontal"); // Las teclas asociadas est�n en:
-        float deltaZ = Input.GetAxis("Vertical");   // Edit\Project Settings\Input
-       // Vector3 movement = new Vector3(deltaX, 0, deltaZ);
-		Vector3 move = transform.right * deltaX + transform.forward * deltaZ;
-		//movement = Vector3.ClampMagnitude(movement, 1.0f) * speed;
-		move = Vector3.ClampMagnitude(move, 1f) * speed;
-		//movement.y = gravity;
+        HandleInput();
+        SpeedControl();
 
-		// --- Estado del suelo ---
-		isGrounded = _charController.isGrounded;
+        // Gestión de Drag (Rozamiento)
+        if (grounded)
+        {
+            if (isSliding)
+                rb.linearDamping = slideDeceleration; // Usamos el drag específico del slide
+            else
+                rb.linearDamping = groundDrag; // Drag normal de caminar
+        }
+        else
+        {
+            rb.linearDamping = 0; // En el aire no hay fricción
+        }
+    }
 
-		if (isGrounded && velocity.y < 0)
-			velocity.y = -2f; // mantener pegado al suelo
+    private void FixedUpdate()
+    {
+        MovePlayer();
+    }
 
-		// --- Salto ---
-		if (Input.GetButtonDown("Jump") && isGrounded)
-		{
-			Jump();
-            //velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+    private void HandleInput()
+    {
+        horizontalInput = moveInput.x;
+        verticalInput = moveInput.y;
+
+        // ----------- SALTO -------------------
+        if (jumpPressed && readyToJump && grounded)
+        {
+            readyToJump = false;
+            Jump();
+            Invoke(nameof(ResetJump), jumpCooldown);
         }
 
-		// --- Gravedad ---
+        // ----------- SLIDE / CROUCH ----------
+        if (crouchHeld && !isCrouching && !isSliding && grounded)
+        {
+            // Solo hacemos Slide si nos movemos lo suficientemente rápido
+            Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+            if (flatVel.magnitude > moveSpeed * 0.5f) 
+                Slide();
+            else 
+                Crouch();
+        }
 
-		//velocity.y += gravity * Time.deltaTime;
-		// m�s gravedad al caer
-		if (velocity.y < 0f)
-			velocity.y += gravity * fallMultiplier * Time.deltaTime;
-		else
-			velocity.y += gravity * Time.deltaTime;
+        if (!crouchHeld)
+        {
+            if (isCrouching) CrouchEnd();
+            if (isSliding) SlideEnd();
+        }
+    }
 
-		// cortar salto si sueltas el bot�n mientras subes
-		if (!isGrounded && !Input.GetButton("Jump") && velocity.y > 0f)
-			velocity.y *= jumpCutMultiplier;
+    private void MovePlayer()
+    {
+        // Si estamos deslizando, NO aplicamos fuerza de movimiento normal para dejar que la inercia actúe
+        // Opcional: permitir un control muy reducido durante el slide
+        if (isSliding) return;
 
-		velocity.y += gravity * Time.deltaTime;
+        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+
+        // Pendientes
+        if (OnSlope() && !jumpPressed)
+        {
+            rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
+            if (rb.linearVelocity.y > 0)
+                rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+        }
+        // Suelo
+        else if (grounded)
+        {
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+        }
+        // Aire
+        else if (!grounded)
+        {
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+        }
 
 
-		// --- Movimiento total ---
-		Vector3 finalMove = move + Vector3.up * velocity.y; 
+        rb.useGravity = !OnSlope();
 
-		_charController.Move(finalMove * Time.deltaTime);
+        // --- WALL FRICTION FIX: evita frenarse contra muros ---
+        if (rb.linearVelocity.magnitude > 0.1f)
+        {
+            // Detecta si hay muro adelante
+            if (Physics.Raycast(transform.position, rb.linearVelocity.normalized, out RaycastHit wallHit, 0.6f))
+            {
+                Vector3 wallNormal = wallHit.normal;
+                Debug.Log("Wall detected with normal: " + wallNormal);
+                // Proyecta la velocidad para quitar la parte que empuja contra el muro
+                Vector3 vel = rb.linearVelocity;
+                float dot = Vector3.Dot(vel, wallNormal);
 
-		//movement = transform.TransformDirection(movement); // convierte desde el sistema local al global
-       // _charController.Move(movement * Time.deltaTime); // no movemos el transform para que se calculen
-    }						// las colisiones
+                if (dot < 0) // Si estás empujando contra la pared
+                {
+                    vel -= wallNormal * dot; // Quita solo el frenado lateral
+                    rb.linearVelocity = vel;
+                }
+            }
+        }
+
+    }
+
+    private void SpeedControl()
+    {
+        // --- SOLUCIÓN FLUIDEZ DASH ---
+        // Si estamos haciendo Slide, ignoramos el límite de velocidad normal
+        // para permitir el impulso inicial del dash.
+        if (isSliding) return; 
+
+        // Limitamos velocidad en pendientes
+        if (OnSlope() && !jumpPressed)
+        {
+            if (rb.linearVelocity.magnitude > maxSpeed)
+                rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
+        }
+        // Limitamos velocidad en suelo/aire
+        else
+        {
+            Vector3 flatVel = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+
+            // Solo limitamos si superamos la velocidad máxima
+            if (flatVel.magnitude > maxSpeed)
+            {
+                Vector3 limitedVel = flatVel.normalized * maxSpeed;
+                rb.linearVelocity = new Vector3(limitedVel.x, rb.linearVelocity.y, limitedVel.z);
+            }
+        }
+    }
+
+    private void Jump()
+    {
+        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+    }
+
+    private void ResetJump() => readyToJump = true;
+
+    /* ----------------------------------------------------------
+                      CROUCH / SLIDE
+    ---------------------------------------------------------- */
+
+    private void Crouch()
+    {
+        transform.localScale = new Vector3(originalSize.x, originalSize.y * 0.6f, originalSize.z);
+        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+        isCrouching = true;
+    }
+
+    private void CrouchEnd()
+    {
+        transform.localScale = originalSize;
+        isCrouching = false;
+    }
+
+    private void Slide()
+    {
+        isSliding = true;
+        transform.localScale = new Vector3(originalSize.x, originalSize.y * 0.6f, originalSize.z);
+        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+        
+        // Empuje inicial del Slide (Dash)
+        // Usamos ForceMode.VelocityChange para ignorar la masa y dar un "golpe" seco instantáneo
+        // O Impulse, pero VelocityChange suele sentirse más "snappy" para dashes.
+        // Si prefieres impulse, cambia a ForceMode.Impulse
+        rb.AddForce(moveDirection.normalized * slideSpeed, ForceMode.VelocityChange);
+    }
+
+    private void SlideEnd()
+    {
+        transform.localScale = originalSize;
+        isSliding = false;
+    }
+
+    private bool OnSlope()
+    {
+        if (Physics.Raycast(transform.position, Vector3.down, out slopeHit, playerHeight * 0.5f + 0.3f))
+        {
+            float angle = Vector3.Angle(Vector3.up, slopeHit.normal);
+            return angle < maxSlopeAngle && angle != 0;
+        }
+        return false;
+    }
+
+    private Vector3 GetSlopeMoveDirection() => Vector3.ProjectOnPlane(moveDirection, slopeHit.normal).normalized;
 }
-

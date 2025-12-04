@@ -2,17 +2,26 @@ using UnityEngine;
 
 public class Fireball : MonoBehaviour
 {
-    public float speed = 10.0f;
-    public int damage = 1;
+    public float speed = 20f;
+    public int damage = 25;
+    PlayerCam posicionCamara;
 
+    void Start()
+    {
+      //  posicionCamara = GetComponentInParent<PlayerCam>();
+     //   transform.Translate(posicionCamara.transform.position.x, posicionCamara.transform.position.y, posicionCamara.transform.position.z);
+    }
     void Update()
     {
-        transform.Translate(0, 0, speed * Time.deltaTime);
+        //posicionCamara = GetComponentInParent<PlayerCam>();
+        transform.Translate(0,0, speed * Time.deltaTime);
+        //transform.Translate(posicionCamara.transform.position.x, posicionCamara.transform.position.y, speed * Time.deltaTime);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerCharacter player = other.GetComponent<PlayerCharacter>();
+        PlayerCharacter player = other.GetComponentInParent<PlayerCharacter>();
+        Debug.Log(player);
         if (player != null)
         {
             player.Hurt(damage);
@@ -20,4 +29,8 @@ public class Fireball : MonoBehaviour
         Destroy(this.gameObject);
     }
 
+    public void SetDamage(int dmg)
+    {
+        damage = dmg;
+    }
 }
