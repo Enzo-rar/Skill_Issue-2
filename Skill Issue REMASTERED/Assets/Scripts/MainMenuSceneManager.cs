@@ -48,11 +48,11 @@ public class MainMenuSceneManager : MonoBehaviour
 
 	public void OnSFXVolume(float volume)
 	{
-		Debug.Log("SFX Volume: " + volume);
+		Debug.Log("Volumen de Efectos: " + volume);
 	}
 
 	public void OnMusicVolume(float volume)
 	{
-		Debug.Log("Music Volume: " + volume);
+		Debug.Log("Volumen de Música: " + volume);
 	}
 }
