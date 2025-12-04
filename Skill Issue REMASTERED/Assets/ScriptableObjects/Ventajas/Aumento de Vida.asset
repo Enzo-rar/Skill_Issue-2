@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Aumento de Vida
   m_EditorClassIdentifier: 
   nombreVentaja: Aumento de Vida
-  descripcion: Aumento de HP en 50
+  descripcion: Aumento de HP en 100 puntos
   icono: {fileID: 0}
   rareza: 0
   tipoFavorable: 3

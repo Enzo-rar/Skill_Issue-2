@@ -5,36 +5,25 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Infima Games/Low Poly Shooter Pack - Free Sample/Scenes/S_Content_Overview.unity
+    guid: 63fdc04a097eb0b4ba4af78a98dac40d
+  - enabled: 1
+    path: Assets/Scenes/Splash.unity
+    guid: ca918942d34617b4299b480bf1f6431d
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 2d9f527f339fa4244b53508fdbc75b4b
   - enabled: 1
     path: Assets/Scenes/Jose/TestJose.unity
     guid: c0e0b25484fc9904fb3149fe41e8d5fe
   - enabled: 1
-    path: Assets/Maps/MapaPrueba1.unity
-    guid: 650b6c3fa03c7af4ab9af84ccfdb4a0f
-  - enabled: 1
-    path: Assets/Maps/MapaPrueba2.unity
-    guid: b98c615880858764583dccfaaa3721d5
-  - enabled: 1
-    path: Assets/Maps/LavaMap.unity
-    guid: 55bbc41204808f640a2ca19bd4f394d0
-  - enabled: 1
     path: Assets/Maps/CastleMap.unity
     guid: 4e0b2b51b6662be4f9d98e95645aff16
   - enabled: 1
-    path: Assets/Scenes/Splash.unity
-    guid: ca918942d34617b4299b480bf1f6431d
-  - enabled: 0
-    path: Assets/Scenes/Miguel/CastilloFuncional.unity
-    guid: c48d6cad714d8be47b1b3554a22fa293
-  - enabled: 1
-    path: Assets/Scenes/MenuPrincipal.unity
-    guid: fed723da22ce14f45a5a1d44cdeab2e1
-  - enabled: 1
-    path: Assets/Scenes/Enzo/Enzo_Test.unity
-    guid: 195084f6d244ad14e9969f3f4394d8d5
+    path: Assets/Maps/LavaMap.unity
+    guid: 55bbc41204808f640a2ca19bd4f394d0
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.input.settings: {fileID: 11400000, guid: 9eb07e2d669e9c94e9d7d3c782a916f7,
+      type: 2}
   m_UseUCBPForAssetBundles: 0

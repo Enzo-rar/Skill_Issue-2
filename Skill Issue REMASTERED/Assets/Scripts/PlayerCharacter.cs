@@ -4,9 +4,10 @@ using System.Collections;
 using UnityEngine.InputSystem;
 public class PlayerCharacter : MonoBehaviour
 {
+    [SerializeField] RayShooter rayShooter;
     [SerializeField] private PlayerSoundManager _SoundManager;
     [SerializeField] private int _baseHealth = 100;
-    [SerializeField] private int _remainingHealth = 1;
+    [SerializeField] private int _remainingHealth = 100;
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private Camera _playerCamera;
     [SerializeField] private Collider _collisionHandler;
@@ -14,6 +15,8 @@ public class PlayerCharacter : MonoBehaviour
     private GameObject _armaEquipada; //getter y setter automatico. Lectura publica pero escritora privada
     public ParticleSystem deathParticles;
     public int playerId = -1; // 1 o 2
+    public bool canMove = true;
+    public bool canShoot = true;
     public bool estaVivo = true;
    private HashSet<Ventajas> historialVentajas = new HashSet<Ventajas>();
 
@@ -21,8 +24,8 @@ public class PlayerCharacter : MonoBehaviour
     private bool tieneDobleSalto = false;
     private bool estaCegado = false;
     private float velocidadBase = 5f;
-
-    private 
+    private bool ventajaHP = false;
+    public bool grabEnemyWeapon = false;
 
      void Start()
     {   
@@ -46,8 +49,16 @@ public class PlayerCharacter : MonoBehaviour
         //_remainingHealth = _baseHealth;
         
     }
+    public void dropWeapon()
+    {
+        if (rayShooter != null)
+        {
+            rayShooter.dropWeaponOnDeath();
+        }
+    }
 
     //Esto solo es para probar, luego se quita, cuidado por que probablemente se esta activando mas de una vez.
+   /*
      private
     void Update()
     {
@@ -56,7 +67,7 @@ public class PlayerCharacter : MonoBehaviour
             GameManager.Instance.RegistrarVictoriaSet(playerId);
         }
     }
-    
+    */
     //Desactivar el componente de audio al segundo jugador para evitar problemas.
     private void DeactivateAudioForSecondPlayer()
     {
@@ -117,8 +128,9 @@ public class PlayerCharacter : MonoBehaviour
             case VentajaFavorable.MasVida:
                 //Aumentar vida en 50, al igual vale la pena hacer un método en HealthSystem para esto y separar este script para ventajas y quizas armas
               //  GetComponent<HealthSystem>().Curar(50);
-              Debug.Log("Vida aumentada en Ventaja +50");
-              _remainingHealth += 50;
+              Debug.Log("Vida aumentada en Ventaja +100");
+              ventajaHP = true;
+              _remainingHealth += 100;
                 break;
                 
             case VentajaFavorable.Velocidad:
@@ -193,7 +205,9 @@ public class PlayerCharacter : MonoBehaviour
     {
         //Emepzar corrutina de muerte 
         //estaVivo a false permite que no salte de nuevo la funcion de morir al disparar cadaver.
+        canMove = false;
         estaVivo = false;
+        canShoot = false;
         _SoundManager.playDeathSound();
         StartCoroutine(ActionsAfterDeath());
 
@@ -215,10 +229,25 @@ public class PlayerCharacter : MonoBehaviour
         //Destroy(this.gameObject);
     }
 
+    void deshazVentajas()
+    {
+        //Aqui se desharian las ventajas al final de cada set, si es que tienen duracion limitada.
+        tieneDobleSalto = false;
+        estaCegado = false;
+        ventajaHP = false;
+
+    }
     public void RevivirJugadorSiguienteSet(Transform respawnPoint)
 {
+    canMove = true;
+    canShoot = true;
     estaVivo = true;
+    
     _remainingHealth = _baseHealth;
+    //Elimina ventajas temporales
+    deshazVentajas();
+
+
     Debug.Log("Jugador " + playerId + " reviviendo en: " + respawnPoint.position);
 
     Transform jugadorRoot = transform.root;
@@ -265,6 +294,8 @@ public class PlayerCharacter : MonoBehaviour
         rb.isKinematic = false;
         rb.WakeUp(); // Despertar el RB
     }
+
+    
     
     Debug.Log("Teletransporte completado a: " + transform.position);
 }

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Fireball : MonoBehaviour
@@ -8,9 +9,11 @@ public class Fireball : MonoBehaviour
 
     void Start()
     {
-      //  posicionCamara = GetComponentInParent<PlayerCam>();
-     //   transform.Translate(posicionCamara.transform.position.x, posicionCamara.transform.position.y, posicionCamara.transform.position.z);
-    }
+	 StartCoroutine(DestroyAfter());
+
+		//  posicionCamara = GetComponentInParent<PlayerCam>();
+		//   transform.Translate(posicionCamara.transform.position.x, posicionCamara.transform.position.y, posicionCamara.transform.position.z);
+	}
     void Update()
     {
         //posicionCamara = GetComponentInParent<PlayerCam>();
@@ -33,4 +36,11 @@ public class Fireball : MonoBehaviour
     {
         damage = dmg;
     }
+	private IEnumerator DestroyAfter()
+	{
+		//Wait for set amount of time
+		yield return new WaitForSeconds(2);
+		//Destroy bullet object
+		Destroy(gameObject);
+	}
 }

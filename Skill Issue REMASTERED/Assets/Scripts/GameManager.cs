@@ -85,6 +85,8 @@ public class GameManager : MonoBehaviour
         return jugadoresRegistradosID++;
     }
 
+
+
     public PlayerCharacter GetPlayerById(int id)
     {
         if (id == 1)
@@ -124,6 +126,8 @@ public class GameManager : MonoBehaviour
         if (scoreP1_Sets >= setsParaGanarRonda || scoreP2_Sets >= setsParaGanarRonda)
         {
             FinalizarRonda(ultimoGanador);
+            playerCharacter1.dropWeapon();
+            playerCharacter2.dropWeapon();
         }
         else
         {
@@ -132,7 +136,8 @@ public class GameManager : MonoBehaviour
             Debug.Log("Set terminado. Iniciando siguiente set...");
             _UITextRondasSet.text = $"Rondas: {Jugador1RondasGanadas} - {Jugador2RondasGanadas}   Sets: {scoreP1_Sets} - {scoreP2_Sets}";
             ReiniciarArenaParaSiguienteSet();
-            
+            playerCharacter1.dropWeapon();
+            playerCharacter2.dropWeapon();
             // Abrir la UI de selección de perks para el perdedor del set para escoger una ventaja
             // Aqui se puede cambiar la logica para que sea el que lleve menos sets ganados en total
             perkSelectorUI.InicializarSeleccion(ultimoPerdedor, ultimoGanador);

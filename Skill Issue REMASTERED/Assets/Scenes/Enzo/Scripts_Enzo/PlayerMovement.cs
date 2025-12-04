@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
     private PlayerSoundManager playerSoundManager;
+    [SerializeField] private PlayerCharacter playerCharacter;
     [Header("Input System")]
     [SerializeField] private PlayerInput playerInput;
 
@@ -132,7 +133,11 @@ public class PlayerMovement : MonoBehaviour
         //Comprueba que debajo del jugador hay suelo, para verificar si podemos saltar y a�adir rozamiento
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
-        MyInput();
+        if(playerCharacter.estaVivo && playerCharacter.canMove)
+        {
+        MyInput();    
+        }
+        
 
         if (grounded && !isSliding)
         {
@@ -148,7 +153,11 @@ public class PlayerMovement : MonoBehaviour
     //FixedUpdate se llama cada intervalos iguales, asi no se llaman mas o menos veces los m�todos dependiendo de los FPS del jugador
     private void FixedUpdate()
     {
-        MovePlayer();
+        if(playerCharacter.estaVivo && playerCharacter.canMove)
+        {
+        MovePlayer();    
+        }
+        
         SpeedControl();
 
 

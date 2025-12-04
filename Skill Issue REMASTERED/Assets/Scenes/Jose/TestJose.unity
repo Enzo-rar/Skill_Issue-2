@@ -741,10 +741,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: GamePlayer
       objectReference: {fileID: 0}
-    - target: {fileID: 8305645692717954911, guid: 4188056d9d1b72e4b983814f306c63a4, type: 3}
-      propertyPath: onHitSound
-      value: 
-      objectReference: {fileID: 8300000, guid: 50f4aebc81abbaa478e27341f947c6a0, type: 3}
+    - target: {fileID: 7342655835232139079, guid: 4188056d9d1b72e4b983814f306c63a4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7342655835232139079, guid: 4188056d9d1b72e4b983814f306c63a4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7342655835232139079, guid: 4188056d9d1b72e4b983814f306c63a4, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
