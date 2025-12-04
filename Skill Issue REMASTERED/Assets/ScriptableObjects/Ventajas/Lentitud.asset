@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08076296f535fef4683b629ca26406df, type: 3}
-  m_Name: Doble Salto
+  m_Name: Lentitud
   m_EditorClassIdentifier: 
-  nombreVentaja: Doble Salto
-  descripcion: Podras saltar una segunda vez en el aire
+  nombreVentaja: Lentitud
+  descripcion: Ralentiza considerablemente a tu enemigo!
   icono: {fileID: 0}
-  rareza: 0
-  tipoFavorable: 1
-  tipoDebuff: 0
+  rareza: 1
+  tipoFavorable: 0
+  tipoDebuff: 3

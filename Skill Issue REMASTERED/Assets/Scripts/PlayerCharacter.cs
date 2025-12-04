@@ -23,7 +23,7 @@ public class PlayerCharacter : MonoBehaviour
     // Variables de estado (flags)
     private bool tieneDobleSalto = false;
     private bool estaCegado = false;
-    private float velocidadBase = 5f;
+    public float velocidadBase = 1f;
     private bool ventajaHP = false;
     public bool grabEnemyWeapon = false;
 
@@ -145,6 +145,22 @@ public class PlayerCharacter : MonoBehaviour
     // --- LÓGICA INTERNA DE DEBUFFS ---
     private void AplicarLogicaDebuff(VentajaDebuff tipo)
     {
+
+        //Aqui le diremos al gameManager que me de la referencia al jugador que debuffo y le aplicaremos el efecto
+        PlayerCharacter jugadorADebuffar = GameManager.Instance.GetPlayerById(playerId == 1 ? 1 : 2);
+        Debug.Log("Jugador " + playerId + " debuffando al jugador " + (playerId == 2 ? 1 : 2) + " con debuff: " + tipo);
+        if (jugadorADebuffar != null)
+        {
+            jugadorADebuffar.activaDebuffo(tipo);
+        }
+        else
+        {
+            Debug.LogWarning("No se encontró el jugador a debuffar con ID: " + (playerId == 1 ? 2 : 1));
+        }
+    }
+
+    public void activaDebuffo(VentajaDebuff tipo)
+    {
         switch (tipo)
         {
             case VentajaDebuff.Flashbang:
@@ -153,16 +169,17 @@ public class PlayerCharacter : MonoBehaviour
                 break;
 
             case VentajaDebuff.Lentitud:
-                velocidadBase *= 0.5f;
+
+                velocidadBase *= 0.2f;
                 break;
                 
             case VentajaDebuff.ReduccionVida:
-              //  GetComponent<HealthSystem>().RecibirDañoDirecto(20);
-                _remainingHealth -= 20;
-                Debug.Log("Vida reducida en Desventaja -20: " + _remainingHealth);
+              
+                _remainingHealth -= 50;
+                Debug.Log("Vida reducida en Desventaja -50: " + _remainingHealth);
                 break;
+            
 
-        
         }
     }
 
@@ -235,7 +252,9 @@ public class PlayerCharacter : MonoBehaviour
         tieneDobleSalto = false;
         estaCegado = false;
         ventajaHP = false;
-
+        _remainingHealth = _baseHealth;
+        velocidadBase = 1f;
+        
     }
     public void RevivirJugadorSiguienteSet(Transform respawnPoint)
 {
@@ -243,7 +262,7 @@ public class PlayerCharacter : MonoBehaviour
     canShoot = true;
     estaVivo = true;
     
-    _remainingHealth = _baseHealth;
+    
     //Elimina ventajas temporales
     deshazVentajas();
 
@@ -257,6 +276,7 @@ public class PlayerCharacter : MonoBehaviour
     // --- 2. DESACTIVAR RIGIDBODY ---
     if (rb != null)
     {
+        
         rb.isKinematic = true; 
         rb.linearVelocity = Vector3.zero; 
         rb.angularVelocity = Vector3.zero;
