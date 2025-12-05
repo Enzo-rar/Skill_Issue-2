@@ -8,15 +8,18 @@ public class MainMenuSceneManager : MonoBehaviour
 {
 
 	public Button defaultButton;
-	public GameObject canvasCredits;  
+	public GameObject canvasCredits;
+	public GameObject canvasControls;
 
 	void Update()
 	{
-		if (canvasCredits.activeSelf) 
+		if (canvasCredits.activeSelf || canvasControls.activeSelf) 
 		{
 			if (Input.anyKeyDown)     
 			{
 				canvasCredits.SetActive(false);
+				canvasControls.SetActive(false);
+
 			}
 		}
 	}
