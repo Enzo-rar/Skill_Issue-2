@@ -1008,7 +1008,8 @@ MonoBehaviour:
   numberOfBullets: 49
   isAutomatic: 1
   anim: {fileID: 0}
-  fireballPrefab: {fileID: 8147669148645074578, guid: 90a7c78b38e6c504285f1191fb4259dd, type: 3}
+  fireballPrefab: {fileID: 8147669148645074578, guid: 90a7c78b38e6c504285f1191fb4259dd,
+    type: 3}
 --- !u!1 &6376315222942897679
 GameObject:
   m_ObjectHideFlags: 0

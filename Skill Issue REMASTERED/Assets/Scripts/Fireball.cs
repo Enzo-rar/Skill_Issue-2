@@ -17,7 +17,7 @@ public class Fireball : MonoBehaviour
     void Update()
     {
         //posicionCamara = GetComponentInParent<PlayerCam>();
-        transform.Translate(0,0, speed * Time.deltaTime);
+        transform.Translate(-5*Time.deltaTime,0, speed * Time.deltaTime);
         //transform.Translate(posicionCamara.transform.position.x, posicionCamara.transform.position.y, speed * Time.deltaTime);
     }
 
