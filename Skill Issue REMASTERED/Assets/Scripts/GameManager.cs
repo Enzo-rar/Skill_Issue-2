@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,6 +57,66 @@ public class GameManager : MonoBehaviour
     public PlayerInput playerInput2;
     private PlayerCharacter playerCharacter1;
     private PlayerCharacter playerCharacter2;
+
+    [Header("Lobby Manager")]
+    [SerializeField] private bool isLobby = false;
+    [SerializeField] private float lobbyTimer = 5.0f;
+    [SerializeField] private TextMeshProUGUI statusT;
+
+
+    private void Start()
+    {
+        if(PlayerInputManager.instance != null)
+        {
+            PlayerInputManager.instance.onPlayerJoined += OnPlayerJoined;
+            if (isLobby)
+            {
+                statusT.gameObject.SetActive(true);
+                statusT.text = "Jugador 1, pulsa un botón para unirte a la partida";
+            }
+            else
+            {
+                statusT.gameObject.SetActive(false);
+            }
+        }
+
+        
+    }
+
+    public void OnPlayerJoined(PlayerInput input)
+    {
+        Debug.Log("Ok so isLobby is " + isLobby);
+        if(isLobby)
+        {
+            if(input.playerIndex == 0)
+            {
+                statusT.text = "Jugador 2, pulsa un botón para unirte a la partida";
+            }
+            else if(input.playerIndex == 1)
+            {
+                StartCoroutine(LobbyTimer());
+            }
+        }
+    }
+
+    private IEnumerator LobbyTimer()
+    {
+        statusT.text = "Todo listo, la partida comenzará en breves...";
+
+        yield return new WaitForSeconds(5.0f);
+
+        float timer = lobbyTimer;
+        while(timer > 0)
+        {
+            statusT.text = $"La partida comenzará en {Mathf.CeilToInt(timer)}";
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+
+        isLobby = false;
+        StartCoroutine(GenerarMapaSet());
+    }
+
     private void Awake()
     {
         if (Instance == null) Instance = this;

@@ -407,9 +407,9 @@ MonoBehaviour:
   slideDeceleration: 2
   jumpKey: 32
   playerHeight: 2
-  whatIsGround:
+  Ground:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 65536
   maxSlopeAngle: 45
   orientation: {fileID: 7986639160689909758}
 --- !u!1 &5836793151099519894
@@ -968,6 +968,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 9130883935812762159, guid: c06aee11dbd23b349b106af027681cbf,
+        type: 3}
+      propertyPath: Ground.m_Bits
+      value: 65536
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
