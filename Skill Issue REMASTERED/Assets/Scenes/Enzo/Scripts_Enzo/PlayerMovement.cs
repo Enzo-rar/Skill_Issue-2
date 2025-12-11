@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Ground Check")]
     public float playerHeight;
-    public LayerMask whatIsGround;
+    public LayerMask Ground;
     bool grounded;
 
     [Header("Slope Handling")]
@@ -131,7 +131,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         //Comprueba que debajo del jugador hay suelo, para verificar si podemos saltar y a�adir rozamiento
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, Ground);
 
         if(playerCharacter.estaVivo && playerCharacter.canMove)
         {
