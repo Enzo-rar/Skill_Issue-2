@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2411e570dbc7b4c43aa492d1508d5c64, type: 3}
   m_Name: Mapa3
   m_EditorClassIdentifier: 
-  sceneAsset: {fileID: 102900000, guid: 55bbc41204808f640a2ca19bd4f394d0, type: 3}
-  scenePath: Assets/Maps/LavaMap.unity
+  sceneAsset: {fileID: 102900000, guid: d99a7cee123b8784b9f91f553d374982, type: 3}
+  scenePath: Assets/Maps/LavaMap (Readjusted).unity

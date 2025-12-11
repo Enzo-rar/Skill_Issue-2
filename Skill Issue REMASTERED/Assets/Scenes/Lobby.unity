@@ -848,95 +848,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 134866351}
   m_CullTransparentMesh: 1
---- !u!1001 &336898135
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: isLobby
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: statusT
-      value: 
-      objectReference: {fileID: 134866353}
-    - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: _gameLogicObject
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 5336480860787036593, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: m_PlayerPrefab
-      value: 
-      objectReference: {fileID: 6613384800543429132, guid: 4188056d9d1b72e4b983814f306c63a4,
-        type: 3}
-    - target: {fileID: 6828120824610988916, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -9.149953
-      objectReference: {fileID: 0}
-    - target: {fileID: 6828120824610988916, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 7.2873154
-      objectReference: {fileID: 0}
-    - target: {fileID: 6828120824610988916, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -4.0249486
-      objectReference: {fileID: 0}
-    - target: {fileID: 6828120824610988916, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6828120824610988916, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6828120824610988916, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6828120824610988916, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6828120824610988916, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6828120824610988916, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6828120824610988916, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8193792966314588504, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
-        type: 3}
-      propertyPath: m_Name
-      value: GameManager
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 190c5cc087d1cb3478db44b2b6a7f95b, type: 3}
 --- !u!1 &344370952
 GameObject:
   m_ObjectHideFlags: 0
@@ -1476,7 +1387,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
+  m_SelectedEditorRenderState: 2
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -4162,6 +4073,41 @@ PrefabInstance:
       propertyPath: statusT
       value: 
       objectReference: {fileID: 134866353}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: mensajesCarga.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'mensajesCarga.Array.data[0]'
+      value: Acariciando perretes...
+      objectReference: {fileID: 0}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'mensajesCarga.Array.data[1]'
+      value: Torturando programadores...
+      objectReference: {fileID: 0}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'mensajesCarga.Array.data[2]'
+      value: Limpiando sangre de la pared...
+      objectReference: {fileID: 0}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'mensajesCarga.Array.data[3]'
+      value: Organizando funerales...
+      objectReference: {fileID: 0}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'mensajesCarga.Array.data[4]'
+      value: Renderizando millones de cuchillos...
+      objectReference: {fileID: 0}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'mensajesCarga.Array.data[5]'
+      value: Robando datos del usuario...
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4311,7 +4257,6 @@ SceneRoots:
   - {fileID: 1910483821}
   - {fileID: 611179395}
   - {fileID: 1074393697}
-  - {fileID: 336898135}
   - {fileID: 1719787288}
   - {fileID: 380217580}
   - {fileID: 1686653020}

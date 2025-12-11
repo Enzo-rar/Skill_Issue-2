@@ -4,6 +4,7 @@ public class MouseLook : MonoBehaviour
 {
     [Header("Referencias")]
     public Transform playerBody;       // Referencia al cuerpo (DEBE ESTAR FIJO/NO ROTAR)
+    public Transform playerSkin;
     // Se elimina la referencia pública a 'playerCamera' ya que este script está adjunto a la cámara.
     public Transform orientation;      // Orientación auxiliar (maneja la rotación horizontal del cuerpo para PlayerMovement)
 
@@ -117,6 +118,7 @@ public class MouseLook : MonoBehaviour
             orientation.rotation = Quaternion.Euler(0f, yRotation, 0f); 
         }
 
+        playerSkin.rotation = Quaternion.Euler(0f, yRotation, 0f);
         // Se elimina la rotación del playerBody para asegurar que la cámara lo controle.
     }
 

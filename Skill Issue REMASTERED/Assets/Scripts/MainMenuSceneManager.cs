@@ -31,7 +31,7 @@ public class MainMenuSceneManager : MonoBehaviour
 
 	public void StartGame()
 	{
-		SceneManager.LoadScene("TestJose");
+		SceneManager.LoadScene("Lobby");
 	}
 
 	public void QuitGame()
