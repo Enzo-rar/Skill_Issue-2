@@ -1063,6 +1063,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerBody: {fileID: 5239943249547910009}
+  playerSkin: {fileID: 7342655835232139079}
   orientation: {fileID: 7986639160689909758}
   PlayerCameraComponent: {fileID: 4009812637954889028}
   crosshairSize: 5
