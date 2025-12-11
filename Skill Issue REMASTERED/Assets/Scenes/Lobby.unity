@@ -1387,7 +1387,7 @@ MeshRenderer:
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
   m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
+  m_SelectedEditorRenderState: 2
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
@@ -4107,11 +4107,6 @@ PrefabInstance:
         type: 3}
       propertyPath: 'mensajesCarga.Array.data[5]'
       value: Robando datos del usuario...
-      objectReference: {fileID: 0}
-    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
-        type: 3}
-      propertyPath: 'mensajesCarga.Array.data[6]'
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

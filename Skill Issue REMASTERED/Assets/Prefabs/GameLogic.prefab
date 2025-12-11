@@ -826,6 +826,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
         type: 3}
+      propertyPath: isLobby
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
+        type: 3}
       propertyPath: perkSelectorUI
       value: 
       objectReference: {fileID: 1640525102976165948}
@@ -841,8 +846,43 @@ PrefabInstance:
       objectReference: {fileID: 1276167090798223181}
     - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
         type: 3}
+      propertyPath: mensajesCarga.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
+        type: 3}
       propertyPath: mapasDisponibles.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
+        type: 3}
+      propertyPath: 'mensajesCarga.Array.data[0]'
+      value: Acariciando perretes...
+      objectReference: {fileID: 0}
+    - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
+        type: 3}
+      propertyPath: 'mensajesCarga.Array.data[1]'
+      value: Torturando programadores...
+      objectReference: {fileID: 0}
+    - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
+        type: 3}
+      propertyPath: 'mensajesCarga.Array.data[2]'
+      value: Limpiando sangre de la pared...
+      objectReference: {fileID: 0}
+    - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
+        type: 3}
+      propertyPath: 'mensajesCarga.Array.data[3]'
+      value: Organizando funerales...
+      objectReference: {fileID: 0}
+    - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
+        type: 3}
+      propertyPath: 'mensajesCarga.Array.data[4]'
+      value: Renderizando millones de cuchillos...
+      objectReference: {fileID: 0}
+    - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
+        type: 3}
+      propertyPath: 'mensajesCarga.Array.data[5]'
+      value: Robando datos del usuario...
       objectReference: {fileID: 0}
     - target: {fileID: 2005444204304686037, guid: 190c5cc087d1cb3478db44b2b6a7f95b,
         type: 3}
