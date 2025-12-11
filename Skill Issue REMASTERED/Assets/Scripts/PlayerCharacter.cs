@@ -19,7 +19,6 @@ public class PlayerCharacter : MonoBehaviour
     public bool canShoot = true;
     public bool estaVivo = true;
    private HashSet<Ventajas> historialVentajas = new HashSet<Ventajas>();
-	public HealthBarUI healthBar; // Referencia al componente HealthBarUI imagen
 								  // Variables de estado (flags)
 	private bool tieneDobleSalto = false;
     private bool estaCegado = false;
@@ -27,15 +26,58 @@ public class PlayerCharacter : MonoBehaviour
     private bool ventajaHP = false;
     public bool grabEnemyWeapon = false;
 
-     void Start()
+	[Header("UI")]
+	[SerializeField] private Canvas playerCanvas;   // Canvas del prefab
+	[SerializeField] private GameObject hudP1;      // raíz de HUD_P1
+	[SerializeField] private GameObject hudP2;      // raíz de HUD_P2
+	public HealthBarUI healthBar; // Referencia al componente HealthBarUI imagen
+
+	void Start()
     {   
         _playerInput = GetComponentInParent<PlayerInput>();
         if(_playerInput != null){
         playerId = GameManager.Instance.RegistrarJugador(_playerInput,_playerCamera, this);
         bool checkForAudio = playerId == 1 ? false : true;
         Debug.Log("Player ID: " + playerId+" Check Audio: " + checkForAudio);
-		healthBar.SetHealth(_remainingHealth, _baseHealth);
-		if (checkForAudio)
+
+			// 1) Ligar el Canvas a la cámara de este jugador
+			if (playerCanvas != null)
+			{
+				playerCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+				playerCanvas.worldCamera = _playerCamera;
+				playerCanvas.planeDistance = 1f;
+			}
+
+			// 2) Activar solo el HUD que toca
+			if (playerId == 1)
+			{
+				if (hudP1 != null) hudP1.SetActive(true);
+				if (hudP2 != null) hudP2.SetActive(false);
+
+				// Buscar la barra dentro de HUD_P1
+				healthBar = hudP1.GetComponentInChildren<HealthBarUI>(true);
+			}
+			else if (playerId == 2)
+			{
+				if (hudP1 != null) hudP1.SetActive(false);
+				if (hudP2 != null) hudP2.SetActive(true);
+
+				// Buscar la barra dentro de HUD_P2
+				healthBar = hudP2.GetComponentInChildren<HealthBarUI>(true);
+			}
+
+			// 3) Inicializar la barra con la vida actual
+			if (healthBar != null)
+			{
+				healthBar.SetHealth(_remainingHealth, _baseHealth);
+			}
+			else
+			{
+				Debug.LogWarning($"healthBar es null en PlayerCharacter ID {playerId}");
+			}
+
+
+			if (checkForAudio)
         {
             DeactivateAudioForSecondPlayer();
         }
@@ -203,7 +245,8 @@ public class PlayerCharacter : MonoBehaviour
         _remainingHealth = _remainingHealth - damage;
         Debug.Log("Jugador " + playerId + " ha recibido daño: " + damage + " Vida restante: " + _remainingHealth);
         _SoundManager.playHitSound();
-		healthBar.SetHealth(_remainingHealth, _baseHealth);
+		if (healthBar != null)
+			healthBar.SetHealth(_remainingHealth, _baseHealth);
 		if ( _remainingHealth <= 0 && estaVivo)
         {
             Die();

@@ -63,8 +63,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float lobbyTimer = 5.0f;
     [SerializeField] private TextMeshProUGUI statusT;
 
+	//public HealthBarUI healthBarP1;
+	//public HealthBarUI healthBarP2;
 
-    private void Start()
+	private void Start()
     {
         if(PlayerInputManager.instance != null)
         {
@@ -79,11 +81,11 @@ public class GameManager : MonoBehaviour
                 statusT.gameObject.SetActive(false);
             }
         }
+	
 
-        
-    }
+	}
 
-    public void OnPlayerJoined(PlayerInput input)
+	public void OnPlayerJoined(PlayerInput input)
     {
         Debug.Log("Ok so isLobby is " + isLobby);
         if(isLobby)
