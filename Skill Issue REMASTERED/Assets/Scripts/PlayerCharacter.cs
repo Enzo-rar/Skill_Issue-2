@@ -19,9 +19,9 @@ public class PlayerCharacter : MonoBehaviour
     public bool canShoot = true;
     public bool estaVivo = true;
    private HashSet<Ventajas> historialVentajas = new HashSet<Ventajas>();
-
-    // Variables de estado (flags)
-    private bool tieneDobleSalto = false;
+	public HealthBarUI healthBar; // Referencia al componente HealthBarUI imagen
+								  // Variables de estado (flags)
+	private bool tieneDobleSalto = false;
     private bool estaCegado = false;
     public float velocidadBase = 1f;
     private bool ventajaHP = false;
@@ -34,7 +34,8 @@ public class PlayerCharacter : MonoBehaviour
         playerId = GameManager.Instance.RegistrarJugador(_playerInput,_playerCamera, this);
         bool checkForAudio = playerId == 1 ? false : true;
         Debug.Log("Player ID: " + playerId+" Check Audio: " + checkForAudio);
-        if (checkForAudio)
+		healthBar.SetHealth(_remainingHealth, _baseHealth);
+		if (checkForAudio)
         {
             DeactivateAudioForSecondPlayer();
         }
@@ -202,7 +203,8 @@ public class PlayerCharacter : MonoBehaviour
         _remainingHealth = _remainingHealth - damage;
         Debug.Log("Jugador " + playerId + " ha recibido daño: " + damage + " Vida restante: " + _remainingHealth);
         _SoundManager.playHitSound();
-        if( _remainingHealth <= 0 && estaVivo)
+		healthBar.SetHealth(_remainingHealth, _baseHealth);
+		if ( _remainingHealth <= 0 && estaVivo)
         {
             Die();
         }

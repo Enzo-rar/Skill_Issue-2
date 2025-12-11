@@ -124,9 +124,17 @@ public class GameManager : MonoBehaviour
     }
 
     public int RegistrarJugador(PlayerInput playerInput, Camera camaraJugador, PlayerCharacter personaje = null)
-    {   
-        //Aqui basicamente solo queremos referencias necesarias en otros scripts como las camaras para la UI de perks
-        if (jugadoresRegistradosID == 1)
+    {
+		Canvas canvasJugador = personaje.GetComponentInChildren<Canvas>();
+		if (canvasJugador != null)
+		{
+			canvasJugador.renderMode = RenderMode.ScreenSpaceCamera;
+			canvasJugador.worldCamera = camaraJugador;
+			// Ajustar el "Plane Distance" para que no se corte con objetos 3D (opcional, prueba con 1)
+			canvasJugador.planeDistance = 1;
+		}
+		//Aqui basicamente solo queremos referencias necesarias en otros scripts como las camaras para la UI de perks
+		if (jugadoresRegistradosID == 1)
         {
             playerCharacter1 = personaje;
             playerInput1 = playerInput;
