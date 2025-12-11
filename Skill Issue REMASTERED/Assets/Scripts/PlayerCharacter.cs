@@ -26,8 +26,11 @@ public class PlayerCharacter : MonoBehaviour
     public float velocidadBase = 1f;
     private bool ventajaHP = false;
     public bool grabEnemyWeapon = false;
-
-     void Start()
+	[Header("UI Referencias")]
+	[Header("UI Referencias")]
+	[SerializeField] private RectTransform healthBarFillRect;    
+	[SerializeField] private RectTransform healthBarBgRect;
+	void Start()
     {   
         _playerInput = GetComponentInParent<PlayerInput>();
         if(_playerInput != null){
@@ -35,6 +38,8 @@ public class PlayerCharacter : MonoBehaviour
         bool checkForAudio = playerId == 1 ? false : true;
         Debug.Log("Player ID: " + playerId+" Check Audio: " + checkForAudio);
 		healthBar.SetHealth(_remainingHealth, _baseHealth);
+		AjustarPosicionHUD(playerId);
+			
 		if (checkForAudio)
         {
             DeactivateAudioForSecondPlayer();
@@ -50,7 +55,35 @@ public class PlayerCharacter : MonoBehaviour
         //_remainingHealth = _baseHealth;
         
     }
-    public void dropWeapon()
+
+	private void AjustarPosicionHUD(int id)
+	{
+		if (id == 2)
+		{
+			healthBarFillRect.anchoredPosition = new Vector2(
+				healthBarFillRect.anchoredPosition.x,
+				-590.0f
+			);
+
+			healthBarBgRect.anchoredPosition = new Vector2(
+				healthBarBgRect.anchoredPosition.x,
+				-590.0f
+			);
+		}
+		else
+		{
+			healthBarFillRect.anchoredPosition = new Vector2(
+				healthBarFillRect.anchoredPosition.x,
+				-50.0f // Posición Y estándar del P1
+			);
+
+			healthBarBgRect.anchoredPosition = new Vector2(
+				healthBarBgRect.anchoredPosition.x,
+				-50.0f // Posición Y estándar del P1
+			);
+		}
+	}
+	public void dropWeapon()
     {
         if (rayShooter != null)
         {
@@ -59,16 +92,18 @@ public class PlayerCharacter : MonoBehaviour
     }
 
     //Esto solo es para probar, luego se quita, cuidado por que probablemente se esta activando mas de una vez.
-   /*
+   
      private
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+		healthBar.SetHealth(_remainingHealth, _baseHealth);
+
+		if (Input.GetKeyDown(KeyCode.F))
         {
             GameManager.Instance.RegistrarVictoriaSet(playerId);
         }
     }
-    */
+    
     //Desactivar el componente de audio al segundo jugador para evitar problemas.
     private void DeactivateAudioForSecondPlayer()
     {

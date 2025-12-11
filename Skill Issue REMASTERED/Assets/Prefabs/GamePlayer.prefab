@@ -34,7 +34,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 51.3, y: -125.00003}
+  m_AnchoredPosition: {x: 51.3, y: -50}
   m_SizeDelta: {x: 400, y: 100}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &4632273615594399976
@@ -1162,7 +1162,7 @@ PrefabInstance:
     - target: {fileID: 445701648494032016, guid: b5b262f2692317142b6e528de0471ae8,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -124
+      value: -50
       objectReference: {fileID: 0}
     - target: {fileID: 445701648494032016, guid: b5b262f2692317142b6e528de0471ae8,
         type: 3}
@@ -1446,6 +1446,8 @@ MonoBehaviour:
   healthBar: {fileID: 909574860494881371}
   velocidadBase: 1
   grabEnemyWeapon: 0
+  healthBarFillRect: {fileID: 1192038663760691778}
+  healthBarBgRect: {fileID: 2599194498989157182}
 --- !u!114 &8305645692717954911
 MonoBehaviour:
   m_ObjectHideFlags: 0
