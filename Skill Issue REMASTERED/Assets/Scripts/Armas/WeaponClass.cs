@@ -1,9 +1,11 @@
 
 using System.Linq;
 using UnityEngine;
+using System.Collections;
 
 public class WeaponClass : MonoBehaviour
 {
+    private Camera _camera;
     public int damage;
     public int bulletXShot;
     public float bulletCooldown;
@@ -12,33 +14,29 @@ public class WeaponClass : MonoBehaviour
 
     public Animator anim;
 
-    [SerializeField] private GameObject fireballPrefab;
-    private GameObject _fireball;
-    private Transform bStartShoot;
-
     void Start()
     {
         anim = GetComponentInChildren<Animator>();
     }
 
-    public void shootProjectile()
+    public void setCamera(Camera c)
     {
-        // Punto exacto frente a la cámara (1.5m delante)
-        // Vector3 spawnPos = _camera.transform.position + _camera.transform.forward * 1.5f;
-        
-        Vector3 spawnPos;
-
-        // Orientación igual a la cámara
-        Quaternion spawnRot;
-        fireballPrefab.GetComponent<Fireball>().SetDamage(damage);
-        for (int i = 0; i < bulletXShot; i++)
-        {
-            bStartShoot = GetComponent<WeaponClass>().transform.Find("bulletExit" + i.ToString());
-            spawnPos = bStartShoot.position;
-            spawnRot = bStartShoot.rotation;
-            _fireball = Instantiate(fireballPrefab, spawnPos, spawnRot);
-        }
-        //Debug.Log("Damage :" + fireballPrefab.GetComponent<Fireball>().damage);
+        _camera = c;
     }
 
+    public void shootProjectile()
+    {
+        
+        Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit) ) 
+        {
+            var hitobject = hit.transform.gameObject;
+            var target = hitobject.GetComponentInParent<PlayerCharacter>();
+            if (target != null)
+            {
+                target.Hurt(damage);
+            }
+        }
+    }
 }

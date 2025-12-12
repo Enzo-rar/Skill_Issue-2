@@ -21,14 +21,9 @@ public class RayShooter : MonoBehaviour
     private bool equipado;
     private GameObject _armaEquipada;
     private ObjetoReactivo componenteReactivo;
-      
-    [SerializeField] private GameObject fireballPrefab;
+    
     [SerializeField] private PlayerCharacter playerStats;
-    private GameObject _fireball;
     [SerializeField] private Camera _camera;
-
-    // Punto desde el que sale la bala
-    private Transform bStartShoot;
 
     public WeaponClass wp;
 
@@ -80,7 +75,6 @@ private void OnDisable()
 
 		if (interactAction.WasPressedThisFrame())
 		{
-			Debug.Log("EEEEEEEEEEEE");
 
 			Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 			RaycastHit hit;
@@ -88,15 +82,12 @@ private void OnDisable()
 			if (Physics.Raycast(ray, out hit))
 			{
 				var item = hit.transform.gameObject;
-				Debug.Log("camara: ", _camera);
 
 				if (item != null && hit.distance <= 3)
 				{
 					componenteReactivo = item.GetComponent<ObjetoReactivo>();
-					Debug.Log("componenteReactivo del item al que has hecho Raycast: ", componenteReactivo);
 					if (componenteReactivo != null)
 					{
-						Debug.Log(item.name + " seleccionado");
 						//En esta condicion puedes implementar una ventaja que te permita recoger el item aunque otro jugador lo tenga equipado (quitarselo de las manos)
 						if (componenteReactivo.IsGrabbed() == true)
 						{
@@ -110,7 +101,7 @@ private void OnDisable()
 								componenteReactivo.ReactToCollect(item, _camera);
 								playerStats.SetItemEquipped(item);
 								equipado = true;
-								bStartShoot = componenteReactivo.transform.Find("bulletExit");
+                                componenteReactivo.GetComponent<WeaponClass>().setCamera(_camera);
 							}
 
 						}
@@ -129,7 +120,6 @@ private void OnDisable()
 
 		if (tirarAction.WasPressedThisFrame())
 		{
-			Debug.Log("QQQQQQQ");
 
 			Ray ray = _camera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
 			RaycastHit hit;
@@ -155,15 +145,17 @@ private void OnDisable()
 			{
 				wp.anim.SetBool("onMovement", false);
 
-				ObjetoReactivo componenteReactivo = itemEquipado.GetComponent<ObjetoReactivo>();
-				componenteReactivo.ReactToDrop(itemEquipado, dropPos);
+                
+
+                ObjetoReactivo componenteReactivo = itemEquipado.GetComponent<ObjetoReactivo>();
+                componenteReactivo.GetComponent<WeaponClass>().setCamera(null);
+                componenteReactivo.ReactToDrop(itemEquipado, dropPos);
 
 				playerStats.SetItemEquipped(null);
 				equipado = false;
 				componenteReactivo.setGrabbed(false);
 				shooting = true;
-
-			}
+            }
 			else
 			{
 				Debug.Log("En la superficie -> " + hit.point + " (" + hit.transform.gameObject.name + "), no es un item valido ó no tienes nada equipado");
@@ -294,23 +286,23 @@ private void OnDisable()
         {
             while (attackAction.inProgress && wp.numberOfBullets !=0)
             {
-                wp.shootProjectile();
                 shooting = false;
 
                 wp.anim.SetBool("inAction", true);
+                wp.shootProjectile();
+                
                 yield return new WaitForSeconds(wp.bulletCooldown-0.000001f);
                 wp.anim.SetBool("inAction", false);
 
-                shooting = true;
                 wp.numberOfBullets -= wp.bulletXShot;
-
+                shooting = true;
             }
         }
         else
         {
-            wp.shootProjectile();
             shooting = false;
             wp.anim.SetBool("inAction", true);
+            wp.shootProjectile();
             yield return new WaitForSeconds(wp.bulletCooldown+0.001f);
             
             wp.numberOfBullets -= wp.bulletXShot;
