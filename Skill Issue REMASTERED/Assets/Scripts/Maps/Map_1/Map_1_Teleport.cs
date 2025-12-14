@@ -2,15 +2,14 @@ using UnityEngine;
 
 public class Map_1_Teleport : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public Transform dest;
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        PlayerCharacter player = other.GetComponentInParent<PlayerCharacter>();
+        if (player != null)
+        {
+            player.transform.position = dest.position;
+        }
     }
 }

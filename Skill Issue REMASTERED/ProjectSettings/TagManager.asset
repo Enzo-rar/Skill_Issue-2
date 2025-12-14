@@ -15,7 +15,6 @@ TagManager:
   - Metal (Static)
   - Wood (Static)
   - Dirt (Static)
-  - Wood
   layers:
   - Default
   - TransparentFX
