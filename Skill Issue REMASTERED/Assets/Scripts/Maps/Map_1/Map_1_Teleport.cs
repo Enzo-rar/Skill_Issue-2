@@ -9,7 +9,8 @@ public class Map_1_Teleport : MonoBehaviour
         PlayerCharacter player = other.GetComponentInParent<PlayerCharacter>();
         if (player != null)
         {
-            player.transform.position = dest.position;
+            player.transform
+                .position = dest.position;
         }
     }
 }
