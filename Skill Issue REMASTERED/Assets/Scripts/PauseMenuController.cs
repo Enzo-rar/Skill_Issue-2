@@ -1,11 +1,13 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PauseMenuController : MonoBehaviour
 {
 	[Header("UI")]
 	[SerializeField] private GameObject pauseRoot; // el Canvas o panel raíz del menú
+	[SerializeField] private GameObject firstSelected; // PlayBtn
 
 	[Header("Escenas")]
 	[SerializeField] private string mainMenuSceneName = "MainMenu";
@@ -18,6 +20,7 @@ public class PauseMenuController : MonoBehaviour
 	private void Awake()
 	{
 		SetPaused(false);
+
 	}
 
 	private void OnEnable()
@@ -46,14 +49,23 @@ public class PauseMenuController : MonoBehaviour
 
 	public void ExitToMainMenu()
 	{
-		SetPaused(false);
-		SceneManager.LoadScene(mainMenuSceneName);
+		// fuerza estado normal sí o sí
+		Time.timeScale = 1f;
+
+		Cursor.lockState = CursorLockMode.None;
+		Cursor.visible = true;
+
+		if (pauseRoot != null)
+			pauseRoot.SetActive(false);
+
+		Destroy(transform.root.gameObject); //añadido
+
+		SceneManager.LoadScene(mainMenuSceneName, LoadSceneMode.Single); // loadscenemode.single añadido
 	}
 
 	private void SetPaused(bool value)
 	{
 		isPaused = value;
-		Debug.Log($"[PauseMenuController] SetPaused({isPaused}). pauseRoot={(pauseRoot != null ? pauseRoot.name : "NULL")}", this);
 
 		if (pauseRoot != null)
 			pauseRoot.SetActive(isPaused);
@@ -64,11 +76,15 @@ public class PauseMenuController : MonoBehaviour
 		{
 			if (isPaused)
 			{
-				Cursor.lockState = CursorLockMode.None;
-				Cursor.visible = true;
+				if (firstSelected != null)
+					EventSystem.current.SetSelectedGameObject(firstSelected);
+					Cursor.lockState = CursorLockMode.None;
+					Cursor.visible = true;
 			}
 			else
 			{
+				EventSystem.current.SetSelectedGameObject(null);
+
 				Cursor.lockState = CursorLockMode.Locked;
 				Cursor.visible = false;
 			}

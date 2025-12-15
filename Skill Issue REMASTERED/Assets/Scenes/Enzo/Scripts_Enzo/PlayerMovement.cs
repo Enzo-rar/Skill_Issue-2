@@ -1,6 +1,6 @@
 using System;
-using UnityEditor;
-using UnityEditor.ShaderGraph.Internal;
+//using UnityEditor;
+//using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -87,7 +87,17 @@ public class PlayerMovement : MonoBehaviour
 
         map["Crouch"].started += OnCrouchStarted;
         map["Crouch"].canceled += OnCrouchCanceled;
-    }
+
+		if (map.FindAction("Pause") != null)
+		{
+			map["Pause"].performed += OnPausePerformed;
+			Debug.Log("[PlayerMovement] Pause subscribed", this);
+		}
+		else
+		{
+			Debug.LogError($"[PlayerMovement] No existe 'Pause' en el map {map.name}", this);
+		}
+	}
 
     void OnDisable()
     {
@@ -102,7 +112,11 @@ public class PlayerMovement : MonoBehaviour
 
         map["Crouch"].started -= OnCrouchStarted;
         map["Crouch"].canceled -= OnCrouchCanceled;
-    }
+		if (map.FindAction("Pause") != null)
+		{
+			map["Pause"].performed -= OnPausePerformed;
+		}
+	}
 
     private void OnCrouchStarted(InputAction.CallbackContext ctx)
     {
@@ -185,8 +199,22 @@ public class PlayerMovement : MonoBehaviour
 
 
     }
+	private void OnPausePerformed(InputAction.CallbackContext ctx)
+	{
+		Debug.Log($"[Pause] performed por Player {playerCharacter.playerId}", this);
 
-    private void MyInput()
+		if (pauseMenu == null)
+			pauseMenu = FindFirstObjectByType<PauseMenuController>();
+
+		if (pauseMenu == null)
+		{
+			Debug.LogError("[Pause] No encuentro PauseMenuController en escena", this);
+			return;
+		}
+
+		pauseMenu.TogglePause();
+	}
+	private void MyInput()
     {
         horizontalInput = moveInput.x; // Las teclas asociadas est�n en:
 		verticalInput = moveInput.y;   // Edit\Project Settings\Input (seg�n el codigo ejemplo del PDF)
@@ -209,7 +237,17 @@ public class PlayerMovement : MonoBehaviour
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         moveDirection.Normalize();
-        if (OnSlope())
+		var map = playerInput.currentActionMap;
+
+		if (map.FindAction("Pause") != null)
+		{
+			map["Pause"].performed += OnPausePerformed;
+		}
+		else
+		{
+			Debug.LogError($"No existe la acción 'Pause' en el ActionMap actual: {map.name}", this);
+		}
+		if (OnSlope())
         {
             rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 10f, ForceMode.Force);
         }

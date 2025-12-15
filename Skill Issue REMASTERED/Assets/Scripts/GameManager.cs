@@ -65,8 +65,9 @@ public class GameManager : MonoBehaviour
     [TextArea(2,5)]
     public List <string> mensajesCarga;
 
+	[SerializeField] private GameObject pauseMenuPrefab;
 
-    private void Start()
+	private void Start()
     {
         if(PlayerInputManager.instance != null)
         {
@@ -81,9 +82,12 @@ public class GameManager : MonoBehaviour
                 statusT.gameObject.SetActive(false);
             }
         }
-
-        
-    }
+		if (FindFirstObjectByType<PauseMenuController>() == null)
+		{
+			Instantiate(pauseMenuPrefab);
+			Debug.Log("[PauseMenu] Instanciado desde GameManager.Start()");
+		}
+	}
 
     public void OnPlayerJoined(PlayerInput input)
     {
