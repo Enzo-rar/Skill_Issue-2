@@ -414,7 +414,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+      objectReference: {fileID: 11400000, guid: b4a878e867a93944e83222982157f30d,
         type: 2}
     - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
         type: 3}
@@ -435,11 +435,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+      objectReference: {fileID: 7421042868548137886, guid: b4a878e867a93944e83222982157f30d,
+        type: 2}
+    - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
+        type: 3}
+      propertyPath: m_TextWrappingMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
         type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
+        type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -646,7 +657,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+      objectReference: {fileID: 11400000, guid: b4a878e867a93944e83222982157f30d,
         type: 2}
     - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
         type: 3}
@@ -670,8 +681,18 @@ PrefabInstance:
       objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
         type: 3}
+      propertyPath: m_TextWrappingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
+        type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
+        type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1106,8 +1127,13 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: -8828519650329488949, guid: b4a878e867a93944e83222982157f30d,
+      objectReference: {fileID: 7421042868548137886, guid: b4a878e867a93944e83222982157f30d,
         type: 2}
+    - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
+        type: 3}
+      propertyPath: m_TextWrappingMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
         type: 3}
       propertyPath: m_fontColor32.rgba
@@ -1778,7 +1804,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Joan Llorens Alc\xF3n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b4a878e867a93944e83222982157f30d, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1844,7 +1870,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &648272095
@@ -2376,7 +2402,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+      objectReference: {fileID: 11400000, guid: b4a878e867a93944e83222982157f30d,
         type: 2}
     - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
         type: 3}
@@ -2397,11 +2423,22 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+      objectReference: {fileID: 7421042868548137886, guid: b4a878e867a93944e83222982157f30d,
+        type: 2}
+    - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
+        type: 3}
+      propertyPath: m_TextWrappingMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
         type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
+        type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3871,7 +3908,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Enzo Nahuel Sabatini Ibazeta\r"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b4a878e867a93944e83222982157f30d, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -3937,7 +3974,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1501186437
@@ -4427,7 +4464,7 @@ PrefabInstance:
     - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
         type: 3}
       propertyPath: m_fontSize
-      value: 43
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
         type: 3}
@@ -4463,8 +4500,13 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
         type: 3}
+      propertyPath: m_TextWrappingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
+        type: 3}
       propertyPath: m_enableAutoSizing
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8007795659183568054, guid: 6891b7ebd33c0af489f2934b79a4464b,
         type: 3}
@@ -4552,7 +4594,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Jose Manuel Cabanes S\xE1nchez"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b4a878e867a93944e83222982157f30d, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -4618,7 +4660,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1792661304
@@ -5130,7 +5172,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Miguel \xC1ngel Puchalt Rosillo"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b4a878e867a93944e83222982157f30d, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -5196,7 +5238,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &2016160230
@@ -5332,8 +5374,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: SKILL ISSUE
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b4a878e867a93944e83222982157f30d, type: 2}
+  m_sharedMaterial: {fileID: 7421042868548137886, guid: b4a878e867a93944e83222982157f30d,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

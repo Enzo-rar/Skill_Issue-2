@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -52,9 +53,26 @@ public class PlayerMovement : MonoBehaviour
     Vector3 flatVelocity;
 
     Rigidbody rb;
+	private PauseMenuController pauseMenu;
+	private void Awake()
+	{
+		pauseMenu = FindFirstObjectByType<PauseMenuController>();
+		Debug.Log($"[PauseInputRelay] Awake en {gameObject.name}. pauseMenu? {(pauseMenu != null)}", this);
+	}
+	public void OnPause(InputValue value)
+	{
+		Debug.Log($"[PauseInputRelay] OnPause en {gameObject.name}. isPressed={value.isPressed}", this);
+		if (!value.isPressed) return;
 
+		if (pauseMenu == null)
+		{
+			pauseMenu = FindFirstObjectByType<PauseMenuController>();
+			Debug.Log($"[PauseInputRelay] Re-busco pauseMenu. encontrado? {(pauseMenu != null)}", this);
+		}
 
-    void OnEnable()
+		pauseMenu?.TogglePause();
+	}
+	void OnEnable()
     {
         if (playerInput == null) { Debug.LogError("PlayerInput no asignado en PlayerMovement"); return; }
 
@@ -125,8 +143,13 @@ public class PlayerMovement : MonoBehaviour
         rb.freezeRotation = true;
         originalSize = GetComponent<Transform>().localScale;
 
-        
-    }
+		var pi = GetComponent<PlayerInput>();
+		if (pi != null)
+		{
+			Debug.Log($"[PauseInputRelay] currentActionMap={pi.currentActionMap?.name}", this);
+			Debug.Log($"[PauseInputRelay] has Pause? {pi.currentActionMap?.FindAction("Pause") != null}", this);
+		}
+	}
 
     void Update()
     {
@@ -287,4 +310,5 @@ public class PlayerMovement : MonoBehaviour
     {
         return Vector3.ProjectOnPlane(moveDirection, slopeHit.normal);
     }
+
 }
