@@ -8,6 +8,8 @@ public class PauseMenuController : MonoBehaviour
 	[Header("UI")]
 	[SerializeField] private GameObject pauseRoot; // el Canvas o panel raíz del menú
 	[SerializeField] private GameObject firstSelected; // PlayBtn
+	[SerializeField] private GameObject canvasControls; // Canvas de controles
+
 
 	[Header("Escenas")]
 	[SerializeField] private string mainMenuSceneName = "MainMenu";
@@ -20,6 +22,27 @@ public class PauseMenuController : MonoBehaviour
 	private void Awake()
 	{
 		SetPaused(false);
+
+	}
+	private void Update()
+	{
+		if (canvasControls != null && canvasControls.activeSelf)
+		{
+			// teclado/mouse
+			if (Input.anyKeyDown)
+			{
+				canvasControls.SetActive(false);
+				return;
+			}
+		}
+		// asegurar que va el mando
+		var gp = UnityEngine.InputSystem.Gamepad.current;
+		if (gp != null && (gp.aButton.wasPressedThisFrame || gp.bButton.wasPressedThisFrame ||
+						   gp.startButton.wasPressedThisFrame || gp.dpad.up.wasPressedThisFrame ||
+						   gp.dpad.down.wasPressedThisFrame || gp.leftStickButton.wasPressedThisFrame))
+		{
+			canvasControls.SetActive(false);
+		}
 
 	}
 
@@ -45,6 +68,11 @@ public class PauseMenuController : MonoBehaviour
 	public void Resume()
 	{
 		SetPaused(false);
+	}
+	public void OpenControlsOverlay()
+	{
+		Debug.Log("[PauseMenuController] OpenControlsOverlay()", this);
+		canvasControls.SetActive(true);
 	}
 
 	public void ExitToMainMenu()
