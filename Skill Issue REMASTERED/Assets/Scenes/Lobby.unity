@@ -4058,6 +4058,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1137904869072687920, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: todasLasVentajas.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1137904869072687920, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'todasLasVentajas.Array.data[4]'
+      value: 
+      objectReference: {fileID: 11400000, guid: cea5624cc96601d4b85ebf1209e1763f,
+        type: 2}
     - target: {fileID: 1276167090798223181, guid: eaf7afdffb895ba4abea102bc51e2630,
         type: 3}
       propertyPath: m_Name

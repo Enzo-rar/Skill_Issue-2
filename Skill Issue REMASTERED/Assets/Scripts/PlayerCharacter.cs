@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.InputSystem;
+using Microsoft.Unity.VisualStudio;
+using UnityEngine.UI;
 public class PlayerCharacter : MonoBehaviour
 {
     [SerializeField] RayShooter rayShooter;
@@ -11,9 +13,13 @@ public class PlayerCharacter : MonoBehaviour
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private Camera _playerCamera;
     [SerializeField] private Collider _collisionHandler;
+
+    [Header("Flashbang UI")]
+    public Image imagenCeguera;
+    public Canvas efectosCanvas;
     //private GameObject _armaEquipada;
     private GameObject _armaEquipada; //getter y setter automatico. Lectura publica pero escritora privada
-    public ParticleSystem deathParticles;
+    public GameObject deathParticles;
     public int playerId = -1; // 1 o 2
     public bool canMove = true;
     public bool canShoot = true;
@@ -26,7 +32,7 @@ public class PlayerCharacter : MonoBehaviour
     public float velocidadBase = 1f;
     private bool ventajaHP = false;
     public bool grabEnemyWeapon = false;
-	[Header("UI Referencias")]
+	
 	[Header("UI Referencias")]
 	[SerializeField] private RectTransform healthBarFillRect;    
 	[SerializeField] private RectTransform healthBarBgRect;
@@ -53,7 +59,12 @@ public class PlayerCharacter : MonoBehaviour
         Debug.Log("Se ha unido el jugador-> " + playerId + " con Health: " + _remainingHealth);
 
         //_remainingHealth = _baseHealth;
-        
+        if(imagenCeguera != null && efectosCanvas != null) 
+        {
+            efectosCanvas.worldCamera = _playerCamera;
+            efectosCanvas.planeDistance = 1;
+            Debug.Log("Asignada la camara del jugador " + playerId + " al canvas de efectos.");
+        }
     }
 
 	private void AjustarPosicionHUD(int id)
@@ -96,7 +107,7 @@ public class PlayerCharacter : MonoBehaviour
      private
     void Update()
     {
-		healthBar.SetHealth(_remainingHealth, _baseHealth);
+	//	healthBar.SetHealth(_remainingHealth, _baseHealth);
 
 		if (Input.GetKeyDown(KeyCode.F))
         {
@@ -167,6 +178,7 @@ public class PlayerCharacter : MonoBehaviour
               Debug.Log("Vida aumentada en Ventaja +100");
               ventajaHP = true;
               _remainingHealth += 100;
+              _baseHealth += 100;
                 break;
                 
             case VentajaFavorable.Velocidad:
@@ -201,7 +213,13 @@ public class PlayerCharacter : MonoBehaviour
         {
             case VentajaDebuff.Flashbang:
                 // Llamamos a la corrutina de ceguera
-                StartCoroutine(RutinaCeguera(3f));
+                if (imagenCeguera!=null)
+                {
+                    Debug.Log("Jugador " + playerId + " afectado por Flashbang - Ceguera activada");
+                    estaCegado = true;
+                    StartCoroutine(RutinaCeguera(6f));
+                }
+                
                 break;
 
             case VentajaDebuff.Lentitud:
@@ -212,6 +230,7 @@ public class PlayerCharacter : MonoBehaviour
             case VentajaDebuff.ReduccionVida:
               
                 _remainingHealth -= 50;
+                _baseHealth -= 50;
                 Debug.Log("Vida reducida en Desventaja -50: " + _remainingHealth);
                 break;
             
@@ -222,14 +241,45 @@ public class PlayerCharacter : MonoBehaviour
     // Corutina para manejar el efecto de ceguera
     private IEnumerator RutinaCeguera(float duracion)
     {
-        estaCegado = true;
-        // Aquí poner como funciona la ceguera visualmente, por ejemplo con un overlay en blanco para flashear la pantalla
-        Debug.Log("Jugador CEGADO");
-        yield return new WaitForSeconds(duracion);
-        estaCegado = false;
-        Debug.Log("Jugador RECUPERADO");
+        Debug.Log("Iniciando rutina de ceguera para el jugador " + playerId);
+        while (estaCegado)
+        {
+            Debug.Log("Jugador " + playerId + " cegado - Iniciando Fade In/Out");
+            _SoundManager.playFlashbangSound();
+          // 1. Poner totalmente blanco (Alpha 1)
+            Color colorActual = imagenCeguera.color;
+            colorActual.a = 1f;
+            imagenCeguera.color = colorActual;
 
+            // 2. Esperar un momento cegado totalmente (ej. 0.5 segundos o 20% del total)
+            float tiempoEspera = duracion * 0.2f;
+            yield return new WaitForSeconds(tiempoEspera);
+
+            // 3. Desvanecer suavemente (Fade Out)
+            float tiempoFade = duracion * 0.8f;
+            float tiempoTranscurrido = 0f;
+
+            while (tiempoTranscurrido < tiempoFade)
+            {
+                tiempoTranscurrido += Time.deltaTime;
+                
+                // Calculamos el nuevo alpha (de 1 a 0)
+                float nuevoAlpha = Mathf.Lerp(1f, 0f, tiempoTranscurrido / tiempoFade);
+                
+                // Aplicamos el color
+                colorActual.a = nuevoAlpha;
+                imagenCeguera.color = colorActual;
+
+                yield return null; // Esperar al siguiente frame
+            }
+
+            // 4. Asegurar que quede invisible al final (Alpha 0)
+            colorActual.a = 0f;
+            imagenCeguera.color = colorActual;
+        }
+        
     }
+    
 
 
    
@@ -263,6 +313,12 @@ public class PlayerCharacter : MonoBehaviour
         estaVivo = false;
         canShoot = false;
         _SoundManager.playDeathSound();
+
+        if(deathParticles != null)
+        {
+           GameObject vfxInstance = Instantiate(deathParticles, transform.position + Vector3.up, deathParticles.transform.rotation);
+        }
+        
         StartCoroutine(ActionsAfterDeath());
 
         
@@ -272,7 +328,7 @@ public class PlayerCharacter : MonoBehaviour
     IEnumerator ActionsAfterDeath()
     {
         // Basicamente podemos dejar un tiempo para ver las particulas de muerte o animaciones, o hacer otras cosas para celebrar la muerte
-        if(deathParticles != null) deathParticles.Play();
+        
         yield return new WaitForSeconds(3f);
         Debug.Log("Jugador " + playerId + " ha muerto -> Procedo a llamar a RegistrarVictoriaSet en GameManager");
         GameManager.Instance.RegistrarVictoriaSet(playerId);
@@ -285,12 +341,16 @@ public class PlayerCharacter : MonoBehaviour
 
     void deshazVentajas()
     {
+
         //Aqui se desharian las ventajas al final de cada set, si es que tienen duracion limitada.
+        _baseHealth = 100;
+        velocidadBase = 1f;
         tieneDobleSalto = false;
         estaCegado = false;
         ventajaHP = false;
         _remainingHealth = _baseHealth;
-        velocidadBase = 1f;
+        
+        
         
     }
     public void RevivirJugadorSiguienteSet(Transform respawnPoint)
@@ -303,6 +363,7 @@ public class PlayerCharacter : MonoBehaviour
     //Elimina ventajas temporales
     deshazVentajas();
 
+    healthBar.SetHealth(_remainingHealth, _baseHealth);
 
     Debug.Log("Jugador " + playerId + " reviviendo en: " + respawnPoint.position);
 

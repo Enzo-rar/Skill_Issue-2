@@ -10,6 +10,9 @@ public class PlayerSoundManager : MonoBehaviour
     private AudioClip onDeathSound;
     [SerializeField]
     private AudioClip onSlideSound;
+
+    [SerializeField]
+    private AudioClip onFlashbangSound;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -29,6 +32,17 @@ public class PlayerSoundManager : MonoBehaviour
             m_SoundSource.PlayOneShot(onDeathSound);
         }else{
             Debug.LogWarning("Death sound clip is not assigned in PlayerSoundManager.");
+        }
+    }
+
+    public void playFlashbangSound()
+    {
+        // Implement flashbang sound logic here if needed
+        if(onFlashbangSound != null)
+        {
+            m_SoundSource.PlayOneShot(onFlashbangSound);
+        }else{
+            Debug.LogWarning("Flashbang sound clip is not assigned in PlayerSoundManager.");
         }
     }
 
