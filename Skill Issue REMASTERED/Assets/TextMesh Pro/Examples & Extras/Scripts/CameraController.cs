@@ -57,8 +57,8 @@ namespace TMPro.Examples
             else
                 Application.targetFrameRate = -1;
 
-            if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android)
-                Input.simulateMouseWithTouches = false;
+            /* if (Application.platform == RuntimePlatform.IPhonePlayer || Application.platform == RuntimePlatform.Android_)
+                 Input.simulateMouseWithTouches = false;*/
 
             cameraTransform = transform;
             previousSmoothing = MovementSmoothing;

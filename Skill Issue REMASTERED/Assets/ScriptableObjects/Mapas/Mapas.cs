@@ -1,11 +1,14 @@
+#if UNITY_EDITOR
 using UnityEditor;
-using UnityEditor.SearchService;
+#endif
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Mapas", menuName = "Scriptable Objects/Mapas")]
 public class Mapas : ScriptableObject
-{
+{  
+    #if UNITY_EDITOR
     public SceneAsset sceneAsset;
+    #endif
     public string scenePath;
 
 

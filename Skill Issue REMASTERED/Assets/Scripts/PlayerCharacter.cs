@@ -2,7 +2,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine.InputSystem;
-using Microsoft.Unity.VisualStudio;
 using UnityEngine.UI;
 public class PlayerCharacter : MonoBehaviour
 {
