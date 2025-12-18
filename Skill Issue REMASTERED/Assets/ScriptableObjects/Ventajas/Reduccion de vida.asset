@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08076296f535fef4683b629ca26406df, type: 3}
   m_Name: Reduccion de vida
   m_EditorClassIdentifier: 
-  nombreVentaja: Aumento de Vida
+  nombreVentaja: Reduccion de Vida
   descripcion: Reduce la vida de tu enemigo en 50 puntos
   icono: {fileID: 21300000, guid: 698c43f11bc5b274abf7c5d003b6c95b, type: 3}
   rareza: 0

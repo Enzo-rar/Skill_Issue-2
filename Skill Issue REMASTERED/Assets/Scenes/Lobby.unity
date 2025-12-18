@@ -4061,8 +4061,32 @@ PrefabInstance:
     - target: {fileID: 1137904869072687920, guid: eaf7afdffb895ba4abea102bc51e2630,
         type: 3}
       propertyPath: todasLasVentajas.Array.size
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1137904869072687920, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'todasLasVentajas.Array.data[0]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 41c77e30f9b9a044785855960576f4c6,
+        type: 2}
+    - target: {fileID: 1137904869072687920, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'todasLasVentajas.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: efb704fc4fe79764aae8933f6d3a379a,
+        type: 2}
+    - target: {fileID: 1137904869072687920, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'todasLasVentajas.Array.data[2]'
+      value: 
+      objectReference: {fileID: 11400000, guid: cea5624cc96601d4b85ebf1209e1763f,
+        type: 2}
+    - target: {fileID: 1137904869072687920, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'todasLasVentajas.Array.data[3]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 6a45599885b6ca14da18eebac7a4f2a4,
+        type: 2}
     - target: {fileID: 1137904869072687920, guid: eaf7afdffb895ba4abea102bc51e2630,
         type: 3}
       propertyPath: 'todasLasVentajas.Array.data[4]'

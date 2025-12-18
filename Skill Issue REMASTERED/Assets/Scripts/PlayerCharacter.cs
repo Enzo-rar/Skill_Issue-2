@@ -107,11 +107,12 @@ public class PlayerCharacter : MonoBehaviour
     void Update()
     {
 	//	healthBar.SetHealth(_remainingHealth, _baseHealth);
-
+    /*
 		if (Input.GetKeyDown(KeyCode.F))
         {
             GameManager.Instance.RegistrarVictoriaSet(playerId);
         }
+    */
     }
     
     //Desactivar el componente de audio al segundo jugador para evitar problemas.
