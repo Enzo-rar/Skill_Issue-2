@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
         }
 
         isLobby = false;
-        StartCoroutine(GenerarMapaSet());
+        StartCoroutine(GenerarMapaSet(true));
     }
 
     private void Awake()
@@ -270,16 +270,18 @@ public class GameManager : MonoBehaviour
     public void ComenzarNuevaRonda()
     {
         // Lógica para limpiar el mapa y empezar de cero
-        ReiniciarArenaParaSiguienteSet();
+        StartCoroutine(GenerarMapaSet(true));
         Debug.Log("Nueva ronda comenzada.");
     }
 
-    private IEnumerator GenerarMapaSet()
+    private IEnumerator GenerarMapaSet(bool changeMap)
     {
         // 1. Elegir un mapa aleatorio (evitando repetir el actual si es posible)
         Mapas nuevoMapa = null;
-        
-        if (mapasDisponibles.Count > 0)
+
+        if (!changeMap) nuevoMapa = mapaActualData;     //Lo de que no cambie de mapa entre sets hay que perfeccionarlo
+
+        if (mapasDisponibles.Count > 0 && nuevoMapa == null)
         {
             List<Mapas> poolMapas = new List<Mapas>(mapasDisponibles);
             if (mapaActualData != null && poolMapas.Count > 1) 
@@ -306,7 +308,7 @@ public class GameManager : MonoBehaviour
         while (!carga.isDone) yield return null;
 
         // 4. Configurar la nueva escena como activa
-        Scene nuevaEscena = SceneManager.GetSceneByPath(nuevoMapa.scenePath);
+        Scene nuevaEscena = SceneManager.GetSceneAt(SceneManager.sceneCount - 1);
         SceneManager.SetActiveScene(nuevaEscena);
         mapaActualData = nuevoMapa;
 
@@ -322,7 +324,7 @@ public class GameManager : MonoBehaviour
             Debug.LogError("No tienes una referencia al GameLogic mira el inspector.");
         }
         // 6. Descargar la escena vieja (si es diferente a la nueva y es válida)
-        if (escenaAntigua.IsValid() && escenaAntigua != nuevaEscena)
+        if (escenaAntigua.IsValid())
         {
            AsyncOperation operacionDescarga = SceneManager.UnloadSceneAsync(escenaAntigua);
            Debug.Log("Descargando escena antigua: " + escenaAntigua.path+" ... OperacionDescarga estado ->"+operacionDescarga);
@@ -375,7 +377,7 @@ public class GameManager : MonoBehaviour
     private void ReiniciarArenaParaSiguienteSet()
     {
         // Aquí se resetean posiciones, vida, munición, etc, habra que añadir lógica específica para cada uno por ejemplo jugador, objetos etc.
-        StartCoroutine(GenerarMapaSet());
+        StartCoroutine(GenerarMapaSet(false));
         
     }
 

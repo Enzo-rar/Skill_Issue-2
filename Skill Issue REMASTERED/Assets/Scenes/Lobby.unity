@@ -4080,6 +4080,11 @@ PrefabInstance:
       objectReference: {fileID: 134866353}
     - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
         type: 3}
+      propertyPath: rondasParaGanarPartida
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
       propertyPath: mensajesCarga.Array.size
       value: 6
       objectReference: {fileID: 0}
