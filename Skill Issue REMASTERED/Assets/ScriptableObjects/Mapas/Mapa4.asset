@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2411e570dbc7b4c43aa492d1508d5c64, type: 3}
   m_Name: Mapa4
   m_EditorClassIdentifier: 
-  sceneAsset: {fileID: 102900000, guid: 432b3b344e41d5c4898f6c1d0367df44, type: 3}
-  scenePath: Assets/Maps/CastleMap (Readjusted).unity
+  sceneAsset: {fileID: 102900000, guid: e81c4181bfc826f499f1d83122b8d61b, type: 3}
+  scenePath: Assets/Maps/Map_4.unity

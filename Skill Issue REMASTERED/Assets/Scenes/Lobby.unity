@@ -4086,7 +4086,7 @@ PrefabInstance:
     - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
         type: 3}
       propertyPath: mapasDisponibles.Array.size
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
         type: 3}
@@ -4128,13 +4128,25 @@ PrefabInstance:
         type: 3}
       propertyPath: 'mapasDisponibles.Array.data[1]'
       value: 
-      objectReference: {fileID: 11400000, guid: 30ac24dba0dbc7c40924ebdd650b8ba9,
+      objectReference: {fileID: 11400000, guid: e5cd8c85458139b4bbc6e27e7abbcd8e,
         type: 2}
     - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
         type: 3}
       propertyPath: 'mapasDisponibles.Array.data[2]'
       value: 
+      objectReference: {fileID: 11400000, guid: 30ac24dba0dbc7c40924ebdd650b8ba9,
+        type: 2}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'mapasDisponibles.Array.data[3]'
+      value: 
       objectReference: {fileID: 11400000, guid: dbb8fd0141dbf08498270c5f8951199a,
+        type: 2}
+    - target: {fileID: 8825137899819242430, guid: eaf7afdffb895ba4abea102bc51e2630,
+        type: 3}
+      propertyPath: 'mapasDisponibles.Array.data[4]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 1359a84395648fa4583343427949fc25,
         type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

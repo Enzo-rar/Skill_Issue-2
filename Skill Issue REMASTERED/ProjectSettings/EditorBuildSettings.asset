@@ -26,15 +26,27 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Lobby.unity
     guid: d073908997a2fc148860770cb8f89b72
-  - enabled: 1
+  - enabled: 0
     path: Assets/Maps/CastleMap (Readjusted).unity
     guid: 432b3b344e41d5c4898f6c1d0367df44
-  - enabled: 1
+  - enabled: 0
     path: Assets/Maps/LavaMap (Readjusted).unity
     guid: d99a7cee123b8784b9f91f553d374982
   - enabled: 1
     path: Assets/Maps/Map_1.unity
     guid: 2abf976c9829c4b44ac875e5b8989bf5
+  - enabled: 1
+    path: Assets/Maps/Map_2.unity
+    guid: 35da07d6be6cdff4ba39079bc7868860
+  - enabled: 1
+    path: Assets/Maps/Map_3.unity
+    guid: a01c3f8df2e9f214784d17aea94d8835
+  - enabled: 1
+    path: Assets/Maps/Map_4.unity
+    guid: e81c4181bfc826f499f1d83122b8d61b
+  - enabled: 1
+    path: Assets/Maps/Map_5.unity
+    guid: 9f984a9d16c3e6b41a3af3fb4fe6507e
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 9eb07e2d669e9c94e9d7d3c782a916f7,
       type: 2}

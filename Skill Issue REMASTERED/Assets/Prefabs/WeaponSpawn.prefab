@@ -848,7 +848,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   obj: {fileID: 4255776817354491389, guid: 92032104906d0164b9fe22f9cb2e49f6, type: 3}
   spawnPos: {fileID: 7950164885191293589}
-  spawntime: 10
+  spawntime: 5
   rotSpeed: 50
   floatingH: 0.2
   floatingS: 2
@@ -877,7 +877,7 @@ Transform:
   m_GameObject: {fileID: 2328496602814652081}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
