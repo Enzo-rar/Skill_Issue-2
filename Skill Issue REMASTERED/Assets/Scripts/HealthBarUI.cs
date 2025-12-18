@@ -10,6 +10,7 @@ public class HealthBarUI : MonoBehaviour
 	{
 		float value = current / max;
 		healthFill.fillAmount = Mathf.Clamp01(value);
+		Debug.Log("Health Bar Updated: " + value);
 	}
 }
 
